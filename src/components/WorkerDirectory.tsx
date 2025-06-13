@@ -11,6 +11,9 @@ const WorkerDirectory = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSkill, setSelectedSkill] = useState('all-skills');
   const [selectedRegion, setSelectedRegion] = useState('all-regions');
+  const [sortBy, setSortBy] = useState('rating');
+
+  console.log('WorkerDirectory - selectedSkill:', selectedSkill, 'selectedRegion:', selectedRegion, 'sortBy:', sortBy);
 
   const skills = [
     'Land Preparation', 'Planting', 'Irrigation', 'Pest Control', 'Harvesting',
@@ -212,7 +215,7 @@ const WorkerDirectory = () => {
           <h3 className="text-lg font-semibold text-forest-800">
             Available Workers ({filteredWorkers.length})
           </h3>
-          <Select defaultValue="rating">
+          <Select value={sortBy} onValueChange={setSortBy}>
             <SelectTrigger className="w-40 border-forest-200">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>

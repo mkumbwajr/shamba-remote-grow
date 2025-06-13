@@ -12,6 +12,8 @@ const Marketplace = () => {
   const [selectedCategory, setSelectedCategory] = useState('all-categories');
   const [cartItems, setCartItems] = useState(0);
 
+  console.log('Marketplace - selectedCategory:', selectedCategory);
+
   const categories = [
     'Seeds', 'Fertilizers', 'Tools', 'Pesticides', 'Equipment', 'Services'
   ];
