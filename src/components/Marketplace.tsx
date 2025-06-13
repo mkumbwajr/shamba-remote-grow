@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ShoppingCart, Search, MapPin, Star, Package, Truck, Leaf, Settings } from 'lucide-react';
+import { formatTzsAmount } from '@/utils/currency';
 
 const Marketplace = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -239,7 +240,7 @@ const Marketplace = () => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-forest-800">${product.price}</p>
+                      <p className="text-2xl font-bold text-forest-800">{formatTzsAmount(product.price)}</p>
                       <p className="text-xs text-forest-600">per unit</p>
                     </div>
                   </div>
@@ -325,7 +326,7 @@ const Marketplace = () => {
                   <div className="bg-crop-50 border border-crop-200 rounded-lg p-3">
                     <div className="flex items-center justify-between">
                       <span className="text-crop-800 font-medium">Price per acre</span>
-                      <span className="text-2xl font-bold text-crop-800">${service.price}</span>
+                      <span className="text-2xl font-bold text-crop-800">{formatTzsAmount(service.price)}</span>
                     </div>
                   </div>
 

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,6 +15,7 @@ import WorkerDirectory from '@/components/WorkerDirectory';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
+import { formatTzsAmount } from '@/utils/currency';
 
 const Index = () => {
   const { user, loading } = useAuth();
@@ -36,6 +38,8 @@ const Index = () => {
     if (!user) return;
     
     try {
+      console.log('Fetching profile for user:', user.id);
+      // Note: This will need to be updated once the database tables are properly set up
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -106,13 +110,13 @@ const Index = () => {
   const marketAlerts = [
     {
       crop: 'Maize',
-      price: '$450/ton',
+      price: 450,
       trend: 'up',
       change: '+5.2%'
     },
     {
       crop: 'Tomatoes',
-      price: '$850/ton',
+      price: 850,
       trend: 'down',
       change: '-2.1%'
     }
@@ -187,7 +191,7 @@ const Index = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-forest-600">Total Investment</p>
-                  <p className="text-2xl font-bold text-forest-800">${mockUser.totalInvestment.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-forest-800">{formatTzsAmount(mockUser.totalInvestment)}</p>
                 </div>
                 <div className="h-12 w-12 bg-crop-100 rounded-lg flex items-center justify-center">
                   <DollarSign className="h-6 w-6 text-crop-600" />
@@ -276,7 +280,7 @@ const Index = () => {
                     <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-earth-50 border border-earth-200">
                       <div>
                         <h4 className="font-medium text-earth-800">{alert.crop}</h4>
-                        <p className="text-lg font-bold text-earth-900">{alert.price}</p>
+                        <p className="text-lg font-bold text-earth-900">{formatTzsAmount(alert.price)}/ton</p>
                       </div>
                       <div className="flex items-center space-x-2">
                         <TrendingUp className={`h-4 w-4 ${alert.trend === 'up' ? 'text-green-600' : 'text-red-600'}`} />

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,6 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Leaf, MapPin, TrendingUp, AlertCircle, Calendar, DollarSign, Droplets, Thermometer } from 'lucide-react';
+import { formatTzsAmount } from '@/utils/currency';
 
 const CropMatcher = () => {
   const [selectedRegion, setSelectedRegion] = useState('');
@@ -29,8 +29,8 @@ const CropMatcher = () => {
       suitability: 95,
       expectedYield: '2.5 tons/acre',
       growthPeriod: '120 days',
-      marketPrice: '$480/ton',
-      investment: '$250/acre',
+      marketPrice: 480,
+      investment: 250,
       roi: '85%',
       description: 'Highly suitable for your selected region with excellent market demand.',
       climate: 'Suitable for tropical/subtropical',
@@ -45,8 +45,8 @@ const CropMatcher = () => {
       suitability: 88,
       expectedYield: '800 kg/acre',
       growthPeriod: '365 days',
-      marketPrice: '$4.20/kg',
-      investment: '$800/acre',
+      marketPrice: 4.20,
+      investment: 800,
       roi: '120%',
       description: 'Excellent long-term investment with premium export potential.',
       climate: 'Highland tropical',
@@ -61,8 +61,8 @@ const CropMatcher = () => {
       suitability: 82,
       expectedYield: '15 tons/acre',
       growthPeriod: '90 days',
-      marketPrice: '$650/ton',
-      investment: '$400/acre',
+      marketPrice: 650,
+      investment: 400,
       roi: '165%',
       description: 'Fast growing with multiple harvests per year possible.',
       climate: 'Warm temperate to tropical',
@@ -77,8 +77,8 @@ const CropMatcher = () => {
       suitability: 78,
       expectedYield: '1.2 tons/acre',
       growthPeriod: '75 days',
-      marketPrice: '$850/ton',
-      investment: '$180/acre',
+      marketPrice: 850,
+      investment: 180,
       roi: '95%',
       description: 'Excellent rotation crop with nitrogen-fixing properties.',
       climate: 'Temperate to tropical',
@@ -143,10 +143,10 @@ const CropMatcher = () => {
                   <SelectValue placeholder="Select budget" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="low">$100 - $500</SelectItem>
-                  <SelectItem value="medium">$500 - $2,000</SelectItem>
-                  <SelectItem value="high">$2,000 - $5,000</SelectItem>
-                  <SelectItem value="premium">$5,000+</SelectItem>
+                  <SelectItem value="low">TZS 250,000 - 1,250,000</SelectItem>
+                  <SelectItem value="medium">TZS 1,250,000 - 5,000,000</SelectItem>
+                  <SelectItem value="high">TZS 5,000,000 - 12,500,000</SelectItem>
+                  <SelectItem value="premium">TZS 12,500,000+</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -209,7 +209,9 @@ const CropMatcher = () => {
                         <DollarSign className="h-4 w-4 text-crop-600" />
                         <span className="text-sm text-forest-600">Market Price</span>
                       </div>
-                      <p className="font-medium text-forest-800">{crop.marketPrice}</p>
+                      <p className="font-medium text-forest-800">
+                        {crop.name === 'Coffee (Arabica)' ? `${formatTzsAmount(crop.marketPrice)}/kg` : `${formatTzsAmount(crop.marketPrice)}/ton`}
+                      </p>
                     </div>
                     <div className="space-y-1">
                       <div className="flex items-center space-x-2">
@@ -233,6 +235,12 @@ const CropMatcher = () => {
                         <span className="text-crop-700">Rainfall: {crop.rainfall}</span>
                       </div>
                     </div>
+                  </div>
+
+                  {/* Investment Cost */}
+                  <div className="bg-earth-50 border border-earth-200 rounded-lg p-3">
+                    <h4 className="font-medium text-earth-800 mb-2">Investment Required</h4>
+                    <p className="text-lg font-bold text-earth-800">{formatTzsAmount(crop.investment)}/acre</p>
                   </div>
 
                   {/* Pros and Cons */}
