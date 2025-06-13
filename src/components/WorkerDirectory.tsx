@@ -186,7 +186,7 @@ const WorkerDirectory = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all-skills">All Skills</SelectItem>
-                {skills.map((skill) => (
+                {skills.filter(skill => skill && skill.trim() !== '').map((skill) => (
                   <SelectItem key={skill} value={skill}>{skill}</SelectItem>
                 ))}
               </SelectContent>
@@ -197,7 +197,7 @@ const WorkerDirectory = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all-regions">All Regions</SelectItem>
-                {regions.map((region) => (
+                {regions.filter(region => region && region.trim() !== '').map((region) => (
                   <SelectItem key={region} value={region}>{region}</SelectItem>
                 ))}
               </SelectContent>

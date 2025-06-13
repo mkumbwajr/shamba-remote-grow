@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -184,7 +185,7 @@ const Marketplace = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all-categories">All Categories</SelectItem>
-                {categories.map((category) => (
+                {categories.filter(category => category && category.trim() !== '').map((category) => (
                   <SelectItem key={category} value={category}>{category}</SelectItem>
                 ))}
               </SelectContent>
