@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,8 +9,8 @@ import { Star, MapPin, Calendar, DollarSign, Users, Phone, Search, MessageSquare
 
 const WorkerDirectory = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedSkill, setSelectedSkill] = useState('');
-  const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedSkill, setSelectedSkill] = useState('all-skills');
+  const [selectedRegion, setSelectedRegion] = useState('all-regions');
 
   const skills = [
     'Land Preparation', 'Planting', 'Irrigation', 'Pest Control', 'Harvesting',
@@ -147,8 +146,8 @@ const WorkerDirectory = () => {
     const matchesSearch = worker.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          worker.specialization.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          worker.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesSkill = !selectedSkill || selectedSkill === 'all-skills' || worker.skills.includes(selectedSkill);
-    const matchesRegion = !selectedRegion || selectedRegion === 'all-regions' || worker.location.includes(selectedRegion);
+    const matchesSkill = selectedSkill === 'all-skills' || worker.skills.includes(selectedSkill);
+    const matchesRegion = selectedRegion === 'all-regions' || worker.location.includes(selectedRegion);
     return matchesSearch && matchesSkill && matchesRegion;
   });
 

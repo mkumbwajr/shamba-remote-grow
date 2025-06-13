@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,7 +9,7 @@ import { ShoppingCart, Search, MapPin, Star, Package, Truck, Leaf, Settings } fr
 
 const Marketplace = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all-categories');
   const [cartItems, setCartItems] = useState(0);
 
   const categories = [
@@ -134,7 +133,7 @@ const Marketplace = () => {
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !selectedCategory || selectedCategory === 'all-categories' || product.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'all-categories' || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
