@@ -161,7 +161,7 @@ const Auth = () => {
             <CardDescription>
               {isLogin 
                 ? 'Sign in to access your farming dashboard' 
-                : 'Create your account to start remote farming'
+                : 'Create your account to start remote digital farming'
               }
             </CardDescription>
           </CardHeader>
