@@ -149,7 +149,7 @@ const Auth = () => {
           <div className="h-16 w-16 bg-gradient-to-br from-forest-600 to-crop-600 rounded-lg flex items-center justify-center mx-auto mb-4">
             <Leaf className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-forest-800">Bwana Shamba Ai</h1>
+          <h1 className="text-3xl font-bold text-forest-800">Bwana Shamba</h1>
           <p className="text-forest-600 mt-2">A Remote Digital Farming Platform</p>
         </div>
 
