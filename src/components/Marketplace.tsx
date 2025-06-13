@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,7 +16,9 @@ const Marketplace = () => {
 
   const categories = [
     'Seeds', 'Fertilizers', 'Tools', 'Pesticides', 'Equipment', 'Services'
-  ];
+  ].filter(category => category && category.trim() !== '');
+
+  console.log('Marketplace - categories after filter:', categories);
 
   const products = [
     {
@@ -179,15 +180,21 @@ const Marketplace = () => {
                 className="pl-10 border-forest-200"
               />
             </div>
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <Select value={selectedCategory} onValueChange={(value) => {
+              console.log('Marketplace - Category selected:', value);
+              setSelectedCategory(value);
+            }}>
               <SelectTrigger className="w-full sm:w-40 border-forest-200">
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all-categories">All Categories</SelectItem>
-                {categories.filter(category => category && category.trim() !== '').map((category) => (
-                  <SelectItem key={category} value={category}>{category}</SelectItem>
-                ))}
+                {categories.map((category) => {
+                  console.log('Marketplace - Rendering category:', category, 'length:', category.length);
+                  return (
+                    <SelectItem key={category} value={category}>{category}</SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
           </div>

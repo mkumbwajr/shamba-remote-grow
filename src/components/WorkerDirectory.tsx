@@ -19,14 +19,17 @@ const WorkerDirectory = () => {
     'Land Preparation', 'Planting', 'Irrigation', 'Pest Control', 'Harvesting',
     'Livestock Care', 'Equipment Operation', 'Crop Management', 'Soil Testing',
     'Farm Supervision', 'Post-Harvest Processing'
-  ];
+  ].filter(skill => skill && skill.trim() !== '');
 
   const regions = [
     'Arusha', 'Kilimanjaro', 'Manyara', 'Tanga', 'Morogoro', 'Pwani',
     'Dar es Salaam', 'Lindi', 'Mtwara', 'Ruvuma', 'Iringa', 'Njombe',
     'Mbeya', 'Songwe', 'Rukwa', 'Katavi', 'Tabora', 'Singida',
     'Dodoma', 'Mwanza', 'Simiyu', 'Shinyanga', 'Geita', 'Kagera'
-  ];
+  ].filter(region => region && region.trim() !== '');
+
+  console.log('WorkerDirectory - skills after filter:', skills);
+  console.log('WorkerDirectory - regions after filter:', regions);
 
   const workers = [
     {
@@ -180,26 +183,38 @@ const WorkerDirectory = () => {
                 className="pl-10 border-forest-200"
               />
             </div>
-            <Select value={selectedSkill} onValueChange={setSelectedSkill}>
+            <Select value={selectedSkill} onValueChange={(value) => {
+              console.log('WorkerDirectory - Skill selected:', value);
+              setSelectedSkill(value);
+            }}>
               <SelectTrigger className="border-forest-200">
                 <SelectValue placeholder="Select skill" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all-skills">All Skills</SelectItem>
-                {skills.filter(skill => skill && skill.trim() !== '').map((skill) => (
-                  <SelectItem key={skill} value={skill}>{skill}</SelectItem>
-                ))}
+                {skills.map((skill) => {
+                  console.log('WorkerDirectory - Rendering skill:', skill, 'length:', skill.length);
+                  return (
+                    <SelectItem key={skill} value={skill}>{skill}</SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
-            <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+            <Select value={selectedRegion} onValueChange={(value) => {
+              console.log('WorkerDirectory - Region selected:', value);
+              setSelectedRegion(value);
+            }}>
               <SelectTrigger className="border-forest-200">
                 <SelectValue placeholder="Select region" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all-regions">All Regions</SelectItem>
-                {regions.filter(region => region && region.trim() !== '').map((region) => (
-                  <SelectItem key={region} value={region}>{region}</SelectItem>
-                ))}
+                {regions.map((region) => {
+                  console.log('WorkerDirectory - Rendering region:', region, 'length:', region.length);
+                  return (
+                    <SelectItem key={region} value={region}>{region}</SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
             <Button className="bg-forest-600 hover:bg-forest-700">
@@ -215,7 +230,10 @@ const WorkerDirectory = () => {
           <h3 className="text-lg font-semibold text-forest-800">
             Available Workers ({filteredWorkers.length})
           </h3>
-          <Select value={sortBy} onValueChange={setSortBy}>
+          <Select value={sortBy} onValueChange={(value) => {
+            console.log('WorkerDirectory - Sort selected:', value);
+            setSortBy(value);
+          }}>
             <SelectTrigger className="w-40 border-forest-200">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
