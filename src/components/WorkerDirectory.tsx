@@ -19,17 +19,25 @@ const WorkerDirectory = () => {
     'Land Preparation', 'Planting', 'Irrigation', 'Pest Control', 'Harvesting',
     'Livestock Care', 'Equipment Operation', 'Crop Management', 'Soil Testing',
     'Farm Supervision', 'Post-Harvest Processing'
-  ].filter(skill => skill && skill.trim() !== '');
+  ].filter(skill => {
+    const isValid = skill && typeof skill === 'string' && skill.trim() !== '' && skill.length > 0;
+    console.log('WorkerDirectory - Filtering skill:', skill, 'isValid:', isValid, 'type:', typeof skill, 'length:', skill?.length);
+    return isValid;
+  });
 
   const regions = [
     'Arusha', 'Kilimanjaro', 'Manyara', 'Tanga', 'Morogoro', 'Pwani',
     'Dar es Salaam', 'Lindi', 'Mtwara', 'Ruvuma', 'Iringa', 'Njombe',
     'Mbeya', 'Songwe', 'Rukwa', 'Katavi', 'Tabora', 'Singida',
     'Dodoma', 'Mwanza', 'Simiyu', 'Shinyanga', 'Geita', 'Kagera'
-  ].filter(region => region && region.trim() !== '');
+  ].filter(region => {
+    const isValid = region && typeof region === 'string' && region.trim() !== '' && region.length > 0;
+    console.log('WorkerDirectory - Filtering region:', region, 'isValid:', isValid, 'type:', typeof region, 'length:', region?.length);
+    return isValid;
+  });
 
-  console.log('WorkerDirectory - skills after filter:', skills);
-  console.log('WorkerDirectory - regions after filter:', regions);
+  console.log('WorkerDirectory - Final skills after filter:', skills);
+  console.log('WorkerDirectory - Final regions after filter:', regions);
 
   const workers = [
     {
@@ -193,7 +201,12 @@ const WorkerDirectory = () => {
               <SelectContent>
                 <SelectItem value="all-skills">All Skills</SelectItem>
                 {skills.map((skill) => {
-                  console.log('WorkerDirectory - Rendering skill:', skill, 'length:', skill.length);
+                  console.log('WorkerDirectory - Rendering SelectItem for skill:', skill, 'length:', skill.length, 'type:', typeof skill);
+                  // Additional safety check before rendering
+                  if (!skill || typeof skill !== 'string' || skill.trim() === '') {
+                    console.error('WorkerDirectory - Skipping invalid skill:', skill);
+                    return null;
+                  }
                   return (
                     <SelectItem key={skill} value={skill}>{skill}</SelectItem>
                   );
@@ -210,7 +223,12 @@ const WorkerDirectory = () => {
               <SelectContent>
                 <SelectItem value="all-regions">All Regions</SelectItem>
                 {regions.map((region) => {
-                  console.log('WorkerDirectory - Rendering region:', region, 'length:', region.length);
+                  console.log('WorkerDirectory - Rendering SelectItem for region:', region, 'length:', region.length, 'type:', typeof region);
+                  // Additional safety check before rendering
+                  if (!region || typeof region !== 'string' || region.trim() === '') {
+                    console.error('WorkerDirectory - Skipping invalid region:', region);
+                    return null;
+                  }
                   return (
                     <SelectItem key={region} value={region}>{region}</SelectItem>
                   );

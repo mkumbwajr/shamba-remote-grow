@@ -16,9 +16,13 @@ const Marketplace = () => {
 
   const categories = [
     'Seeds', 'Fertilizers', 'Tools', 'Pesticides', 'Equipment', 'Services'
-  ].filter(category => category && category.trim() !== '');
+  ].filter(category => {
+    const isValid = category && typeof category === 'string' && category.trim() !== '' && category.length > 0;
+    console.log('Marketplace - Filtering category:', category, 'isValid:', isValid, 'type:', typeof category, 'length:', category?.length);
+    return isValid;
+  });
 
-  console.log('Marketplace - categories after filter:', categories);
+  console.log('Marketplace - Final categories after filter:', categories);
 
   const products = [
     {
@@ -190,7 +194,12 @@ const Marketplace = () => {
               <SelectContent>
                 <SelectItem value="all-categories">All Categories</SelectItem>
                 {categories.map((category) => {
-                  console.log('Marketplace - Rendering category:', category, 'length:', category.length);
+                  console.log('Marketplace - Rendering SelectItem for category:', category, 'length:', category.length, 'type:', typeof category);
+                  // Additional safety check before rendering
+                  if (!category || typeof category !== 'string' || category.trim() === '') {
+                    console.error('Marketplace - Skipping invalid category:', category);
+                    return null;
+                  }
                   return (
                     <SelectItem key={category} value={category}>{category}</SelectItem>
                   );
