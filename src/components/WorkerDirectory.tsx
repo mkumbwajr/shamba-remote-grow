@@ -147,8 +147,8 @@ const WorkerDirectory = () => {
     const matchesSearch = worker.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          worker.specialization.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          worker.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesSkill = !selectedSkill || worker.skills.includes(selectedSkill);
-    const matchesRegion = !selectedRegion || worker.location.includes(selectedRegion);
+    const matchesSkill = !selectedSkill || selectedSkill === 'all-skills' || worker.skills.includes(selectedSkill);
+    const matchesRegion = !selectedRegion || selectedRegion === 'all-regions' || worker.location.includes(selectedRegion);
     return matchesSearch && matchesSkill && matchesRegion;
   });
 
@@ -183,7 +183,7 @@ const WorkerDirectory = () => {
                 <SelectValue placeholder="Select skill" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Skills</SelectItem>
+                <SelectItem value="all-skills">All Skills</SelectItem>
                 {skills.map((skill) => (
                   <SelectItem key={skill} value={skill}>{skill}</SelectItem>
                 ))}
@@ -194,7 +194,7 @@ const WorkerDirectory = () => {
                 <SelectValue placeholder="Select region" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Regions</SelectItem>
+                <SelectItem value="all-regions">All Regions</SelectItem>
                 {regions.map((region) => (
                   <SelectItem key={region} value={region}>{region}</SelectItem>
                 ))}

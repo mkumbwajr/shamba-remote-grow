@@ -134,7 +134,7 @@ const Marketplace = () => {
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !selectedCategory || product.category === selectedCategory;
+    const matchesCategory = !selectedCategory || selectedCategory === 'all-categories' || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -182,7 +182,7 @@ const Marketplace = () => {
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all-categories">All Categories</SelectItem>
                 {categories.map((category) => (
                   <SelectItem key={category} value={category}>{category}</SelectItem>
                 ))}
