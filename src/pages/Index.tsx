@@ -1,26 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { AlertCircle, TrendingUp, Users, MapPin, Calendar, Leaf, DollarSign, Settings } from 'lucide-react';
+import { AlertCircle, TrendingUp, Users, MapPin, Calendar, Leaf, DollarSign, Settings, User, LogOut } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import CropMatcher from '@/components/CropMatcher';
 import Marketplace from '@/components/Marketplace';
 import LandRental from '@/components/LandRental';
 import WorkerDirectory from '@/components/WorkerDirectory';
-import UserOnboarding from '@/components/UserOnboarding';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
+import { useNavigate } from 'react-router-dom';
 
 const Index = () => {
-  const [user, setUser] = useState(null);
-  const [showOnboarding, setShowOnboarding] = useState(true);
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+  const [profile, setProfile] = useState<any>(null);
 
-  // Mock user data - replace with actual auth later
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate('/auth');
+    }
+  }, [user, loading, navigate]);
+
+  useEffect(() => {
+    if (user) {
+      fetchProfile();
+    }
+  }, [user]);
+
+  const fetchProfile = async () => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (error) {
+        console.error('Profile fetch error:', error);
+      } else {
+        setProfile(data);
+      }
+    } catch (error) {
+      console.error('Unexpected error:', error);
+    }
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate('/auth');
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-forest-50 via-crop-50 to-earth-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="h-8 w-8 border-4 border-forest-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-forest-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
+
+  // Mock user data - replace with actual profile data
   const mockUser = {
-    name: 'John Farmer',
-    country: 'Kenya',
-    preferredCrop: 'Maize',
+    name: profile?.full_name || 'User',
+    country: profile?.country || 'Unknown',
+    preferredCrop: profile?.preferred_crop || 'Maize',
     activeFarms: 2,
     totalInvestment: 5000,
     expectedHarvest: '2024-08-15'
@@ -62,17 +118,6 @@ const Index = () => {
     }
   ];
 
-  if (showOnboarding && !user) {
-    return (
-      <UserOnboarding 
-        onComplete={(userData) => {
-          setUser(userData);
-          setShowOnboarding(false);
-        }}
-      />
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-forest-50 via-crop-50 to-earth-50">
       {/* Header */}
@@ -91,12 +136,30 @@ const Index = () => {
             <div className="flex items-center space-x-4">
               <Badge variant="outline" className="bg-crop-100 border-crop-300">
                 <MapPin className="h-3 w-3 mr-1" />
-                Tanzania Operations
+                {mockUser.country} Operations
               </Badge>
-              <Avatar>
-                <AvatarImage src="/placeholder-avatar.jpg" />
-                <AvatarFallback className="bg-forest-100">JF</AvatarFallback>
-              </Avatar>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                    <Avatar>
+                      <AvatarImage src="/placeholder-avatar.jpg" />
+                      <AvatarFallback className="bg-forest-100">
+                        {mockUser.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end">
+                  <DropdownMenuItem onClick={() => navigate('/profile')}>
+                    <User className="mr-2 h-4 w-4" />
+                    Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
