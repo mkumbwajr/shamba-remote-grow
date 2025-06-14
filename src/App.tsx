@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { CartProvider } from "@/contexts/CartContext";
+import { InventoryProvider } from "@/contexts/InventoryContext";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Onboarding from "./pages/Onboarding";
@@ -19,6 +20,7 @@ import InvestmentPage from "./pages/Investment";
 import Farms from "./pages/Farms";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
+import InventoryPage from "./pages/Inventory";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,30 +28,33 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
-      <CartProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/onboarding" element={<Onboarding />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/crop-matcher" element={<CropMatcherPage />} />
-              <Route path="/marketplace" element={<MarketplacePage />} />
-              <Route path="/land-rental" element={<LandRentalPage />} />
-              <Route path="/workers" element={<WorkersPage />} />
-              <Route path="/hired-workers" element={<HiredWorkersPage />} />
-              <Route path="/investment" element={<InvestmentPage />} />
-              <Route path="/farms" element={<Farms />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/order-success" element={<OrderSuccess />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </CartProvider>
+      <InventoryProvider>
+        <CartProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/onboarding" element={<Onboarding />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/crop-matcher" element={<CropMatcherPage />} />
+                <Route path="/marketplace" element={<MarketplacePage />} />
+                <Route path="/land-rental" element={<LandRentalPage />} />
+                <Route path="/workers" element={<WorkersPage />} />
+                <Route path="/hired-workers" element={<HiredWorkersPage />} />
+                <Route path="/investment" element={<InvestmentPage />} />
+                <Route path="/farms" element={<Farms />} />
+                <Route path="/inventory" element={<InventoryPage />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/order-success" element={<OrderSuccess />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </CartProvider>
+      </InventoryProvider>
     </LanguageProvider>
   </QueryClientProvider>
 );

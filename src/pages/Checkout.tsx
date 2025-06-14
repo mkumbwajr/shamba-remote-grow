@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,12 +7,14 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useCart } from '@/contexts/CartContext';
+import { useInventory } from '@/contexts/InventoryContext';
 import { formatTshAmount } from '@/utils/currency';
 import { ArrowLeft, CreditCard, Truck } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Checkout = () => {
   const { items, getTotalPrice, clearCart } = useCart();
+  const { addPurchaseToInventory } = useInventory();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -40,11 +41,14 @@ const Checkout = () => {
     // Simulate order processing
     await new Promise(resolve => setTimeout(resolve, 2000));
 
+    // Add items to inventory
+    addPurchaseToInventory(items);
+
     // Clear cart and show success message
     clearCart();
     toast({
       title: "Order Placed Successfully!",
-      description: "Your order has been received and will be processed soon.",
+      description: "Your order has been received and items added to inventory.",
     });
 
     // Redirect to success page
