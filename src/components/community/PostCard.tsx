@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Heart, MessageCircle, Share2, MoreHorizontal } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { usePostLikes, usePostComments, useToggleLike } from '@/hooks/community';
 import CommentSection from './CommentSection';
 import { toast } from 'sonner';
@@ -21,6 +22,7 @@ interface PostCardProps {
 
 const PostCard = ({ post }: PostCardProps) => {
   const [showComments, setShowComments] = useState(false);
+  const { t } = useLanguage();
   const { data: likes = [] } = usePostLikes(post.id);
   const { data: comments = [] } = usePostComments(post.id);
   const toggleLike = useToggleLike();
@@ -113,7 +115,7 @@ const PostCard = ({ post }: PostCardProps) => {
                   onClick={() => setShowComments(!showComments)}
                   className="hover:underline"
                 >
-                  {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
+                  {comments.length} {comments.length === 1 ? t('comment') : `${t('comment')}s`}
                 </button>
               )}
             </div>
@@ -133,7 +135,7 @@ const PostCard = ({ post }: PostCardProps) => {
             }`}
           >
             <Heart className={`h-5 w-5 mr-2 ${isLiked ? 'fill-current' : ''}`} />
-            Like
+            {t('like') as string}
           </Button>
           
           <Button
@@ -143,7 +145,7 @@ const PostCard = ({ post }: PostCardProps) => {
             className="flex-1 h-10 rounded-lg mx-1 text-gray-600 hover:text-gray-700 hover:bg-gray-100"
           >
             <MessageCircle className="h-5 w-5 mr-2" />
-            Comment
+            {t('comment') as string}
           </Button>
           
           <Button
@@ -153,7 +155,7 @@ const PostCard = ({ post }: PostCardProps) => {
             className="flex-1 h-10 rounded-lg mx-1 text-gray-600 hover:text-gray-700 hover:bg-gray-100"
           >
             <Share2 className="h-5 w-5 mr-2" />
-            Share
+            {t('share') as string}
           </Button>
         </div>
 

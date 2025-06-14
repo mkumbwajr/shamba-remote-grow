@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useLanguage } from '@/contexts/LanguageContext';
 import AppLayout from '@/components/layout/AppLayout';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import ContactsList from '@/components/messages/ContactsList';
@@ -16,6 +17,7 @@ const MessagesPage = () => {
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
   const [selectedWorkerId, setSelectedWorkerId] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -49,8 +51,8 @@ const MessagesPage = () => {
         <SidebarTrigger className="-ml-1" />
         <div className="flex-1 flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Messages</h2>
-            <p className="text-gray-600 text-sm">Chat with your hired workers</p>
+            <h2 className="text-2xl font-bold text-gray-800">{t('messages') as string}</h2>
+            <p className="text-gray-600 text-sm">{t('chatWithWorkers') as string}</p>
           </div>
           <Avatar className="h-10 w-10">
             <AvatarImage src="/placeholder-avatar.jpg" />

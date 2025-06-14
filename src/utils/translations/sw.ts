@@ -34,7 +34,7 @@ export const swTranslations = {
 
   // Dashboard
   remoteFarmingPlatform: 'Jukwaa la Kilimo kwa Mbali',
-  operations: 'Shughuli',
+  operations: 'Shughuli za Kilimo',
   activeFarms: 'Mashamba Yanayofanya Kazi',
   totalInvestment: 'Jumla ya Uwekezaji',
   workersHired: 'Wafanyakazi Walioajiriwa',
@@ -53,8 +53,65 @@ export const swTranslations = {
   profile: 'Wasifu',
   signOut: 'Toka',
   
-  // Profile page
+  // Navigation & Sidebar
+  myFarms: 'Mashamba Yangu',
+  inventory: 'Hazina',
+  investment: 'Uwekezaji',
+  messages: 'Ujumbe',
+  community: 'Jumuiya',
+  supportHelpCenter: 'Msaada na Kituo cha Usaidizi',
+  
+  // Community Page
+  connectWithFarmers: 'Ungana na wakulima wenzako',
+  whatsOnYourMind: 'Nini kinakuhangaisha',
+  post: 'Chapisha',
+  photo: 'Picha',
+  feeling: 'Hisia',
+  location: 'Mahali',
+  like: 'Penda',
+  comment: 'Maoni',
+  share: 'Shiriki',
+  writeComment: 'Andika maoni...',
+  noPostsYet: 'Hakuna machapisho bado',
+  beFirstToShare: 'Kuwa wa kwanza kushiriki kitu na jumuiya!',
+  
+  // Farms Page
+  manageFarmOperations: 'Simamia shughuli za kilimo',
+  addNewFarm: 'Ongeza Shamba Jipya',
+  newFarms: 'Mashamba Mapya',
+  activeFarmsSection: 'Mashamba Yanayofanya Kazi',
+  farmHistory: 'Historia ya Mashamba',
+  last30Days: 'Siku 30 zilizopita',
+  noNewFarms: 'Hakuna mashamba mapya yaliyoundwa katika siku 30 zilizopita',
+  noActiveFarms: 'Hakuna mashamba yanayofanya kazi yaliyopatikana',
+  noHistoricalFarms: 'Hakuna mashamba ya kihistoria yaliyopatikana',
+  loadingFarms: 'Inapakia mashamba...',
+  
+  // Workers Page
+  findHireWorkers: 'Tafuta na uajiri wafanyakazi wenye ujuzi wa kilimo',
+  
+  // Messages Page
+  chatWithWorkers: 'Piga gumzo na wafanyakazi wako walioajiriwa',
+  
+  // Inventory Page
+  trackPurchasesStock: 'Fuatilia ununuzi wako wa sokoni na viwango vya hisa',
+  
+  // Crop Matcher Page
+  aiPoweredRecommendations: 'Mapendekezo ya mazao yanayoendeshwa na AI na ufahamu wa soko',
+  
+  // Land Rental Page
+  findRentLand: 'Tafuta na ukodishe ardhi ya kilimo',
+  
+  // Support Page
   backToDashboard: 'Rudi kwenye Dashibodi',
+  getHelpForFarming: 'Pata msaada unaohitaji kwa safari yako ya kilimo',
+  support: 'Msaada',
+  helpCenter: 'Kituo cha Usaidizi',
+  
+  // Investment Page
+  trackInvestmentPerformance: 'Fuatilia utendaji wa uwekezaji wako na mapato',
+  
+  // Profile page
   yourProfile: 'Wasifu Wako',
   memberSince: 'Mwanachama tangu',
   profileInformation: 'Maelezo ya Wasifu',
@@ -74,7 +131,7 @@ export const swTranslations = {
   contactAndSocial: 'Mawasiliano na Mitandao',
   
   // New profile fields
-  bio: 'Wasifu',
+  bio: 'Wasifu Mfupi',
   farmLocation: 'Mahali pa Shamba',
   farmingGoals: 'Malengo ya Kilimo',
   interestedServices: 'Huduma za Kupenda',
@@ -128,13 +185,13 @@ export const swTranslations = {
   },
   experienceLevels: {
     'Beginner (0-2 years)': 'Mwanzo (miaka 0-2)',
-    'Intermediate (3-5 years)': 'Kati (miaka 3-5)',
+    'Intermediate (3-5 years)': 'Wastani (miaka 3-5)',
     'Advanced (6-10 years)': 'Juu (miaka 6-10)',
     'Expert (10+ years)': 'Mtaalamu (miaka 10+)'
   },
   farmSizes: {
     'Small (0-2 acres)': 'Ndogo (ekari 0-2)',
-    'Medium (3-10 acres)': 'Kati (ekari 3-10)',
+    'Medium (3-10 acres)': 'Wastani (ekari 3-10)',
     'Large (11-50 acres)': 'Kubwa (ekari 11-50)',
     'Very Large (50+ acres)': 'Kubwa Sana (ekari 50+)'
   },

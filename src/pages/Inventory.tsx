@@ -52,8 +52,8 @@ const InventoryPage = () => {
             <SidebarTrigger className="-ml-1" />
             <div className="flex-1 flex justify-between items-center">
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">Inventory</h2>
-                <p className="text-gray-600 text-sm">Track your marketplace purchases and stock levels</p>
+                <h2 className="text-2xl font-bold text-gray-800">{t('inventory') as string}</h2>
+                <p className="text-gray-600 text-sm">{t('trackPurchasesStock') as string}</p>
               </div>
               <Avatar className="h-10 w-10">
                 <AvatarImage src="/placeholder-avatar.jpg" />

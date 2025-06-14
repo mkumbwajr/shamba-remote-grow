@@ -30,7 +30,7 @@ export const enTranslations = {
   creatingAccount: 'Creating Account...',
   dontHaveAccount: "Don't have an account? Sign up",
   alreadyHaveAccount: "Already have an account? Sign in",
-  passwordMismatchError: 'do not match.', // New key
+  passwordMismatchError: 'do not match.',
 
   // Dashboard
   remoteFarmingPlatform: 'Remote Farming Platform',
@@ -53,8 +53,65 @@ export const enTranslations = {
   profile: 'Profile',
   signOut: 'Sign Out',
   
-  // Profile page basics
+  // Navigation & Sidebar
+  myFarms: 'My Farms',
+  inventory: 'Inventory',
+  investment: 'Investment',
+  messages: 'Messages',
+  community: 'Community',
+  supportHelpCenter: 'Support & Help Center',
+  
+  // Community Page
+  connectWithFarmers: 'Connect with fellow farmers',
+  whatsOnYourMind: "What's on your mind",
+  post: 'Post',
+  photo: 'Photo',
+  feeling: 'Feeling',
+  location: 'Location',
+  like: 'Like',
+  comment: 'Comment',
+  share: 'Share',
+  writeComment: 'Write a comment...',
+  noPostsYet: 'No posts yet',
+  beFirstToShare: 'Be the first to share something with the community!',
+  
+  // Farms Page
+  manageFarmOperations: 'Manage your farming operations',
+  addNewFarm: 'Add New Farm',
+  newFarms: 'New Farms',
+  activeFarmsSection: 'Active Farms',
+  farmHistory: 'Farm History',
+  last30Days: 'Last 30 days',
+  noNewFarms: 'No new farms created in the last 30 days',
+  noActiveFarms: 'No active farms found',
+  noHistoricalFarms: 'No historical farms found',
+  loadingFarms: 'Loading farms...',
+  
+  // Workers Page
+  findHireWorkers: 'Find and hire skilled farm workers',
+  
+  // Messages Page
+  chatWithWorkers: 'Chat with your hired workers',
+  
+  // Inventory Page
+  trackPurchasesStock: 'Track your marketplace purchases and stock levels',
+  
+  // Crop Matcher Page
+  aiPoweredRecommendations: 'AI-powered crop recommendations and market insights',
+  
+  // Land Rental Page
+  findRentLand: 'Find and rent agricultural land',
+  
+  // Support Page
   backToDashboard: 'Back to Dashboard',
+  getHelpForFarming: 'Get the help you need for your farming journey',
+  support: 'Support',
+  helpCenter: 'Help Center',
+  
+  // Investment Page
+  trackInvestmentPerformance: 'Track your investment performance and returns',
+  
+  // Profile page basics
   yourProfile: 'Your Profile',
   memberSince: 'Member since',
   profileInformation: 'Profile Information',

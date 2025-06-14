@@ -55,7 +55,7 @@ const CropMatcherPage = () => {
                 <h2 className="text-2xl font-bold text-gray-800">
                   {t('crops') as string}
                 </h2>
-                <p className="text-gray-600 text-sm">AI-powered crop recommendations and market insights</p>
+                <p className="text-gray-600 text-sm">{t('aiPoweredRecommendations') as string}</p>
               </div>
               <Avatar className="h-10 w-10">
                 <AvatarImage src="/placeholder-avatar.jpg" />

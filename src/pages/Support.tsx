@@ -2,6 +2,7 @@
 import React from 'react';
 import AppLayout from '@/components/layout/AppLayout';
 import { useProfileData } from '@/hooks/useProfileData';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SupportSection from '@/components/support/SupportSection';
 import HelpCenterSection from '@/components/support/HelpCenterSection';
@@ -11,6 +12,7 @@ import { Button } from '@/components/ui/button';
 
 const Support = () => {
   const { profile } = useProfileData();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   console.log('Support page loading, profile:', profile);
@@ -26,16 +28,16 @@ const Support = () => {
               className="mb-4 text-green-600 hover:text-green-700"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Dashboard
+              {t('backToDashboard') as string}
             </Button>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Support & Help Center</h1>
-            <p className="text-gray-600">Get the help you need for your farming journey</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('supportHelpCenter') as string}</h1>
+            <p className="text-gray-600">{t('getHelpForFarming') as string}</p>
           </div>
 
           <Tabs defaultValue="support" className="space-y-6">
             <TabsList className="grid w-full grid-cols-2 lg:w-1/2">
-              <TabsTrigger value="support">Support</TabsTrigger>
-              <TabsTrigger value="help">Help Center</TabsTrigger>
+              <TabsTrigger value="support">{t('support') as string}</TabsTrigger>
+              <TabsTrigger value="help">{t('helpCenter') as string}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="support">

@@ -1,8 +1,10 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Send, Heart } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { usePostComments, useCreateComment } from '@/hooks/community';
 import { formatDistanceToNow } from 'date-fns';
 import { toast } from 'sonner';
@@ -13,6 +15,7 @@ interface CommentSectionProps {
 
 const CommentSection = ({ postId }: CommentSectionProps) => {
   const [newComment, setNewComment] = useState('');
+  const { t } = useLanguage();
   const { data: comments = [] } = usePostComments(postId);
   const createComment = useCreateComment();
 
@@ -59,7 +62,7 @@ const CommentSection = ({ postId }: CommentSectionProps) => {
                   </div>
                   <div className="flex items-center space-x-4 mt-1 ml-3">
                     <button className="text-xs font-semibold text-gray-500 hover:text-blue-600 transition-colors">
-                      Like
+                      {t('like') as string}
                     </button>
                     <button className="text-xs font-semibold text-gray-500 hover:text-blue-600 transition-colors">
                       Reply
@@ -85,7 +88,7 @@ const CommentSection = ({ postId }: CommentSectionProps) => {
         </Avatar>
         <div className="flex-1 flex space-x-2">
           <Input
-            placeholder="Write a comment..."
+            placeholder={t('writeComment') as string}
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSubmitComment()}

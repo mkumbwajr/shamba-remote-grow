@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -59,15 +60,15 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
   const menuItems = [
     { name: String(t('dashboard')), icon: Home, path: '/' },
     { name: String(t('crops')), icon: Wheat, path: '/crop-matcher' },
-    { name: 'My Farms', icon: Tractor, path: '/farms' },
+    { name: String(t('myFarms')), icon: Tractor, path: '/farms' },
     { name: String(t('marketplace')), icon: ShoppingCart, path: '/marketplace' },
-    { name: 'Inventory', icon: Package, path: '/inventory' },
+    { name: String(t('inventory')), icon: Package, path: '/inventory' },
     { name: String(t('land')), icon: MapPinned, path: '/land-rental' },
     { name: String(t('workers')), icon: Users, path: '/workers' },
-    { name: 'Investment', icon: TrendingUp, path: '/investment' },
-    { name: 'Messages', icon: MessageSquare, path: '/messages' },
-    { name: 'Community', icon: Heart, path: '/community' },
-    { name: 'Support & Help Center', icon: Settings, path: '/support' },
+    { name: String(t('investment')), icon: TrendingUp, path: '/investment' },
+    { name: String(t('messages')), icon: MessageSquare, path: '/messages' },
+    { name: String(t('community')), icon: Heart, path: '/community' },
+    { name: String(t('supportHelpCenter')), icon: Settings, path: '/support' },
   ];
 
   return (
@@ -83,7 +84,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
                 Bwana Shamba
               </h1>
               <p className="text-sm text-green-600 truncate">
-                Remote Digital Farming
+                {String(t('remoteFarmingPlatform'))}
               </p>
             </div>
           )}

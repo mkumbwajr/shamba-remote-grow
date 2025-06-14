@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { usePosts } from '@/hooks/community';
+import { useLanguage } from '@/contexts/LanguageContext';
 import PostCard from './PostCard';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -52,6 +53,7 @@ const fakePosts = [
 
 const PostFeed = () => {
   const { data: posts, isLoading } = usePosts();
+  const { t } = useLanguage();
 
   if (isLoading) {
     return (
@@ -93,8 +95,8 @@ const PostFeed = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.477 8-10 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.477-8 10-8s10 3.582 10 8z" />
             </svg>
           </div>
-          <p className="text-gray-500 text-lg mb-2 font-medium">No posts yet</p>
-          <p className="text-gray-400">Be the first to share something with the community!</p>
+          <p className="text-gray-500 text-lg mb-2 font-medium">{t('noPostsYet') as string}</p>
+          <p className="text-gray-400">{t('beFirstToShare') as string}</p>
         </div>
       )}
     </div>

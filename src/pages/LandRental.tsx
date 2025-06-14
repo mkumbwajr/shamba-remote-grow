@@ -55,7 +55,7 @@ const LandRentalPage = () => {
                 <h2 className="text-2xl font-bold text-gray-800">
                   {t('land') as string}
                 </h2>
-                <p className="text-gray-600 text-sm">Find and rent agricultural land</p>
+                <p className="text-gray-600 text-sm">{t('findRentLand') as string}</p>
               </div>
               <Avatar className="h-10 w-10">
                 <AvatarImage src="/placeholder-avatar.jpg" />

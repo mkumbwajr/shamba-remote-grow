@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { ImageIcon, Smile, MapPin } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useCreatePost } from '@/hooks/community';
 import { toast } from 'sonner';
 
@@ -17,6 +18,7 @@ const PostCreator = ({ userProfile }: PostCreatorProps) => {
   const [content, setContent] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [showImageInput, setShowImageInput] = useState(false);
+  const { t } = useLanguage();
   const createPost = useCreatePost();
 
   const handleSubmit = async () => {
@@ -40,6 +42,9 @@ const PostCreator = ({ userProfile }: PostCreatorProps) => {
     }
   };
 
+  const firstName = userProfile?.full_name?.split(' ')[0] || 'there';
+  const placeholderText = `${t('whatsOnYourMind') as string}, ${firstName}?`;
+
   return (
     <Card className="mb-4 bg-white rounded-xl shadow-sm border border-gray-200">
       <CardContent className="p-4">
@@ -53,7 +58,7 @@ const PostCreator = ({ userProfile }: PostCreatorProps) => {
           
           <div className="flex-1">
             <Textarea
-              placeholder={`What's on your mind, ${userProfile?.full_name?.split(' ')[0] || 'there'}?`}
+              placeholder={placeholderText}
               value={content}
               onChange={(e) => setContent(e.target.value)}
               className="border-0 resize-none focus-visible:ring-0 text-base placeholder:text-gray-500 bg-gray-50 rounded-3xl px-4 py-3 min-h-[48px]"
@@ -85,7 +90,7 @@ const PostCreator = ({ userProfile }: PostCreatorProps) => {
                   className="text-gray-600 hover:bg-gray-100 rounded-lg px-3 py-2 h-9"
                 >
                   <ImageIcon className="h-5 w-5 mr-2 text-green-600" />
-                  <span className="text-sm font-medium">Photo</span>
+                  <span className="text-sm font-medium">{t('photo') as string}</span>
                 </Button>
                 
                 <Button
@@ -94,7 +99,7 @@ const PostCreator = ({ userProfile }: PostCreatorProps) => {
                   disabled
                 >
                   <Smile className="h-5 w-5 mr-2 text-yellow-600" />
-                  <span className="text-sm font-medium">Feeling</span>
+                  <span className="text-sm font-medium">{t('feeling') as string}</span>
                 </Button>
                 
                 <Button
@@ -103,7 +108,7 @@ const PostCreator = ({ userProfile }: PostCreatorProps) => {
                   disabled
                 >
                   <MapPin className="h-5 w-5 mr-2 text-red-600" />
-                  <span className="text-sm font-medium">Location</span>
+                  <span className="text-sm font-medium">{t('location') as string}</span>
                 </Button>
               </div>
               
@@ -112,7 +117,7 @@ const PostCreator = ({ userProfile }: PostCreatorProps) => {
                 disabled={createPost.isPending || (!content.trim() && !imageUrl.trim())}
                 className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-6 py-2 h-9 text-sm font-medium disabled:opacity-50"
               >
-                Post
+                {t('post') as string}
               </Button>
             </div>
           </div>

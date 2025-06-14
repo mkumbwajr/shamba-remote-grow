@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useLanguage } from '@/contexts/LanguageContext';
 import AppLayout from '@/components/layout/AppLayout';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import PostCreator from '@/components/community/PostCreator';
@@ -15,6 +16,7 @@ interface UserProfileData {
 const CommunityPage = () => {
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -44,8 +46,8 @@ const CommunityPage = () => {
         <SidebarTrigger className="-ml-1" />
         <div className="flex-1 flex justify-between items-center">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Community</h2>
-            <p className="text-gray-500 text-sm">Connect with fellow farmers</p>
+            <h2 className="text-xl font-bold text-gray-900">{t('community') as string}</h2>
+            <p className="text-gray-500 text-sm">{t('connectWithFarmers') as string}</p>
           </div>
           <Avatar className="h-9 w-9 ring-2 ring-gray-100">
             <AvatarImage src="/placeholder-avatar.jpg" />
