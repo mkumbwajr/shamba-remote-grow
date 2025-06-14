@@ -1,374 +1,203 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Leaf } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { toast } from 'sonner';
 import LanguageToggle from '@/components/LanguageToggle';
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [country, setCountry] = useState<string | undefined>(undefined);
+  const [phone, setPhone] = useState('');
+  const [preferredCrop, setPreferredCrop] = useState<string | undefined>(undefined);
+  const [farmSize, setFarmSize] = useState<string | undefined>(undefined);
+  const [farmingExperience, setFarmingExperience] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { t } = useLanguage();
 
-  // Login form state
-  const [loginData, setLoginData] = useState({
-    email: '',
-    password: ''
-  });
-
-  // Signup form state
-  const [signupData, setSignupData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    fullName: '',
-    country: '',
-    phone: '',
-    preferredCrop: '',
-    farmingExperience: '',
-    farmSize: ''
-  });
-
-  const countries = [
-    'Kenya', 'Tanzania', 'Uganda', 'Rwanda', 'Burundi', 'Ethiopia', 'South Sudan'
-  ];
-
-  const crops = [
-    'Maize', 'Rice', 'Beans', 'Tomatoes', 'Onions', 'Carrots', 'Cabbage', 'Coffee', 'Tea'
-  ];
-
-  const experienceLevels = [
-    'Beginner (0-2 years)', 'Intermediate (3-5 years)', 'Advanced (6-10 years)', 'Expert (10+ years)'
-  ];
-
-  const farmSizes = [
-    'Small (0-2 acres)', 'Medium (3-10 acres)', 'Large (11-50 acres)', 'Very Large (50+ acres)'
-  ];
-
   useEffect(() => {
-    // Check if user is already logged in
-    const checkAuth = async () => {
+    const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
         navigate('/');
       }
     };
-    checkAuth();
+    checkUser();
   }, [navigate]);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  // Using a helper to get object keys, t function expects string for object path
+  const getObjectKeys = (path: string) => Object.keys(t(path, { returnObjects: true } as any) || {});
+
+  const countries = getObjectKeys('countries');
+  const crops = getObjectKeys('cropsList');
+  const experienceLevels = getObjectKeys('experienceLevels');
+  const farmSizes = getObjectKeys('farmSizes');
+
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: loginData.email,
-        password: loginData.password,
+    if (isSignUp) {
+      if (password !== confirmPassword) {
+        toast.error(t('confirmPassword') + ' ' + t('notProvided'));
+        setIsLoading(false);
+        return;
+      }
+      // Data for signUp options is user_metadata, handled by backend trigger
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+            country: country || null, // Ensure null if undefined
+            phone: phone || null,
+            preferred_crop: preferredCrop || null,
+            farming_experience: farmingExperience || null,
+            farm_size: farmSize || null,
+          },
+        },
       });
 
-      if (error) {
-        toast.error(error.message);
+      if (signUpError) {
+        toast.error(signUpError.message);
+      } else if (signUpData.user) {
+        toast.success(t('createAccount') + ' ' + t('save') + 'd! Please check your email to verify.');
+      } else if (!signUpData.session && !signUpData.user) {
+        // This case can happen if email confirmation is required and already exists but not confirmed.
+        // Supabase returns { data: { session: null, user: null }, error: null }
+        toast.info("Please check your email to verify your account or try signing in if already verified.");
+      }
+    } else { // Sign In
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInError) {
+        toast.error(signInError.message);
       } else {
-        toast.success('Successfully logged in!');
         navigate('/');
       }
-    } catch (error) {
-      toast.error('An unexpected error occurred');
-    } finally {
-      setIsLoading(false);
     }
-  };
-
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    if (signupData.password !== signupData.confirmPassword) {
-      toast.error('Passwords do not match');
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const { error } = await supabase.auth.signUp({
-        email: signupData.email,
-        password: signupData.password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/`,
-          data: {
-            full_name: signupData.fullName,
-            country: signupData.country,
-          }
-        }
-      });
-
-      if (error) {
-        toast.error(error.message);
-      } else {
-        // Create profile with additional information
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          const { error: profileError } = await supabase
-            .from('profiles')
-            .upsert({
-              id: user.id,
-              full_name: signupData.fullName,
-              country: signupData.country,
-              phone: signupData.phone,
-              preferred_crop: signupData.preferredCrop,
-              farming_experience: signupData.farmingExperience,
-              farm_size: signupData.farmSize,
-            });
-
-          if (profileError) {
-            console.error('Profile creation error:', profileError);
-          }
-        }
-
-        toast.success('Account created successfully! Please check your email to verify your account.');
-        setIsLogin(true);
-      }
-    } catch (error) {
-      toast.error('An unexpected error occurred');
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-forest-50 via-crop-50 to-earth-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex justify-end mb-4">
-            <LanguageToggle />
-          </div>
-          <div className="h-16 w-16 bg-gradient-to-br from-forest-600 to-crop-600 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <Leaf className="h-8 w-8 text-white" />
-          </div>
-          <h1 className="text-3xl font-bold text-forest-800">Bwana Shamba</h1>
-          <p className="text-forest-600 mt-2">{t('remoteFarmingPlatform')}</p>
-        </div>
-
-        <Card className="bg-white border-forest-200 shadow-lg">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl text-forest-800">
-              {isLogin ? t('welcomeBack') : t('joinBwanaShamba')}
-            </CardTitle>
-            <CardDescription>
-              {isLogin 
-                ? t('signInToAccess') 
-                : t('createAccountToStart')
-              }
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent>
-            {isLogin ? (
-              <form onSubmit={handleLogin} className="space-y-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-100 via-yellow-50 to-blue-100 flex flex-col items-center justify-center p-4">
+      <div className="absolute top-4 right-4">
+        <LanguageToggle />
+      </div>
+      <Card className="w-full max-w-md shadow-xl">
+        <CardHeader className="text-center">
+          <img src="/placeholder.svg" alt="Bwana Shamba" className="w-20 h-20 mx-auto mb-4" />
+          <CardTitle className="text-3xl font-bold text-green-700">
+            {isSignUp ? t('joinBwanaShamba') : t('welcomeBack')}
+          </CardTitle>
+          <CardDescription>
+            {isSignUp ? t('createAccountToStart') : t('signInToAccess')}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleAuth} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="email">{t('email')}</Label>
+              <Input id="email" type="email" placeholder={t('enterEmail')} value={email} onChange={(e) => setEmail(e.target.value)} required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">{t('password')}</Label>
+              <Input id="password" type="password" placeholder={isSignUp ? t('createPassword') : t('enterPassword')} value={password} onChange={(e) => setPassword(e.target.value)} required />
+            </div>
+            {isSignUp && (
+              <>
                 <div className="space-y-2">
-                  <Label htmlFor="email">{t('email')}</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder={t('enterEmail')}
-                    value={loginData.email}
-                    onChange={(e) => setLoginData(prev => ({ ...prev, email: e.target.value }))}
-                    required
-                  />
+                  <Label htmlFor="confirmPassword">{t('confirmPassword')}</Label>
+                  <Input id="confirmPassword" type="password" placeholder={t('confirmPasswordPlaceholder')} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
                 </div>
-
                 <div className="space-y-2">
-                  <Label htmlFor="password">{t('password')}</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder={t('enterPassword')}
-                    value={loginData.password}
-                    onChange={(e) => setLoginData(prev => ({ ...prev, password: e.target.value }))}
-                    required
-                  />
+                  <Label htmlFor="fullName">{t('fullName')}</Label>
+                  <Input id="fullName" placeholder={t('yourFullName')} value={fullName} onChange={(e) => setFullName(e.target.value)} required />
                 </div>
-
-                <Button 
-                  type="submit" 
-                  className="w-full bg-forest-600 hover:bg-forest-700"
-                  disabled={isLoading}
-                >
-                  {isLoading ? t('signingIn') : t('signIn')}
-                </Button>
-              </form>
-            ) : (
-              <form onSubmit={handleSignup} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="fullName">{t('fullName')}</Label>
-                    <Input
-                      id="fullName"
-                      placeholder={t('yourFullName')}
-                      value={signupData.fullName}
-                      onChange={(e) => setSignupData(prev => ({ ...prev, fullName: e.target.value }))}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="country">{t('country')}</Label>
-                    <Select 
-                      value={signupData.country} 
-                      onValueChange={(value) => setSignupData(prev => ({ ...prev, country: value }))}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('selectCountry')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {countries.map((country) => (
-                          <SelectItem key={country} value={country}>
-                            {t(`countries.${country}`)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
                 <div className="space-y-2">
-                  <Label htmlFor="email">{t('email')}</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder={t('enterEmail')}
-                    value={signupData.email}
-                    onChange={(e) => setSignupData(prev => ({ ...prev, email: e.target.value }))}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="phone">{t('phone')}</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder={t('yourPhoneNumber')}
-                    value={signupData.phone}
-                    onChange={(e) => setSignupData(prev => ({ ...prev, phone: e.target.value }))}
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="preferredCrop">{t('preferredCrop')}</Label>
-                    <Select 
-                      value={signupData.preferredCrop} 
-                      onValueChange={(value) => setSignupData(prev => ({ ...prev, preferredCrop: value }))}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('selectCrop')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {crops.map((crop) => (
-                          <SelectItem key={crop} value={crop}>
-                            {t(`crops.${crop}`)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="farmSize">{t('farmSize')}</Label>
-                    <Select 
-                      value={signupData.farmSize} 
-                      onValueChange={(value) => setSignupData(prev => ({ ...prev, farmSize: value }))}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('selectSize')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {farmSizes.map((size) => (
-                          <SelectItem key={size} value={size}>
-                            {t(`farmSizes.${size}`)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="experience">{t('farmingExperience')}</Label>
-                  <Select 
-                    value={signupData.farmingExperience} 
-                    onValueChange={(value) => setSignupData(prev => ({ ...prev, farmingExperience: value }))}
-                  >
+                  <Label htmlFor="country">{t('country')}</Label>
+                  <Select value={country} onValueChange={setCountry}>
                     <SelectTrigger>
-                      <SelectValue placeholder={t('selectExperience')} />
+                      <SelectValue placeholder={t('selectCountry')} />
                     </SelectTrigger>
                     <SelectContent>
-                      {experienceLevels.map((level) => (
-                        <SelectItem key={level} value={level}>
-                          {t(`experienceLevels.${level}`)}
-                        </SelectItem>
+                      {countries.map((cKey) => (
+                        <SelectItem key={cKey} value={cKey}>{t(`countries.${cKey}`)}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="password">{t('password')}</Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      placeholder={t('createPassword')}
-                      value={signupData.password}
-                      onChange={(e) => setSignupData(prev => ({ ...prev, password: e.target.value }))}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">{t('confirmPassword')}</Label>
-                    <Input
-                      id="confirmPassword"
-                      type="password"
-                      placeholder={t('confirmPasswordPlaceholder')}
-                      value={signupData.confirmPassword}
-                      onChange={(e) => setSignupData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                      required
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label htmlFor="phone">{t('phone')}</Label>
+                  <Input id="phone" placeholder={t('yourPhoneNumber')} value={phone} onChange={(e) => setPhone(e.target.value)} />
                 </div>
-
-                <Button 
-                  type="submit" 
-                  className="w-full bg-crop-600 hover:bg-crop-700"
-                  disabled={isLoading}
-                >
-                  {isLoading ? t('creatingAccount') : t('createAccount')}
-                </Button>
-              </form>
+                <div className="space-y-2">
+                  <Label htmlFor="preferredCrop">{t('preferredCrop')}</Label>
+                  <Select value={preferredCrop} onValueChange={setPreferredCrop}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('selectCrop')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {crops.map((cropKey) => (
+                        <SelectItem key={cropKey} value={cropKey}>{t(`cropsList.${cropKey}`)}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="farmSize">{t('farmSize')}</Label>
+                  <Select value={farmSize} onValueChange={setFarmSize}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('selectSize')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {farmSizes.map((sizeKey) => (
+                        <SelectItem key={sizeKey} value={sizeKey}>{t(`farmSizes.${sizeKey}`)}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="farmingExperience">{t('farmingExperience')}</Label>
+                  <Select value={farmingExperience} onValueChange={setFarmingExperience}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('selectExperience')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {experienceLevels.map((levelKey) => (
+                        <SelectItem key={levelKey} value={levelKey}>{t(`experienceLevels.${levelKey}`)}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </>
             )}
-
-            <div className="mt-6 text-center">
-              <Button
-                variant="link"
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-forest-600 hover:text-forest-700"
-              >
-                {isLogin ? t('dontHaveAccount') : t('alreadyHaveAccount')}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            <Button type="submit" className="w-full bg-green-600 hover:bg-green-700" disabled={isLoading}>
+              {isLoading ? (isSignUp ? t('creatingAccount') : t('signingIn')) : (isSignUp ? t('createAccount') : t('signIn'))}
+            </Button>
+          </form>
+          <p className="mt-6 text-center text-sm">
+            {isSignUp ? t('alreadyHaveAccount') : t('dontHaveAccount')}{' '}
+            <Button variant="link" onClick={() => setIsSignUp(!isSignUp)} className="text-green-600 hover:text-green-700 p-0">
+              {isSignUp ? t('signIn') : t('createAccount')}
+            </Button>
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 };
