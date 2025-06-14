@@ -9,15 +9,16 @@ import { BarChart, DollarSign, HardHat, Home, Info, LogOut, MapPinned, Settings,
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageToggle from '@/components/LanguageToggle';
 import MarketIntelligenceChart from '@/components/dashboard/MarketIntelligenceChart';
+import FarmsPage from '@/components/farms/FarmsPage';
 
 interface UserProfileData {
   full_name?: string | null;
-  // Add other fields if needed for display
 }
 
 const Index = () => {
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
   const [showMarketChart, setShowMarketChart] = useState(false);
+  const [showFarms, setShowFarms] = useState(false);
   const navigate = useNavigate();
   const { t } = useLanguage();
 
@@ -47,6 +48,19 @@ const Index = () => {
     navigate('/auth');
   };
 
+  const handleActiveFarmsClick = () => {
+    setShowFarms(true);
+  };
+
+  const handleBackToDashboard = () => {
+    setShowFarms(false);
+  };
+
+  // If showing farms page, render it instead of dashboard
+  if (showFarms) {
+    return <FarmsPage onBack={handleBackToDashboard} />;
+  }
+
   const menuItems = [
     { name: t('dashboard') as string, icon: Home, path: '/' },
     { name: t('crops') as string, icon: Wheat, path: '/crop-matcher' },
@@ -56,7 +70,14 @@ const Index = () => {
   ];
 
   const quickStats = [
-    { title: t('activeFarms') as string, value: '5', icon: Tractor, change: '+2 this month' },
+    { 
+      title: t('activeFarms') as string, 
+      value: '5', 
+      icon: Tractor, 
+      change: '+2 this month',
+      onClick: handleActiveFarmsClick,
+      clickable: true
+    },
     { title: t('totalInvestment') as string, value: '$12,500', icon: DollarSign, change: '+5%' },
     { title: t('workersHired') as string, value: '23', icon: HardHat, change: '+3 new' },
     { title: t('nextHarvest') as string, value: `30 ${t('days') as string}`, icon: BarChart, change: 'Maize' },
@@ -124,7 +145,11 @@ const Index = () => {
         {/* Quick Stats */}
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {quickStats.map((stat) => (
-            <Card key={stat.title} className="shadow-lg hover:shadow-xl transition-shadow">
+            <Card 
+              key={stat.title} 
+              className={`shadow-lg hover:shadow-xl transition-shadow ${stat.clickable ? 'cursor-pointer hover:bg-gray-50' : ''}`}
+              onClick={stat.onClick}
+            >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium text-gray-600">{stat.title}</CardTitle>
                 <stat.icon className="h-5 w-5 text-green-500" />
