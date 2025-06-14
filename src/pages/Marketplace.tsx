@@ -3,14 +3,21 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Marketplace from '@/components/Marketplace';
-import { AppSidebar } from '@/components/layout/AppSidebar';
-import {
-  SidebarProvider,
-  SidebarInset,
-  SidebarTrigger,
-} from '@/components/ui/sidebar';
+import { 
+  Home, 
+  MapPinned, 
+  Settings, 
+  ShoppingCart, 
+  Tractor, 
+  Users, 
+  Wheat, 
+  LogOut,
+  DollarSign
+} from 'lucide-react';
+import LanguageToggle from '@/components/LanguageToggle';
 
 interface UserProfileData {
   full_name?: string | null;
@@ -42,35 +49,88 @@ const MarketplacePage = () => {
     fetchUserProfile();
   }, [navigate]);
 
-  return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gray-50">
-        <AppSidebar userProfile={userProfile} />
-        <SidebarInset className="flex-1">
-          {/* Header */}
-          <header className="sticky top-0 z-10 flex h-14 sm:h-16 shrink-0 items-center gap-2 border-b bg-white px-3 sm:px-4">
-            <SidebarTrigger className="-ml-1" />
-            <div className="flex-1 flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
-              <div className="min-w-0">
-                <h2 className="text-lg sm:text-2xl font-bold text-gray-800 truncate">
-                  {t('marketplace') as string}
-                </h2>
-                <p className="text-gray-600 text-xs sm:text-sm hidden sm:block">Seeds, tools, and services for your farming needs</p>
-              </div>
-              <Avatar className="h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0">
-                <AvatarImage src="/placeholder-avatar.jpg" />
-                <AvatarFallback>{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
-              </Avatar>
-            </div>
-          </header>
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate('/auth');
+  };
 
-          {/* Main content */}
-          <main className="flex-1 overflow-auto">
-            <Marketplace />
-          </main>
-        </SidebarInset>
-      </div>
-    </SidebarProvider>
+  const menuItems = [
+    { name: String(t('dashboard')), icon: Home, path: '/' },
+    { name: String(t('crops')), icon: Wheat, path: '/crop-matcher' },
+    { name: 'Investment', icon: DollarSign, path: '/investment' },
+    { name: String(t('marketplace')), icon: ShoppingCart, path: '/marketplace', active: true },
+    { name: String(t('land')), icon: MapPinned, path: '/land-rental' },
+    { name: String(t('workers')), icon: Users, path: '/workers' },
+  ];
+
+  return (
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-64 bg-green-700 text-white p-6 space-y-6 fixed h-full">
+        <div className="text-center mb-8">
+          <div className="w-11 h-11 bg-green-600 rounded-lg flex items-center justify-center mx-auto mb-2">
+            <Tractor className="w-6 h-6 text-white" />
+          </div>
+          <h1 className="text-xl font-semibold">{String(t('remoteFarmingPlatform'))}</h1>
+        </div>
+        <nav className="space-y-1">
+          {menuItems.map((item) => (
+            <Button
+              key={item.name}
+              variant="ghost"
+              className={`w-full justify-start text-md py-3 ${
+                item.active 
+                  ? 'bg-green-600 text-white' 
+                  : 'hover:bg-green-600'
+              }`}
+              onClick={() => navigate(item.path)}
+            >
+              <item.icon className="mr-3 h-5 w-5" />
+              {item.name}
+            </Button>
+          ))}
+        </nav>
+        <div className="absolute bottom-4 left-4 right-4 space-y-1">
+          <div className="mb-2">
+            <LanguageToggle />
+          </div>
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-md hover:bg-green-600 py-3"
+            onClick={() => navigate('/profile')}
+          >
+            <Settings className="mr-3 h-5 w-5" />
+            {String(t('profile'))}
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-md hover:bg-red-500 hover:text-white py-3"
+            onClick={handleSignOut}
+          >
+            <LogOut className="mr-3 h-5 w-5" />
+            {String(t('signOut'))}
+          </Button>
+        </div>
+      </aside>
+
+      {/* Main content */}
+      <main className="flex-1 ml-64 p-8">
+        <header className="flex justify-between items-center mb-8">
+          <div>
+            <h2 className="text-3xl font-bold text-gray-800">
+              {t('marketplace') as string}
+            </h2>
+            <p className="text-gray-600">Seeds, tools, and services for your farming needs</p>
+          </div>
+          <Avatar className="h-10 w-10">
+            <AvatarImage src="/placeholder-avatar.jpg" />
+            <AvatarFallback>{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
+          </Avatar>
+        </header>
+
+        <Marketplace />
+      </main>
+    </div>
   );
 };
 
