@@ -107,10 +107,18 @@ const WorkersPage = () => {
             </h2>
             <p className="text-gray-600">Find and hire skilled farm workers</p>
           </div>
-          <Avatar>
-            <AvatarImage src="/placeholder-avatar.jpg" />
-            <AvatarFallback>{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
-          </Avatar>
+          <div className="flex items-center space-x-4">
+            <Button 
+              variant="outline"
+              onClick={() => navigate('/hired-workers')}
+            >
+              My Hired Workers
+            </Button>
+            <Avatar>
+              <AvatarImage src="/placeholder-avatar.jpg" />
+              <AvatarFallback>{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
+            </Avatar>
+          </div>
         </header>
 
         <WorkerDirectory />

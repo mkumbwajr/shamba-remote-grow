@@ -66,6 +66,63 @@ export type Database = {
         }
         Relationships: []
       }
+      hired_workers: {
+        Row: {
+          created_at: string
+          end_date: string | null
+          farm_location: string | null
+          hire_date: string
+          id: string
+          job_description: string | null
+          notes: string | null
+          rate: number
+          rate_type: string
+          status: string
+          updated_at: string
+          user_id: string
+          worker_id: string
+          worker_name: string
+          worker_phone: string
+          worker_specialization: string
+        }
+        Insert: {
+          created_at?: string
+          end_date?: string | null
+          farm_location?: string | null
+          hire_date?: string
+          id?: string
+          job_description?: string | null
+          notes?: string | null
+          rate: number
+          rate_type?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+          worker_id: string
+          worker_name: string
+          worker_phone: string
+          worker_specialization: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string | null
+          farm_location?: string | null
+          hire_date?: string
+          id?: string
+          job_description?: string | null
+          notes?: string | null
+          rate?: number
+          rate_type?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+          worker_id?: string
+          worker_name?: string
+          worker_phone?: string
+          worker_specialization?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           bio: string | null

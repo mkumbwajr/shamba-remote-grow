@@ -6,6 +6,9 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Star, MapPin, Calendar, DollarSign, Users, Phone, Search, MessageSquare } from 'lucide-react';
+import { useHireWorker } from '@/hooks/useHiredWorkers';
+import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 const WorkerDirectory = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -165,17 +168,55 @@ const WorkerDirectory = () => {
     return matchesSearch && matchesSkill && matchesRegion;
   });
 
+  const { mutate: hireWorker, isPending } = useHireWorker();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
   const handleHireWorker = (worker: any) => {
     console.log(`Initiated hiring process for ${worker.name}`);
-    // This would open a hiring modal or navigate to a detailed hiring page
+    
+    hireWorker({
+      worker_id: worker.id.toString(),
+      worker_name: worker.name,
+      worker_specialization: worker.specialization,
+      worker_phone: worker.phone,
+      rate: worker.rate,
+      rate_type: worker.rateType,
+      farm_location: worker.location,
+      job_description: `Hired for ${worker.specialization.toLowerCase()} work`,
+    }, {
+      onSuccess: () => {
+        toast({
+          title: "Worker Hired Successfully!",
+          description: `${worker.name} has been added to your hired workers.`,
+        });
+      },
+      onError: (error) => {
+        console.error('Error hiring worker:', error);
+        toast({
+          title: "Error Hiring Worker",
+          description: "There was an error hiring the worker. Please try again.",
+          variant: "destructive",
+        });
+      }
+    });
   };
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h2 className="text-2xl font-bold text-forest-800">Farm Workers Directory</h2>
-        <p className="text-forest-600">Find and hire vetted agricultural professionals</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-2xl font-bold text-forest-800">Farm Workers Directory</h2>
+          <p className="text-forest-600">Find and hire vetted agricultural professionals</p>
+        </div>
+        <Button 
+          variant="outline" 
+          onClick={() => navigate('/hired-workers')}
+          className="border-forest-200"
+        >
+          View My Hired Workers
+        </Button>
       </div>
 
       {/* Search and Filters */}
@@ -359,9 +400,9 @@ const WorkerDirectory = () => {
                     <Button
                       onClick={() => handleHireWorker(worker)}
                       className="flex-1 bg-forest-600 hover:bg-forest-700"
-                      disabled={worker.availability !== 'Available'}
+                      disabled={worker.availability !== 'Available' || isPending}
                     >
-                      {worker.availability === 'Available' ? 'Hire Now' : 'Currently Busy'}
+                      {isPending ? 'Hiring...' : worker.availability === 'Available' ? 'Hire Now' : 'Currently Busy'}
                     </Button>
                     <Button variant="outline" className="border-forest-200">
                       <MessageSquare className="h-4 w-4 mr-1" />
