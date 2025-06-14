@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -67,7 +66,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
     { name: String(t('workers')), icon: Users, path: '/workers' },
     { name: 'Messages', icon: MessageSquare, path: '/messages' },
     { name: 'Community', icon: Heart, path: '/community' },
-    { name: 'Support', icon: Settings, path: '/support' },
+    { name: 'Support & Help Center', icon: Settings, path: '/support' },
     { name: 'Investment', icon: TrendingUp, path: '/investment' },
   ];
 
