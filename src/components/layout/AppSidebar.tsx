@@ -50,11 +50,11 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
   };
 
   const menuItems = [
-    { name: t('dashboard') as string, icon: Home, path: '/' },
-    { name: t('crops') as string, icon: Wheat, path: '/crop-matcher' },
-    { name: t('marketplace') as string, icon: ShoppingCart, path: '/marketplace' },
-    { name: t('land') as string, icon: MapPinned, path: '/land-rental' },
-    { name: t('workers') as string, icon: Users, path: '/workers' },
+    { name: String(t('dashboard')), icon: Home, path: '/' },
+    { name: String(t('crops')), icon: Wheat, path: '/crop-matcher' },
+    { name: String(t('marketplace')), icon: ShoppingCart, path: '/marketplace' },
+    { name: String(t('land')), icon: MapPinned, path: '/land-rental' },
+    { name: String(t('workers')), icon: Users, path: '/workers' },
   ];
 
   return (
@@ -67,7 +67,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
           {state === "expanded" && (
             <div className="min-w-0">
               <h1 className="text-lg font-semibold text-green-800 truncate">
-                {t('remoteFarmingPlatform') as string}
+                {String(t('remoteFarmingPlatform'))}
               </h1>
             </div>
           )}
@@ -77,7 +77,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="text-green-700">
-            {state === "expanded" ? t('navigation') : ''}
+            {state === "expanded" ? String(t('navigation')) : ''}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -109,22 +109,22 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={() => navigate('/profile')}
-              tooltip={state === "collapsed" ? t('profile') as string : undefined}
+              tooltip={state === "collapsed" ? String(t('profile')) : undefined}
               className="hover:bg-green-50 hover:text-green-700"
             >
               <Settings className="h-5 w-5" />
-              <span>{t('profile') as string}</span>
+              <span>{String(t('profile'))}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={handleSignOut}
-              tooltip={state === "collapsed" ? t('signOut') as string : undefined}
+              tooltip={state === "collapsed" ? String(t('signOut')) : undefined}
               className="hover:bg-red-50 hover:text-red-600"
             >
               <LogOut className="h-5 w-5" />
-              <span>{t('signOut') as string}</span>
+              <span>{String(t('signOut'))}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
