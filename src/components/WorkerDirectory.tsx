@@ -6,8 +6,6 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Star, MapPin, Calendar, DollarSign, Users, Phone, Search, MessageSquare } from 'lucide-react';
-import { useHireWorker } from '@/hooks/useHiredWorkers';
-import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 
 const WorkerDirectory = () => {
@@ -15,6 +13,7 @@ const WorkerDirectory = () => {
   const [selectedSkill, setSelectedSkill] = useState('all-skills');
   const [selectedRegion, setSelectedRegion] = useState('all-regions');
   const [sortBy, setSortBy] = useState('rating');
+  const navigate = useNavigate();
 
   console.log('WorkerDirectory - selectedSkill:', selectedSkill, 'selectedRegion:', selectedRegion, 'sortBy:', sortBy);
 
@@ -168,38 +167,9 @@ const WorkerDirectory = () => {
     return matchesSearch && matchesSkill && matchesRegion;
   });
 
-  const { mutate: hireWorker, isPending } = useHireWorker();
-  const { toast } = useToast();
-  const navigate = useNavigate();
-
   const handleHireWorker = (worker: any) => {
-    console.log(`Initiated hiring process for ${worker.name}`);
-    
-    hireWorker({
-      worker_id: worker.id.toString(),
-      worker_name: worker.name,
-      worker_specialization: worker.specialization,
-      worker_phone: worker.phone,
-      rate: worker.rate,
-      rate_type: worker.rateType,
-      farm_location: worker.location,
-      job_description: `Hired for ${worker.specialization.toLowerCase()} work`,
-    }, {
-      onSuccess: () => {
-        toast({
-          title: "Worker Hired Successfully!",
-          description: `${worker.name} has been added to your hired workers.`,
-        });
-      },
-      onError: (error) => {
-        console.error('Error hiring worker:', error);
-        toast({
-          title: "Error Hiring Worker",
-          description: "There was an error hiring the worker. Please try again.",
-          variant: "destructive",
-        });
-      }
-    });
+    console.log(`Initiating hiring process for ${worker.name}`);
+    navigate(`/hire-worker/${worker.id}`);
   };
 
   return (
@@ -400,9 +370,9 @@ const WorkerDirectory = () => {
                     <Button
                       onClick={() => handleHireWorker(worker)}
                       className="flex-1 bg-forest-600 hover:bg-forest-700"
-                      disabled={worker.availability !== 'Available' || isPending}
+                      disabled={worker.availability !== 'Available'}
                     >
-                      {isPending ? 'Hiring...' : worker.availability === 'Available' ? 'Hire Now' : 'Currently Busy'}
+                      {worker.availability === 'Available' ? 'Hire Now' : 'Currently Busy'}
                     </Button>
                     <Button variant="outline" className="border-forest-200">
                       <MessageSquare className="h-4 w-4 mr-1" />

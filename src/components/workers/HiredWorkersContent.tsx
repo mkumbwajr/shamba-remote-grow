@@ -4,12 +4,46 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Star, MapPin, Calendar, DollarSign, Phone, MessageSquare, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { Star, MapPin, Calendar, DollarSign, Phone, MessageSquare, Clock, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 import { useHiredWorkers } from '@/hooks/useHiredWorkers';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 
 const HiredWorkersContent = () => {
-  const { data: hiredWorkers, isLoading } = useHiredWorkers();
+  const { data: hiredWorkers, isLoading, refetch } = useHiredWorkers();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleEndContract = async (workerId: string) => {
+    navigate(`/end-contract/${workerId}`);
+  };
+
+  const handleApproveWorker = async (workerId: string) => {
+    try {
+      const { error } = await supabase
+        .from('hired_workers')
+        .update({ status: 'active' })
+        .eq('id', workerId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Worker Approved!",
+        description: "The worker has been approved and added to your active workers.",
+      });
+
+      refetch();
+    } catch (error) {
+      console.error('Error approving worker:', error);
+      toast({
+        title: "Error",
+        description: "There was an error approving the worker.",
+        variant: "destructive",
+      });
+    }
+  };
 
   if (isLoading) {
     return (
@@ -30,32 +64,35 @@ const HiredWorkersContent = () => {
         </div>
         <h3 className="text-xl font-semibold text-gray-800 mb-2">No Workers Hired Yet</h3>
         <p className="text-gray-600 mb-6">You haven't hired any workers yet. Start by browsing our worker directory.</p>
-        <Button className="bg-green-600 hover:bg-green-700">
+        <Button 
+          className="bg-green-600 hover:bg-green-700"
+          onClick={() => navigate('/workers')}
+        >
           Browse Workers
         </Button>
       </div>
     );
   }
 
-  // Categorize workers
-  const now = new Date();
-  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-
+  // Categorize workers by status
+  const pendingWorkers = hiredWorkers.filter(worker => worker.status === 'pending_worker_approval');
+  const pendingUserApproval = hiredWorkers.filter(worker => worker.status === 'pending_user_approval');
   const activeWorkers = hiredWorkers.filter(worker => worker.status === 'active');
-  const newWorkers = activeWorkers.filter(worker => 
-    worker.created_at && new Date(worker.created_at) > thirtyDaysAgo
-  );
-  const oldActiveWorkers = activeWorkers.filter(worker => 
-    worker.created_at && new Date(worker.created_at) <= thirtyDaysAgo
-  );
+  const pendingTermination = hiredWorkers.filter(worker => worker.status === 'pending_termination');
   const historicalWorkers = hiredWorkers.filter(worker => 
     worker.status === 'completed' || worker.status === 'terminated'
   );
 
   const getStatusIcon = (status: string) => {
     switch (status) {
+      case 'pending_worker_approval':
+        return <Clock className="h-4 w-4 text-yellow-500" />;
+      case 'pending_user_approval':
+        return <AlertTriangle className="h-4 w-4 text-orange-500" />;
       case 'active':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'pending_termination':
+        return <Clock className="h-4 w-4 text-red-500" />;
       case 'completed':
         return <CheckCircle className="h-4 w-4 text-blue-500" />;
       case 'terminated':
@@ -67,14 +104,39 @@ const HiredWorkersContent = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
+      case 'pending_worker_approval':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'pending_user_approval':
+        return 'bg-orange-100 text-orange-800';
       case 'active':
         return 'bg-green-100 text-green-800';
+      case 'pending_termination':
+        return 'bg-red-100 text-red-800';
       case 'completed':
         return 'bg-blue-100 text-blue-800';
       case 'terminated':
         return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'pending_worker_approval':
+        return 'Pending Worker Approval';
+      case 'pending_user_approval':
+        return 'Pending Your Approval';
+      case 'active':
+        return 'Active';
+      case 'pending_termination':
+        return 'Pending Termination';
+      case 'completed':
+        return 'Completed';
+      case 'terminated':
+        return 'Terminated';
+      default:
+        return status.charAt(0).toUpperCase() + status.slice(1);
     }
   };
 
@@ -97,7 +159,7 @@ const HiredWorkersContent = () => {
               <div className="flex items-center space-x-2">
                 {getStatusIcon(worker.status)}
                 <Badge className={getStatusColor(worker.status)}>
-                  {worker.status.charAt(0).toUpperCase() + worker.status.slice(1)}
+                  {getStatusText(worker.status)}
                 </Badge>
               </div>
             </div>
@@ -155,7 +217,7 @@ const HiredWorkersContent = () => {
           </div>
         )}
 
-        {/* Contact Info */}
+        {/* Action Buttons */}
         <div className="border-t border-forest-100 pt-3">
           <div className="flex items-center justify-between text-sm text-forest-600 mb-3">
             <div className="flex items-center space-x-2">
@@ -169,8 +231,22 @@ const HiredWorkersContent = () => {
               <MessageSquare className="h-4 w-4 mr-1" />
               Contact
             </Button>
+            
+            {worker.status === 'pending_user_approval' && (
+              <Button 
+                onClick={() => handleApproveWorker(worker.id)}
+                className="flex-1 bg-green-600 hover:bg-green-700"
+              >
+                Approve Worker
+              </Button>
+            )}
+            
             {worker.status === 'active' && (
-              <Button variant="outline" className="border-red-200 text-red-600 hover:bg-red-50">
+              <Button 
+                variant="outline" 
+                className="border-red-200 text-red-600 hover:bg-red-50"
+                onClick={() => handleEndContract(worker.id)}
+              >
                 End Contract
               </Button>
             )}
@@ -182,37 +258,67 @@ const HiredWorkersContent = () => {
 
   return (
     <div className="space-y-8">
-      {/* New Workers Section */}
-      {newWorkers.length > 0 && (
+      {/* Pending Worker Approval */}
+      {pendingWorkers.length > 0 && (
         <section>
           <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-            <Clock className="h-5 w-5 mr-2 text-green-500" />
-            Recently Hired (Last 30 days) - {newWorkers.length}
+            <Clock className="h-5 w-5 mr-2 text-yellow-500" />
+            Pending Worker Approval - {pendingWorkers.length}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {newWorkers.map((worker) => (
+            {pendingWorkers.map((worker) => (
               <WorkerCard key={worker.id} worker={worker} />
             ))}
           </div>
         </section>
       )}
 
-      {/* Active Workers Section */}
-      {oldActiveWorkers.length > 0 && (
+      {/* Pending User Approval */}
+      {pendingUserApproval.length > 0 && (
         <section>
           <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-            <CheckCircle className="h-5 w-5 mr-2 text-blue-500" />
-            Active Workers - {oldActiveWorkers.length}
+            <AlertTriangle className="h-5 w-5 mr-2 text-orange-500" />
+            Pending Your Approval - {pendingUserApproval.length}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {oldActiveWorkers.map((worker) => (
+            {pendingUserApproval.map((worker) => (
               <WorkerCard key={worker.id} worker={worker} />
             ))}
           </div>
         </section>
       )}
 
-      {/* Historical Workers Section */}
+      {/* Active Workers */}
+      {activeWorkers.length > 0 && (
+        <section>
+          <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <CheckCircle className="h-5 w-5 mr-2 text-green-500" />
+            Active Workers - {activeWorkers.length}
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {activeWorkers.map((worker) => (
+              <WorkerCard key={worker.id} worker={worker} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Pending Termination */}
+      {pendingTermination.length > 0 && (
+        <section>
+          <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <Clock className="h-5 w-5 mr-2 text-red-500" />
+            Pending Termination - {pendingTermination.length}
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {pendingTermination.map((worker) => (
+              <WorkerCard key={worker.id} worker={worker} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Historical Workers */}
       {historicalWorkers.length > 0 && (
         <section>
           <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">

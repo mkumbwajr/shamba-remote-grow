@@ -17,6 +17,8 @@ import LandRentalPage from "./pages/LandRental";
 import LandPlotMapPage from "./pages/LandPlotMap";
 import WorkersPage from "./pages/Workers";
 import HiredWorkersPage from "./pages/HiredWorkers";
+import HireWorkerPage from "./pages/HireWorker";
+import EndContractPage from "./pages/EndContract";
 import InvestmentPage from "./pages/Investment";
 import Farms from "./pages/Farms";
 import Checkout from "./pages/Checkout";
@@ -46,6 +48,8 @@ const App = () => (
                 <Route path="/land-plot-map/:plotId" element={<LandPlotMapPage />} />
                 <Route path="/workers" element={<WorkersPage />} />
                 <Route path="/hired-workers" element={<HiredWorkersPage />} />
+                <Route path="/hire-worker/:workerId" element={<HireWorkerPage />} />
+                <Route path="/end-contract/:workerId" element={<EndContractPage />} />
                 <Route path="/investment" element={<InvestmentPage />} />
                 <Route path="/farms" element={<Farms />} />
                 <Route path="/inventory" element={<InventoryPage />} />

@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Tables } from '@/integrations/supabase/types';
 
 export const useHiredWorkers = () => {
-  return useQuery({
+  const query = useQuery({
     queryKey: ['hired-workers'],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -20,6 +20,11 @@ export const useHiredWorkers = () => {
       return data as Tables<'hired_workers'>[];
     },
   });
+
+  return {
+    ...query,
+    refetch: query.refetch,
+  };
 };
 
 export const useHireWorker = () => {
