@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +9,7 @@ import { BarChart, DollarSign, HardHat, Home, Info, LogOut, MapPinned, Settings,
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageToggle from '@/components/LanguageToggle';
 
-interface UserProfileData { // Renamed to avoid conflict if Profile type is imported elsewhere
+interface UserProfileData {
   full_name?: string | null;
   // Add other fields if needed for display
 }
@@ -22,8 +23,6 @@ const Index = () => {
     const fetchUserProfile = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        // Using `as any` to bypass TS error due to un-typed client.
-        // This assumes 'profiles' table and 'full_name' column exist.
         const { data: profileData, error } = await (supabase.from('profiles') as any)
           .select('full_name')
           .eq('id', user.id)
@@ -31,9 +30,8 @@ const Index = () => {
         
         if (error) {
           console.error("Error fetching profile:", error.message);
-          // Potentially navigate to auth or show error
         } else if (profileData) {
-          setUserProfile(profileData as UserProfileData); // Cast to expected type
+          setUserProfile(profileData as UserProfileData);
         }
       } else {
         navigate('/auth');
@@ -48,18 +46,18 @@ const Index = () => {
   };
 
   const menuItems = [
-    { name: t('dashboard'), icon: Home, path: '/' },
-    { name: t('crops'), icon: Wheat, path: '/crop-matcher' },
-    { name: t('marketplace'), icon: ShoppingCart, path: '/marketplace' },
-    { name: t('land'), icon: MapPinned, path: '/land-rental' },
-    { name: t('workers'), icon: Users, path: '/workers' },
+    { name: t('dashboard') as string, icon: Home, path: '/' },
+    { name: t('crops') as string, icon: Wheat, path: '/crop-matcher' },
+    { name: t('marketplace') as string, icon: ShoppingCart, path: '/marketplace' },
+    { name: t('land') as string, icon: MapPinned, path: '/land-rental' },
+    { name: t('workers') as string, icon: Users, path: '/workers' },
   ];
 
   const quickStats = [
-    { title: t('activeFarms'), value: '5', icon: Tractor, change: '+2 this month' },
-    { title: t('totalInvestment'), value: '$12,500', icon: DollarSign, change: '+5%' },
-    { title: t('workersHired'), value: '23', icon: HardHat, change: '+3 new' },
-    { title: t('nextHarvest'), value: `30 ${t('days')}`, icon: BarChart, change: 'Maize' },
+    { title: t('activeFarms') as string, value: '5', icon: Tractor, change: '+2 this month' },
+    { title: t('totalInvestment') as string, value: '$12,500', icon: DollarSign, change: '+5%' },
+    { title: t('workersHired') as string, value: '23', icon: HardHat, change: '+3 new' },
+    { title: t('nextHarvest') as string, value: `30 ${t('days') as string}`, icon: BarChart, change: 'Maize' },
   ];
 
   return (
@@ -67,41 +65,41 @@ const Index = () => {
       {/* Sidebar */}
       <aside className="w-64 bg-green-700 text-white p-6 space-y-6 fixed h-full">
         <div className="text-center mb-8">
-          <img src="/placeholder.svg" alt="Bwana Shamba Logo" className="w-11 h-11 mx-auto mb-2" /> {/* Adjusted size for better fit */}
-          <h1 className="text-xl font-semibold">{t('remoteFarmingPlatform')}</h1> {/* Adjusted size */}
+          <img src="/placeholder.svg" alt="Bwana Shamba Logo" className="w-11 h-11 mx-auto mb-2" />
+          <h1 className="text-xl font-semibold">{t('remoteFarmingPlatform') as string}</h1>
         </div>
-        <nav className="space-y-1"> {/* Reduced space for more items */}
+        <nav className="space-y-1">
           {menuItems.map((item) => (
             <Button
               key={item.name}
               variant="ghost"
-              className="w-full justify-start text-md hover:bg-green-600 py-3" /* Adjusted size */
+              className="w-full justify-start text-md hover:bg-green-600 py-3"
               onClick={() => navigate(item.path)}
             >
-              <item.icon className="mr-3 h-5 w-5" /> {/* Adjusted size */}
+              <item.icon className="mr-3 h-5 w-5" />
               {item.name}
             </Button>
           ))}
         </nav>
-        <div className="absolute bottom-4 left-4 right-4 space-y-1"> {/* Adjusted spacing */}
-          <div className="mb-2"> {/* Add margin below language toggle for better separation */}
+        <div className="absolute bottom-4 left-4 right-4 space-y-1">
+          <div className="mb-2">
             <LanguageToggle />
           </div>
            <Button
             variant="ghost"
-            className="w-full justify-start text-md hover:bg-green-600 py-3" /* Adjusted size */
+            className="w-full justify-start text-md hover:bg-green-600 py-3"
             onClick={() => navigate('/profile')}
           >
-            <Settings className="mr-3 h-5 w-5" /> {/* Adjusted size */}
-            {t('profile')}
+            <Settings className="mr-3 h-5 w-5" />
+            {t('profile') as string}
           </Button>
           <Button
             variant="ghost"
-            className="w-full justify-start text-md hover:bg-red-500 hover:text-white py-3" /* Adjusted size */
+            className="w-full justify-start text-md hover:bg-red-500 hover:text-white py-3"
             onClick={handleSignOut}
           >
-            <LogOut className="mr-3 h-5 w-5" /> {/* Adjusted size */}
-            {t('signOut')}
+            <LogOut className="mr-3 h-5 w-5" />
+            {t('signOut') as string}
           </Button>
         </div>
       </aside>
@@ -111,12 +109,12 @@ const Index = () => {
         <header className="flex justify-between items-center mb-8">
           <div>
             <h2 className="text-3xl font-bold text-gray-800">
-              {t('welcomeBack')}, {userProfile?.full_name || 'Farmer'}!
+              {t('welcomeBack') as string}, {userProfile?.full_name || 'Farmer'}!
             </h2>
-            <p className="text-gray-600">{t('operations')}</p>
+            <p className="text-gray-600">{t('operations') as string}</p>
           </div>
           <Avatar>
-            <AvatarImage src="/placeholder-avatar.jpg" /> {/* Placeholder, consider dynamic source */}
+            <AvatarImage src="/placeholder-avatar.jpg" />
             <AvatarFallback>{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
           </Avatar>
         </header>
@@ -141,8 +139,8 @@ const Index = () => {
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <Card className="shadow-lg">
             <CardHeader>
-              <CardTitle className="text-xl text-gray-800">{t('farmUpdates')}</CardTitle>
-              <CardDescription>{t('realTimeProgress')}</CardDescription>
+              <CardTitle className="text-xl text-gray-800">{t('farmUpdates') as string}</CardTitle>
+              <CardDescription>{t('realTimeProgress') as string}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -164,8 +162,8 @@ const Index = () => {
 
           <Card className="shadow-lg">
             <CardHeader>
-              <CardTitle className="text-xl text-gray-800">{t('marketIntelligence')}</CardTitle>
-              <CardDescription>{t('currentCropPrices')}</CardDescription>
+              <CardTitle className="text-xl text-gray-800">{t('marketIntelligence') as string}</CardTitle>
+              <CardDescription>{t('currentCropPrices') as string}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -191,3 +189,4 @@ const Index = () => {
 };
 
 export default Index;
+
