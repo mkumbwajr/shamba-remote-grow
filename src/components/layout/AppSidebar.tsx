@@ -56,6 +56,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
   const menuItems = [
     { name: String(t('dashboard')), icon: Home, path: '/' },
     { name: String(t('crops')), icon: Wheat, path: '/crop-matcher' },
+    { name: 'My Farms', icon: Tractor, path: '/farms' },
     { name: String(t('marketplace')), icon: ShoppingCart, path: '/marketplace' },
     { name: String(t('land')), icon: MapPinned, path: '/land-rental' },
     { name: String(t('workers')), icon: Users, path: '/workers' },
