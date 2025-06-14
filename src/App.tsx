@@ -24,6 +24,7 @@ import Farms from "./pages/Farms";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import InventoryPage from "./pages/Inventory";
+import MessagesPage from "./pages/Messages";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -53,6 +54,7 @@ const App = () => (
                 <Route path="/investment" element={<InvestmentPage />} />
                 <Route path="/farms" element={<Farms />} />
                 <Route path="/inventory" element={<InventoryPage />} />
+                <Route path="/messages" element={<MessagesPage />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/order-success" element={<OrderSuccess />} />
                 <Route path="*" element={<NotFound />} />
