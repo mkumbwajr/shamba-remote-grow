@@ -44,10 +44,10 @@ export const usePosts = () => {
     },
   });
 
-  // Set up real-time subscription for posts
+  // Set up real-time subscription for posts with unique channel name
   useEffect(() => {
     const channel = supabase
-      .channel('posts-changes')
+      .channel('posts-realtime-updates')
       .on(
         'postgres_changes',
         {
@@ -119,10 +119,10 @@ export const usePostComments = (postId: string) => {
     },
   });
 
-  // Set up real-time subscription for comments
+  // Set up real-time subscription for comments with unique channel name
   useEffect(() => {
     const channel = supabase
-      .channel(`comments-${postId}`)
+      .channel(`comments-realtime-${postId}`)
       .on(
         'postgres_changes',
         {
@@ -194,10 +194,10 @@ export const usePostLikes = (postId: string) => {
     },
   });
 
-  // Set up real-time subscription for likes
+  // Set up real-time subscription for likes with unique channel name
   useEffect(() => {
     const channel = supabase
-      .channel(`likes-${postId}`)
+      .channel(`likes-realtime-${postId}`)
       .on(
         'postgres_changes',
         {
