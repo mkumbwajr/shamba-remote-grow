@@ -9,6 +9,9 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import CropMatcher from "./pages/CropMatcher";
+import Marketplace from "./pages/Marketplace";
+import Workers from "./pages/Workers";
+import LandRental from "./pages/LandRental";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +28,9 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/crop-matcher" element={<CropMatcher />} />
+            <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/workers" element={<Workers />} />
+            <Route path="/land-rental" element={<LandRental />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
