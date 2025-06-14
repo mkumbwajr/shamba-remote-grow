@@ -1,14 +1,12 @@
 
 import React from 'react';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useLanguage, TranslationSet } from '@/contexts/LanguageContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Tables } from '@/integrations/supabase/types';
-import MultiSelectDropdown from './MultiSelectDropdown';
-import SingleSelectDropdown from './SingleSelectDropdown';
-import { countries, regionsByCountry, languages } from '@/utils/locationData';
+import PersonalInformationSection from './sections/PersonalInformationSection';
+import BioSection from './sections/BioSection';
+import FarmingInformationSection from './sections/FarmingInformationSection';
+import GoalsAndInterestsSection from './sections/GoalsAndInterestsSection';
+import ContactAndSocialSection from './sections/ContactAndSocialSection';
 
 interface ProfileEditModeProps {
   formData: Partial<Tables<'profiles'>>;
@@ -16,330 +14,36 @@ interface ProfileEditModeProps {
   userEmail?: string | null;
 }
 
-const getObjectKeys = (translateFn: (key: string, options?: { returnObjects?: boolean }) => string | TranslationSet, path: string) => {
-    const obj = translateFn(path, { returnObjects: true });
-    return typeof obj === 'object' && obj !== null ? Object.keys(obj) : [];
-};
-
 const ProfileEditMode: React.FC<ProfileEditModeProps> = ({ formData, onFormChange, userEmail }) => {
   const { t } = useLanguage();
-
-  const crops = getObjectKeys(t, 'cropsList');
-  const experienceLevels = getObjectKeys(t, 'experienceLevels');
-  const farmSizes = getObjectKeys(t, 'farmSizes');
-  const services = getObjectKeys(t, 'servicesList');
-  const budgetRanges = getObjectKeys(t, 'budgetRanges');
-  const contactMethods = getObjectKeys(t, 'contactMethods');
-
-  // Get regions based on selected country
-  const selectedCountryRegions = formData.country ? regionsByCountry[formData.country] || [] : [];
   
   return (
     <div className="space-y-4 sm:space-y-6">
-      {/* Personal Information Section */}
-      <div>
-        <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 border-b border-gray-200 pb-2">
-          {t('personalInformation') as string}
-        </h3>
-        <div className="grid grid-cols-1 gap-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="fullName-profileEdit" className="text-sm">{t('fullName') as string}</Label>
-              <Input
-                id="fullName-profileEdit"
-                value={formData.full_name || ''}
-                onChange={(e) => onFormChange('full_name', e.target.value)}
-                placeholder={t('yourFullName') as string}
-                className="mt-1"
-              />
-            </div>
-            <div>
-              <Label htmlFor="email-profileEdit" className="text-sm">{t('email') as string}</Label>
-              <Input 
-                id="email-profileEdit" 
-                type="email" 
-                value={userEmail || ''} 
-                disabled 
-                className="bg-gray-100 mt-1" 
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="phone-profileEdit" className="text-sm">{t('phone') as string}</Label>
-              <Input
-                id="phone-profileEdit"
-                value={formData.phone || ''}
-                onChange={(e) => onFormChange('phone', e.target.value)}
-                placeholder={t('yourPhoneNumber') as string}
-                className="mt-1"
-              />
-            </div>
-            <SingleSelectDropdown
-              id="citizenship-profileEdit"
-              label={t('citizenship') as string}
-              value={formData.citizenship || null}
-              onChange={(value) => onFormChange('citizenship', value)}
-              options={countries}
-              placeholder={t('selectCitizenship') as string}
-              translationPrefix="countries"
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="nidaNumber-profileEdit" className="text-sm">{t('nidaNumber') as string}</Label>
-              <Input
-                id="nidaNumber-profileEdit"
-                value={formData.nida_number || ''}
-                onChange={(e) => onFormChange('nida_number', e.target.value)}
-                placeholder={t('yourNidaNumber') as string}
-                className="mt-1"
-              />
-            </div>
-            <div>
-              <Label htmlFor="passportNumber-profileEdit" className="text-sm">{t('passportNumber') as string}</Label>
-              <Input
-                id="passportNumber-profileEdit"
-                value={formData.passport_number || ''}
-                onChange={(e) => onFormChange('passport_number', e.target.value)}
-                placeholder={t('yourPassportNumber') as string}
-                className="mt-1"
-              />
-            </div>
-          </div>
-          <SingleSelectDropdown
-            id="country-profileEdit"
-            label={t('country') as string}
-            value={formData.country || null}
-            onChange={(value) => onFormChange('country', value)}
-            options={countries}
-            placeholder={t('selectCountry') as string}
-            translationPrefix="countries"
-          />
-        </div>
-      </div>
-
-      {/* Bio Section */}
-      <div>
-        <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 border-b border-gray-200 pb-2">
-          {t('about') as string}
-        </h3>
-        <div>
-          <Label htmlFor="bio-profileEdit" className="text-sm">{t('bio') as string}</Label>
-          <Textarea
-            id="bio-profileEdit"
-            value={formData.bio || ''}
-            onChange={(e) => onFormChange('bio', e.target.value)}
-            placeholder={t('tellUsAboutYourself') as string}
-            rows={4}
-            className="mt-1 resize-none"
-          />
-        </div>
-      </div>
-
-      {/* Farming Information Section */}
-      <div>
-        <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 border-b border-gray-200 pb-2">
-          {t('farmingInformation') as string}
-        </h3>
-        <div className="grid grid-cols-1 gap-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="preferredCrop-profileEdit" className="text-sm">{t('preferredCrop') as string}</Label>
-              <Select
-                value={formData.preferred_crop || undefined}
-                onValueChange={(value) => onFormChange('preferred_crop', value)}
-              >
-                <SelectTrigger id="preferredCrop-profileEdit" className="mt-1">
-                  <SelectValue placeholder={t('selectCrop') as string} />
-                </SelectTrigger>
-                <SelectContent>
-                  {crops.map((cropKey) => (
-                    <SelectItem key={cropKey} value={cropKey}>
-                      {t(`cropsList.${cropKey}`) as string}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="farmSize-profileEdit" className="text-sm">{t('farmSize') as string}</Label>
-              <Select
-                value={formData.farm_size || undefined}
-                onValueChange={(value) => onFormChange('farm_size', value)}
-              >
-                <SelectTrigger id="farmSize-profileEdit" className="mt-1">
-                  <SelectValue placeholder={t('selectSize') as string} />
-                </SelectTrigger>
-                <SelectContent>
-                  {farmSizes.map((sizeKey) => (
-                    <SelectItem key={sizeKey} value={sizeKey}>
-                      {t(`farmSizes.${sizeKey}`) as string}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="farmingExperience-profileEdit" className="text-sm">{t('farmingExperience') as string}</Label>
-              <Select
-                value={formData.farming_experience || undefined}
-                onValueChange={(value) => onFormChange('farming_experience', value)}
-              >
-                <SelectTrigger id="farmingExperience-profileEdit" className="mt-1">
-                  <SelectValue placeholder={t('selectExperience') as string} />
-                </SelectTrigger>
-                <SelectContent>
-                  {experienceLevels.map((levelKey) => (
-                    <SelectItem key={levelKey} value={levelKey}>
-                      {t(`experienceLevels.${levelKey}`) as string}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            {selectedCountryRegions.length > 0 ? (
-              <SingleSelectDropdown
-                id="farmLocation-profileEdit"
-                label={t('farmLocation') as string}
-                value={formData.farm_location || null}
-                onChange={(value) => onFormChange('farm_location', value)}
-                options={selectedCountryRegions}
-                placeholder={t('selectRegion') as string}
-              />
-            ) : (
-              <div>
-                <Label htmlFor="farmLocation-profileEdit" className="text-sm">{t('farmLocation') as string}</Label>
-                <Input
-                  id="farmLocation-profileEdit"
-                  value={formData.farm_location || ''}
-                  onChange={(e) => onFormChange('farm_location', e.target.value)}
-                  placeholder={t('yourFarmLocation') as string}
-                  className="mt-1"
-                />
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Goals and Interests Section */}
-      <div>
-        <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 border-b border-gray-200 pb-2">
-          {t('goalsAndInterests') as string}
-        </h3>
-        <div className="grid grid-cols-1 gap-4">
-          <div>
-            <Label htmlFor="farmingGoals-profileEdit" className="text-sm">{t('farmingGoals') as string}</Label>
-            <Textarea
-              id="farmingGoals-profileEdit"
-              value={formData.farming_goals || ''}
-              onChange={(e) => onFormChange('farming_goals', e.target.value)}
-              placeholder={t('describeYourFarmingGoals') as string}
-              rows={3}
-              className="mt-1 resize-none"
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="interestedServices-profileEdit" className="text-sm">{t('interestedServices') as string}</Label>
-              <Select
-                value={formData.interested_services || undefined}
-                onValueChange={(value) => onFormChange('interested_services', value)}
-              >
-                <SelectTrigger id="interestedServices-profileEdit" className="mt-1">
-                  <SelectValue placeholder={t('selectServices') as string} />
-                </SelectTrigger>
-                <SelectContent>
-                  {services.map((serviceKey) => (
-                    <SelectItem key={serviceKey} value={serviceKey}>
-                      {t(`servicesList.${serviceKey}`) as string}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="investmentBudget-profileEdit" className="text-sm">{t('investmentBudget') as string}</Label>
-              <Select
-                value={formData.investment_budget || undefined}
-                onValueChange={(value) => onFormChange('investment_budget', value)}
-              >
-                <SelectTrigger id="investmentBudget-profileEdit" className="mt-1">
-                  <SelectValue placeholder={t('selectBudgetRange') as string} />
-                </SelectTrigger>
-                <SelectContent>
-                  {budgetRanges.map((budgetKey) => (
-                    <SelectItem key={budgetKey} value={budgetKey}>
-                      {t(`budgetRanges.${budgetKey}`) as string}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <MultiSelectDropdown
-            id="languagesSpoken-profileEdit"
-            label={t('languagesSpoken') as string}
-            value={formData.languages_spoken || null}
-            onChange={(value) => onFormChange('languages_spoken', value)}
-            options={languages}
-            placeholder={t('selectLanguages') as string}
-          />
-        </div>
-      </div>
-
-      {/* Contact and Social Section */}
-      <div>
-        <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 border-b border-gray-200 pb-2">
-          {t('contactAndSocial') as string}
-        </h3>
-        <div className="grid grid-cols-1 gap-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="website-profileEdit" className="text-sm">{t('website') as string}</Label>
-              <Input
-                id="website-profileEdit"
-                type="url"
-                value={formData.website || ''}
-                onChange={(e) => onFormChange('website', e.target.value)}
-                placeholder={t('yourWebsite') as string}
-                className="mt-1"
-              />
-            </div>
-            <div>
-              <Label htmlFor="socialMedia-profileEdit" className="text-sm">{t('socialMedia') as string}</Label>
-              <Input
-                id="socialMedia-profileEdit"
-                value={formData.social_media || ''}
-                onChange={(e) => onFormChange('social_media', e.target.value)}
-                placeholder={t('socialMediaHandles') as string}
-                className="mt-1"
-              />
-            </div>
-          </div>
-          <div>
-            <Label htmlFor="preferredContact-profileEdit" className="text-sm">{t('preferredContact') as string}</Label>
-            <Select
-              value={formData.preferred_contact_method || undefined}
-              onValueChange={(value) => onFormChange('preferred_contact_method', value)}
-            >
-              <SelectTrigger id="preferredContact-profileEdit" className="mt-1">
-                <SelectValue placeholder={t('selectContactMethod') as string} />
-              </SelectTrigger>
-              <SelectContent>
-                {contactMethods.map((methodKey) => (
-                  <SelectItem key={methodKey} value={methodKey}>
-                    {t(`contactMethods.${methodKey}`) as string}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </div>
+      <PersonalInformationSection 
+        formData={formData}
+        onFormChange={onFormChange}
+        userEmail={userEmail}
+      />
+      
+      <BioSection 
+        formData={formData}
+        onFormChange={onFormChange}
+      />
+      
+      <FarmingInformationSection 
+        formData={formData}
+        onFormChange={onFormChange}
+      />
+      
+      <GoalsAndInterestsSection 
+        formData={formData}
+        onFormChange={onFormChange}
+      />
+      
+      <ContactAndSocialSection 
+        formData={formData}
+        onFormChange={onFormChange}
+      />
     </div>
   );
 };
