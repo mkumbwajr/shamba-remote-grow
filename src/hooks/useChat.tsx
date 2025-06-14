@@ -36,12 +36,13 @@ export const useChatMessages = (hiredWorkerId?: string) => {
     enabled: !!hiredWorkerId,
   });
 
-  // Set up real-time subscription
+  // Set up real-time subscription with unique channel name per worker
   useEffect(() => {
     if (!hiredWorkerId) return;
 
+    const channelName = `chat-messages-${hiredWorkerId}`;
     const channel = supabase
-      .channel('chat-messages')
+      .channel(channelName)
       .on(
         'postgres_changes',
         {
