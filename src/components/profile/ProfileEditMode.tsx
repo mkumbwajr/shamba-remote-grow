@@ -6,6 +6,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLanguage, TranslationSet } from '@/contexts/LanguageContext';
 import { Tables } from '@/integrations/supabase/types';
+import MultiSelectDropdown from './MultiSelectDropdown';
+import SingleSelectDropdown from './SingleSelectDropdown';
+import { countries, regionsByCountry, languages } from '@/utils/locationData';
 
 interface ProfileEditModeProps {
   formData: Partial<Tables<'profiles'>>;
@@ -21,13 +24,15 @@ const getObjectKeys = (translateFn: (key: string, options?: { returnObjects?: bo
 const ProfileEditMode: React.FC<ProfileEditModeProps> = ({ formData, onFormChange, userEmail }) => {
   const { t } = useLanguage();
 
-  const countries = getObjectKeys(t, 'countries');
   const crops = getObjectKeys(t, 'cropsList');
   const experienceLevels = getObjectKeys(t, 'experienceLevels');
   const farmSizes = getObjectKeys(t, 'farmSizes');
   const services = getObjectKeys(t, 'servicesList');
   const budgetRanges = getObjectKeys(t, 'budgetRanges');
   const contactMethods = getObjectKeys(t, 'contactMethods');
+
+  // Get regions based on selected country
+  const selectedCountryRegions = formData.country ? regionsByCountry[formData.country] || [] : [];
   
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -70,16 +75,15 @@ const ProfileEditMode: React.FC<ProfileEditModeProps> = ({ formData, onFormChang
                 className="mt-1"
               />
             </div>
-            <div>
-              <Label htmlFor="citizenship-profileEdit" className="text-sm">{t('citizenship') as string}</Label>
-              <Input
-                id="citizenship-profileEdit"
-                value={formData.citizenship || ''}
-                onChange={(e) => onFormChange('citizenship', e.target.value)}
-                placeholder={t('yourCitizenship') as string}
-                className="mt-1"
-              />
-            </div>
+            <SingleSelectDropdown
+              id="citizenship-profileEdit"
+              label={t('citizenship') as string}
+              value={formData.citizenship || null}
+              onChange={(value) => onFormChange('citizenship', value)}
+              options={countries}
+              placeholder={t('selectCitizenship') as string}
+              translationPrefix="countries"
+            />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -103,24 +107,15 @@ const ProfileEditMode: React.FC<ProfileEditModeProps> = ({ formData, onFormChang
               />
             </div>
           </div>
-          <div>
-            <Label htmlFor="country-profileEdit" className="text-sm">{t('country') as string}</Label>
-            <Select
-              value={formData.country || undefined}
-              onValueChange={(value) => onFormChange('country', value)}
-            >
-              <SelectTrigger id="country-profileEdit" className="mt-1">
-                <SelectValue placeholder={t('selectCountry') as string} />
-              </SelectTrigger>
-              <SelectContent>
-                {countries.map((cKey) => (
-                  <SelectItem key={cKey} value={cKey}>
-                    {t(`countries.${cKey}`) as string}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <SingleSelectDropdown
+            id="country-profileEdit"
+            label={t('country') as string}
+            value={formData.country || null}
+            onChange={(value) => onFormChange('country', value)}
+            options={countries}
+            placeholder={t('selectCountry') as string}
+            translationPrefix="countries"
+          />
         </div>
       </div>
 
@@ -205,16 +200,27 @@ const ProfileEditMode: React.FC<ProfileEditModeProps> = ({ formData, onFormChang
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Label htmlFor="farmLocation-profileEdit" className="text-sm">{t('farmLocation') as string}</Label>
-              <Input
+            {selectedCountryRegions.length > 0 ? (
+              <SingleSelectDropdown
                 id="farmLocation-profileEdit"
-                value={formData.farm_location || ''}
-                onChange={(e) => onFormChange('farm_location', e.target.value)}
-                placeholder={t('yourFarmLocation') as string}
-                className="mt-1"
+                label={t('farmLocation') as string}
+                value={formData.farm_location || null}
+                onChange={(value) => onFormChange('farm_location', value)}
+                options={selectedCountryRegions}
+                placeholder={t('selectRegion') as string}
               />
-            </div>
+            ) : (
+              <div>
+                <Label htmlFor="farmLocation-profileEdit" className="text-sm">{t('farmLocation') as string}</Label>
+                <Input
+                  id="farmLocation-profileEdit"
+                  value={formData.farm_location || ''}
+                  onChange={(e) => onFormChange('farm_location', e.target.value)}
+                  placeholder={t('yourFarmLocation') as string}
+                  className="mt-1"
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -274,16 +280,14 @@ const ProfileEditMode: React.FC<ProfileEditModeProps> = ({ formData, onFormChang
               </Select>
             </div>
           </div>
-          <div>
-            <Label htmlFor="languagesSpoken-profileEdit" className="text-sm">{t('languagesSpoken') as string}</Label>
-            <Input
-              id="languagesSpoken-profileEdit"
-              value={formData.languages_spoken || ''}
-              onChange={(e) => onFormChange('languages_spoken', e.target.value)}
-              placeholder={t('languagesYouSpeak') as string}
-              className="mt-1"
-            />
-          </div>
+          <MultiSelectDropdown
+            id="languagesSpoken-profileEdit"
+            label={t('languagesSpoken') as string}
+            value={formData.languages_spoken || null}
+            onChange={(value) => onFormChange('languages_spoken', value)}
+            options={languages}
+            placeholder={t('selectLanguages') as string}
+          />
         </div>
       </div>
 
