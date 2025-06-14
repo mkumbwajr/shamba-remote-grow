@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { Tractor } from 'lucide-react';
 import { useFarms } from '@/hooks/useFarms';
-import { supabase } from '@/integrations/supabase/client';
+import { useFarmsUserProfile } from '@/hooks/useFarmsUserProfile';
 import { AppSidebar } from '@/components/layout/AppSidebar';
 import FarmsPageHeader from './FarmsPageHeader';
 import FarmsPageSections from './FarmsPageSections';
+import FarmsPageLoading from './FarmsPageLoading';
 import {
   SidebarProvider,
   SidebarInset,
@@ -15,32 +15,9 @@ interface FarmsPageProps {
   onBack: () => void;
 }
 
-interface UserProfileData {
-  full_name?: string | null;
-}
-
 const FarmsPage = ({ onBack }: FarmsPageProps) => {
   const { data: farms, isLoading } = useFarms();
-  const [userProfile, setUserProfile] = React.useState<UserProfileData | null>(null);
-
-  React.useEffect(() => {
-    const fetchUserProfile = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profileData, error } = await (supabase.from('profiles') as any)
-          .select('full_name')
-          .eq('id', user.id)
-          .single();
-        
-        if (error) {
-          console.error("Error fetching profile:", error.message);
-        } else if (profileData) {
-          setUserProfile(profileData as UserProfileData);
-        }
-      }
-    };
-    fetchUserProfile();
-  }, []);
+  const userProfile = useFarmsUserProfile();
 
   const now = new Date();
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
@@ -57,21 +34,7 @@ const FarmsPage = ({ onBack }: FarmsPageProps) => {
   ) || [];
 
   if (isLoading) {
-    return (
-      <SidebarProvider>
-        <div className="min-h-screen flex w-full bg-gray-50">
-          <AppSidebar userProfile={userProfile} />
-          <SidebarInset className="flex-1">
-            <div className="flex items-center justify-center min-h-[60vh]">
-              <div className="text-center">
-                <Tractor className="h-12 w-12 text-green-500 mx-auto mb-4 animate-pulse" />
-                <p className="text-lg text-gray-600">Loading farms...</p>
-              </div>
-            </div>
-          </SidebarInset>
-        </div>
-      </SidebarProvider>
-    );
+    return <FarmsPageLoading userProfile={userProfile} />;
   }
 
   return (
