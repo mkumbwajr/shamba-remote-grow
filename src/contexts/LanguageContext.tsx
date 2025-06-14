@@ -1,11 +1,11 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Language, translations, getTranslation } from '@/utils/translations';
+import { Language, translations, getTranslation, TranslationSet } from '@/utils/translations'; // Import TranslationSet
 
 interface LanguageContextType {
   language: Language;
   setLanguage: (language: Language) => void;
-  t: (key: string) => string;
+  t: (key: string, options?: { returnObjects?: boolean }) => string | TranslationSet; // Updated signature
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -20,8 +20,8 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem('bwana-shamba-language', language);
   }, [language]);
 
-  const t = (key: string): string => {
-    return getTranslation(language, key);
+  const t = (key: string, options?: { returnObjects?: boolean }): string | TranslationSet => { // Updated implementation
+    return getTranslation(language, key, options);
   };
 
   return (
@@ -38,3 +38,7 @@ export const useLanguage = () => {
   }
   return context;
 };
+
+// Export TranslationSet if it's to be used by other components directly importing from here
+// However, it's already exported from '@/utils/translations'
+export type { TranslationSet };

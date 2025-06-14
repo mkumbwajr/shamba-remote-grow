@@ -30,7 +30,8 @@ export const swTranslations = {
   creatingAccount: 'Unafungua Akaunti...',
   dontHaveAccount: 'Huna akaunti? Jisajili',
   alreadyHaveAccount: 'Una akaunti tayari? Ingia',
-  
+  passwordMismatchError: 'hailingani.', // New key
+
   // Dashboard
   remoteFarmingPlatform: 'Jukwaa la Kilimo kwa Mbali',
   operations: 'Shughuli',

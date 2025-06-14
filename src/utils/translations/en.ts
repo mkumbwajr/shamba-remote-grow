@@ -30,7 +30,8 @@ export const enTranslations = {
   creatingAccount: 'Creating Account...',
   dontHaveAccount: "Don't have an account? Sign up",
   alreadyHaveAccount: "Already have an account? Sign in",
-  
+  passwordMismatchError: 'do not match.', // New key
+
   // Dashboard
   remoteFarmingPlatform: 'Remote Farming Platform',
   operations: 'Operations',
