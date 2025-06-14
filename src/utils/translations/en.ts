@@ -1,4 +1,3 @@
-
 export const enTranslations = {
   // Auth page
   welcomeBack: 'Welcome Back',
@@ -64,6 +63,7 @@ export const enTranslations = {
   saving: 'Saving...',
   notProvided: 'Not provided',
   experience: 'Experience',
+  noProfileFound: 'Profile not found. You can create one by editing.', // Added new key
   
   // Common
   loading: 'Loading...',

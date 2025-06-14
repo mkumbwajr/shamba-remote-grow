@@ -1,4 +1,3 @@
-
 export const swTranslations = {
   // Auth page
   welcomeBack: 'Karibu Tena',
@@ -30,7 +29,7 @@ export const swTranslations = {
   creatingAccount: 'Unafungua Akaunti...',
   dontHaveAccount: 'Huna akaunti? Jisajili',
   alreadyHaveAccount: 'Una akaunti tayari? Ingia',
-  passwordMismatchError: 'hailingani.', // New key
+  passwordMismatchError: 'hailingani.',
 
   // Dashboard
   remoteFarmingPlatform: 'Jukwaa la Kilimo kwa Mbali',
@@ -64,7 +63,8 @@ export const swTranslations = {
   saving: 'Inahifadhi...',
   notProvided: 'Haijapatikana',
   experience: 'Uzoefu',
-  
+  noProfileFound: 'Wasifu haupatikani. Unaweza kuunda kwa kuhariri.',
+
   // Common
   loading: 'Inapakia...',
   loadingProfile: 'Inapakia wasifu...',

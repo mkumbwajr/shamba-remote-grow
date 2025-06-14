@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Language, translations, getTranslation, TranslationSet } from '@/utils/translations'; // Import TranslationSet
 
@@ -39,6 +38,4 @@ export const useLanguage = () => {
   return context;
 };
 
-// Export TranslationSet if it's to be used by other components directly importing from here
-// However, it's already exported from '@/utils/translations'
 export type { TranslationSet };

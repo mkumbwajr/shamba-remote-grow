@@ -1,4 +1,3 @@
-
 import { enTranslations } from './translations/en';
 import { swTranslations } from './translations/sw';
 
@@ -11,7 +10,7 @@ export const translations = {
 
 // Type for the structure of individual translation files (e.g., enTranslations)
 // This is a simplified representation; a more precise type could be generated.
-type TranslationSet = Record<string, any>; 
+export type TranslationSet = Record<string, any>; // Added export
 
 export const getTranslation = (
   language: Language,
