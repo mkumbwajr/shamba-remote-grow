@@ -26,6 +26,7 @@ import OrderSuccess from "./pages/OrderSuccess";
 import InventoryPage from "./pages/Inventory";
 import MessagesPage from "./pages/Messages";
 import CommunityPage from "./pages/Community";
+import NewsPage from "./pages/News";
 import Support from "./pages/Support";
 import NotFound from "./pages/NotFound";
 
@@ -58,6 +59,7 @@ const App = () => (
                 <Route path="/inventory" element={<InventoryPage />} />
                 <Route path="/messages" element={<MessagesPage />} />
                 <Route path="/community" element={<CommunityPage />} />
+                <Route path="/news" element={<NewsPage />} />
                 <Route path="/support" element={<Support />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/order-success" element={<OrderSuccess />} />
