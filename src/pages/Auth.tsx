@@ -43,19 +43,13 @@ const Auth = () => {
   
   const handleSignUpSubmit = async (data: SignupDataForSubmit) => {
     setIsLoading(true);
-    const { email_param, password_param, ...otherFields } = data;
+    const { email_param, password_param } = data;
 
     const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
       email: email_param,
       password: password_param,
       options: {
         data: {
-          full_name: otherFields.fullName,
-          country: otherFields.country || null,
-          phone: otherFields.phone || null,
-          preferred_crop: otherFields.preferredCrop || null,
-          farming_experience: otherFields.farmingExperience || null,
-          farm_size: otherFields.farmSize || null,
           is_new_user: true, // Flag to identify new users for onboarding
         },
         emailRedirectTo: `${window.location.origin}/onboarding`,
@@ -79,7 +73,6 @@ const Auth = () => {
     }
     setIsLoading(false);
   };
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 via-yellow-50 to-blue-100 flex flex-col items-center justify-center p-4">
