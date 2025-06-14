@@ -5,125 +5,80 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Search, Plus, MessageSquare, User, Clock } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { MessageSquare, ThumbsUp, Clock, User, Plus } from 'lucide-react';
 
-const existingTickets = [
+const forumTopics = [
   {
     id: 1,
-    title: 'Crop Matcher not showing results for my region',
-    category: 'Technical',
-    status: 'Open',
-    priority: 'High',
-    author: 'John Farmer',
-    replies: 3,
+    title: 'Best practices for maize farming in Arusha region',
+    author: 'John Mwalimu',
+    category: 'Crop Management',
+    replies: 15,
+    likes: 23,
     lastActivity: '2 hours ago',
-    description: 'The crop matcher seems to be stuck loading when I select my region (Kilimanjaro). I\'ve tried refreshing but the issue persists.'
+    preview: 'I\'ve been farming maize for 5 years and wanted to share some techniques that have worked well...'
   },
   {
     id: 2,
-    title: 'How to calculate ROI for mixed farming?',
-    category: 'General',
-    status: 'Answered',
-    priority: 'Medium',
-    author: 'Mary Agriculture',
-    replies: 7,
-    lastActivity: '1 day ago',
-    description: 'I\'m growing both maize and beans on my farm. How should I calculate the return on investment for this mixed farming approach?'
+    title: 'Soil testing services in Dar es Salaam',
+    author: 'Mary Kimathi',
+    category: 'Soil & Fertilizers',
+    replies: 8,
+    likes: 12,
+    lastActivity: '5 hours ago',
+    preview: 'Can anyone recommend reliable soil testing services in Dar es Salaam area?'
   },
   {
     id: 3,
-    title: 'Payment failed during marketplace checkout',
-    category: 'Billing',
-    status: 'In Progress',
-    priority: 'High',
-    author: 'Peter Crops',
-    replies: 1,
-    lastActivity: '3 hours ago',
-    description: 'I was trying to buy seeds worth 50,000 TSH but the payment keeps failing. My M-Pesa has sufficient balance.'
+    title: 'Hiring reliable farm workers - tips and experiences',
+    author: 'Peter Njau',
+    category: 'Workers',
+    replies: 22,
+    likes: 31,
+    lastActivity: '1 day ago',
+    preview: 'After hiring several workers through the platform, here are some tips I\'ve learned...'
   },
   {
     id: 4,
-    title: 'Best practices for hiring seasonal workers',
-    category: 'General',
-    status: 'Answered',
-    priority: 'Low',
-    author: 'Grace Farming',
-    replies: 12,
+    title: 'Tomato market prices - current trends',
+    author: 'Grace Mushi',
+    category: 'Marketplace',
+    replies: 6,
+    likes: 9,
     lastActivity: '2 days ago',
-    description: 'Looking for advice on how to find and hire reliable seasonal workers for harvest season.'
-  },
-  {
-    id: 5,
-    title: 'Mobile app version not syncing with web',
-    category: 'Technical',
-    status: 'Open',
-    priority: 'Medium',
-    author: 'Samuel Tech',
-    replies: 2,
-    lastActivity: '5 hours ago',
-    description: 'Changes I make on the mobile app don\'t appear on the web version and vice versa.'
+    preview: 'Has anyone noticed the recent changes in tomato prices? What are your predictions...'
   }
 ];
 
+const categories = ['All', 'Crop Management', 'Soil & Fertilizers', 'Workers', 'Marketplace', 'Equipment', 'Weather'];
+
 const SupportForumSection = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [isCreateTicketOpen, setIsCreateTicketOpen] = useState(false);
-  const [newTicket, setNewTicket] = useState({
-    title: '',
-    category: '',
-    priority: '',
-    description: ''
-  });
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [newTopic, setNewTopic] = useState({ title: '', category: '', content: '' });
 
-  const categories = ['all', 'Technical', 'General', 'Billing', 'Marketplace', 'Crops'];
-  const priorities = ['Low', 'Medium', 'High'];
+  const filteredTopics = selectedCategory === 'All' 
+    ? forumTopics 
+    : forumTopics.filter(topic => topic.category === selectedCategory);
 
-  const filteredTickets = existingTickets.filter(ticket => {
-    const matchesSearch = ticket.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         ticket.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || ticket.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
-
-  const handleCreateTicket = () => {
-    console.log('Creating ticket:', newTicket);
-    // In real implementation, this would create a new support ticket
-    setIsCreateTicketOpen(false);
-    setNewTicket({ title: '', category: '', priority: '', description: '' });
-    alert('Support ticket created successfully! Our team will respond within 24 hours.');
+  const handleCreateTopic = () => {
+    // In a real implementation, this would create a new forum topic
+    console.log('Creating new topic:', newTopic);
+    setShowCreateForm(false);
+    setNewTopic({ title: '', category: '', content: '' });
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Open':
-        return 'bg-blue-100 text-blue-800';
-      case 'In Progress':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'Answered':
-        return 'bg-green-100 text-green-800';
-      case 'Closed':
-        return 'bg-gray-100 text-gray-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'High':
-        return 'bg-red-100 text-red-800';
-      case 'Medium':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'Low':
-        return 'bg-green-100 text-green-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
+  const getCategoryColor = (category: string) => {
+    const colors = {
+      'Crop Management': 'bg-green-100 text-green-800',
+      'Soil & Fertilizers': 'bg-brown-100 text-brown-800',
+      'Workers': 'bg-blue-100 text-blue-800',
+      'Marketplace': 'bg-purple-100 text-purple-800',
+      'Equipment': 'bg-orange-100 text-orange-800',
+      'Weather': 'bg-cyan-100 text-cyan-800'
+    };
+    return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800';
   };
 
   return (
@@ -132,151 +87,115 @@ const SupportForumSection = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-xl text-green-800">Support Forum</CardTitle>
-              <p className="text-gray-600">Get help from the community and our support team</p>
+              <CardTitle className="text-xl text-green-800">Community Support Forum</CardTitle>
+              <p className="text-gray-600">Connect with other farmers and share knowledge</p>
             </div>
-            <Dialog open={isCreateTicketOpen} onOpenChange={setIsCreateTicketOpen}>
-              <DialogTrigger asChild>
-                <Button className="bg-green-600 hover:bg-green-700">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Ticket
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-md">
-                <DialogHeader>
-                  <DialogTitle>Create Support Ticket</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="title">Title</Label>
-                    <Input
-                      id="title"
-                      placeholder="Brief description of your issue"
-                      value={newTicket.title}
-                      onChange={(e) => setNewTicket({...newTicket, title: e.target.value})}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="category">Category</Label>
-                    <Select value={newTicket.category} onValueChange={(value) => setNewTicket({...newTicket, category: value})}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {categories.slice(1).map(cat => (
-                          <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="priority">Priority</Label>
-                    <Select value={newTicket.priority} onValueChange={(value) => setNewTicket({...newTicket, priority: value})}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select priority" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {priorities.map(priority => (
-                          <SelectItem key={priority} value={priority}>{priority}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea
-                      id="description"
-                      placeholder="Detailed description of your issue"
-                      rows={4}
-                      value={newTicket.description}
-                      onChange={(e) => setNewTicket({...newTicket, description: e.target.value})}
-                    />
-                  </div>
-                  <Button 
-                    onClick={handleCreateTicket} 
-                    className="w-full bg-green-600 hover:bg-green-700"
-                    disabled={!newTicket.title || !newTicket.category || !newTicket.description}
-                  >
-                    Create Ticket
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
+            <Button 
+              onClick={() => setShowCreateForm(!showCreateForm)}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              New Topic
+            </Button>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {/* Search and Filters */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="Search tickets..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-full sm:w-48">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map(cat => (
-                    <SelectItem key={cat} value={cat}>
-                      {cat === 'all' ? 'All Categories' : cat}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+          {/* Category Filter */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            {categories.map((category) => (
+              <Button
+                key={category}
+                variant={selectedCategory === category ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setSelectedCategory(category)}
+                className={selectedCategory === category ? 'bg-green-600 hover:bg-green-700' : ''}
+              >
+                {category}
+              </Button>
+            ))}
+          </div>
 
-            {/* Tickets List */}
-            <div className="space-y-3">
-              {filteredTickets.map((ticket) => (
-                <div key={ticket.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-medium text-gray-900">{ticket.title}</h3>
-                    <div className="flex items-center space-x-2">
-                      <Badge className={`text-xs ${getPriorityColor(ticket.priority)}`}>
-                        {ticket.priority}
-                      </Badge>
-                      <Badge className={`text-xs ${getStatusColor(ticket.status)}`}>
-                        {ticket.status}
-                      </Badge>
+          {/* Create Topic Form */}
+          {showCreateForm && (
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle className="text-lg">Create New Topic</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Input
+                  placeholder="Topic title"
+                  value={newTopic.title}
+                  onChange={(e) => setNewTopic({...newTopic, title: e.target.value})}
+                />
+                <select
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  value={newTopic.category}
+                  onChange={(e) => setNewTopic({...newTopic, category: e.target.value})}
+                >
+                  <option value="">Select Category</option>
+                  {categories.slice(1).map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+                <Textarea
+                  placeholder="Describe your question or share your knowledge..."
+                  value={newTopic.content}
+                  onChange={(e) => setNewTopic({...newTopic, content: e.target.value})}
+                  rows={4}
+                />
+                <div className="flex space-x-2">
+                  <Button onClick={handleCreateTopic} className="bg-green-600 hover:bg-green-700">
+                    Create Topic
+                  </Button>
+                  <Button variant="outline" onClick={() => setShowCreateForm(false)}>
+                    Cancel
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Forum Topics */}
+          <div className="space-y-4">
+            {filteredTopics.map((topic) => (
+              <div key={topic.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-2">{topic.title}</h3>
+                    <p className="text-gray-600 text-sm mb-3">{topic.preview}</p>
+                    <div className="flex items-center space-x-4 text-sm text-gray-500">
+                      <div className="flex items-center space-x-1">
+                        <User className="w-4 h-4" />
+                        <span>{topic.author}</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <Clock className="w-4 h-4" />
+                        <span>{topic.lastActivity}</span>
+                      </div>
                     </div>
                   </div>
-                  
-                  <p className="text-sm text-gray-600 mb-3">{ticket.description}</p>
-                  
-                  <div className="flex items-center justify-between text-xs text-gray-500">
-                    <div className="flex items-center space-x-4">
-                      <span className="flex items-center">
-                        <User className="w-3 h-3 mr-1" />
-                        {ticket.author}
-                      </span>
-                      <span className="flex items-center">
-                        <MessageSquare className="w-3 h-3 mr-1" />
-                        {ticket.replies} replies
-                      </span>
-                      <Badge variant="secondary" className="text-xs">
-                        {ticket.category}
-                      </Badge>
+                  <Badge className={getCategoryColor(topic.category)}>
+                    {topic.category}
+                  </Badge>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4 text-sm text-gray-500">
+                    <div className="flex items-center space-x-1">
+                      <MessageSquare className="w-4 h-4" />
+                      <span>{topic.replies} replies</span>
                     </div>
-                    <span className="flex items-center">
-                      <Clock className="w-3 h-3 mr-1" />
-                      {ticket.lastActivity}
-                    </span>
+                    <div className="flex items-center space-x-1">
+                      <ThumbsUp className="w-4 h-4" />
+                      <span>{topic.likes} likes</span>
+                    </div>
                   </div>
+                  <Button variant="outline" size="sm">
+                    View Discussion
+                  </Button>
                 </div>
-              ))}
-              
-              {filteredTickets.length === 0 && (
-                <div className="text-center py-8">
-                  <p className="text-gray-500">No tickets found matching your criteria.</p>
-                </div>
-              )}
-            </div>
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>

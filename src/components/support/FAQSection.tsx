@@ -1,25 +1,24 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Search } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 
 const faqData = [
   {
-    category: 'Getting Started',
+    category: 'Account & Profile',
     questions: [
       {
-        question: 'How do I create an account on Bwana Shamba?',
-        answer: 'To create an account, click the "Sign Up" button on the homepage, fill in your details including name, email, country, and farming preferences. You\'ll receive a verification email to activate your account.'
+        question: 'How do I create my farmer profile?',
+        answer: 'Navigate to the Profile section from the sidebar and click "Edit Profile" to add your farming information, location, and other details.'
       },
       {
-        question: 'What information do I need to provide during onboarding?',
-        answer: 'During onboarding, you\'ll need to provide your full name, country, phone number (optional), preferred crop, farm size, and farming experience level. This helps us personalize your experience.'
+        question: 'Can I change my location after registration?',
+        answer: 'Yes, you can update your location and other profile information at any time through the Profile section.'
       },
       {
-        question: 'Is Bwana Shamba free to use?',
-        answer: 'Bwana Shamba offers both free and premium features. Basic crop matching, marketplace browsing, and community access are free. Premium features include advanced analytics, priority support, and enhanced marketplace tools.'
+        question: 'How do I reset my password?',
+        answer: 'Use the "Forgot Password" link on the login page to receive a password reset email.'
       }
     ]
   },
@@ -28,15 +27,15 @@ const faqData = [
     questions: [
       {
         question: 'How does the Crop Matcher work?',
-        answer: 'The Crop Matcher analyzes your location, soil conditions, climate data, and farming experience to recommend the best crops for your farm. It considers factors like rainfall, temperature, and market demand.'
+        answer: 'The Crop Matcher analyzes your location, soil type, climate, and farming experience to recommend the best crops for your conditions.'
       },
       {
-        question: 'Can I track multiple farms on the platform?',
-        answer: 'Yes, you can add and manage multiple farms in your dashboard. Each farm can have different crops, workers, and investment tracking. Use the "My Farms" section to switch between farms.'
+        question: 'Can I track multiple crops at once?',
+        answer: 'Yes, you can manage multiple farms and track different crops simultaneously through the Farms section.'
       },
       {
-        question: 'How do I update my crop progress?',
-        answer: 'Navigate to your farm dashboard and click on the specific crop. You can update planting dates, growth stages, treatments applied, and harvest information. This data helps with analytics and planning.'
+        question: 'How accurate are the crop recommendations?',
+        answer: 'Our recommendations are based on local agricultural data, climate patterns, and successful farming practices in your region.'
       }
     ]
   },
@@ -45,114 +44,91 @@ const faqData = [
     questions: [
       {
         question: 'How do I buy seeds and equipment?',
-        answer: 'Browse the marketplace, add items to your cart, and proceed to checkout. We accept mobile money payments and bank transfers. Items are delivered to your specified address within 3-7 business days.'
+        answer: 'Browse the Marketplace section, select items, add them to cart, and proceed to checkout. We accept various payment methods.'
       },
       {
         question: 'Can I sell my produce on the platform?',
-        answer: 'Yes, farmers can list their produce for sale in the marketplace. Go to "Sell Products" in the marketplace section, provide product details, pricing, and availability. Buyers can contact you directly.'
+        answer: 'Yes, farmers can list their produce for sale. Contact support to set up your seller account.'
       },
       {
         question: 'What payment methods are accepted?',
-        answer: 'We accept M-Pesa, Tigo Pesa, Airtel Money, bank transfers, and major credit cards. Payment is secure and processed through verified payment gateways.'
+        answer: 'We accept mobile money (M-Pesa, Tigo Pesa), bank transfers, and credit/debit cards.'
       }
     ]
   },
   {
-    category: 'Workers & Land Rental',
+    category: 'Workers & Land',
     questions: [
       {
         question: 'How do I hire farm workers?',
-        answer: 'Visit the Workers section, browse available workers, check their profiles and ratings, then send a hire request. You can negotiate terms and manage contracts through the platform.'
+        answer: 'Visit the Workers section to browse available workers, view their profiles, and send hire requests.'
       },
       {
-        question: 'How does land rental work?',
-        answer: 'Browse available land plots in the Land Rental section. View detailed information including location, size, soil quality, and rental terms. Contact landowners directly to negotiate rental agreements.'
+        question: 'Can I rent agricultural land?',
+        answer: 'Yes, the Land Rental section shows available plots with detailed information about location, soil quality, and pricing.'
       },
       {
-        question: 'Can I rate workers after contracts end?',
-        answer: 'Yes, after a contract ends, you can rate and review workers based on their performance. This helps other farmers make informed decisions and helps workers build their reputation.'
-      }
-    ]
-  },
-  {
-    category: 'Technical Support',
-    questions: [
-      {
-        question: 'The app is running slowly. What should I do?',
-        answer: 'Try refreshing your browser, clearing cache, or checking your internet connection. If issues persist, contact our support team with details about your device and browser.'
-      },
-      {
-        question: 'I forgot my password. How do I reset it?',
-        answer: 'Click "Forgot Password" on the login page, enter your email address, and follow the instructions in the reset email. If you don\'t receive the email, check your spam folder.'
-      },
-      {
-        question: 'Can I use Bwana Shamba on my mobile phone?',
-        answer: 'Yes, Bwana Shamba is fully responsive and works on mobile devices. For the best experience, use a modern browser like Chrome, Safari, or Firefox.'
+        question: 'How are worker payments handled?',
+        answer: 'Payments are processed through the platform with options for daily, weekly, or project-based compensation.'
       }
     ]
   }
 ];
 
 const FAQSection = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [openItems, setOpenItems] = useState<string[]>([]);
 
-  const filteredFAQs = faqData.map(category => ({
-    ...category,
-    questions: category.questions.filter(
-      q => 
-        q.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        q.answer.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  })).filter(category => category.questions.length > 0);
+  const toggleItem = (itemId: string) => {
+    setOpenItems(prev =>
+      prev.includes(itemId)
+        ? prev.filter(id => id !== itemId)
+        : [...prev, itemId]
+    );
+  };
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl text-green-800">Frequently Asked Questions</CardTitle>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              placeholder="Search FAQs..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-6">
-            {filteredFAQs.map((category, categoryIndex) => (
-              <div key={categoryIndex}>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">{category.category}</h3>
-                <Accordion type="single" collapsible className="space-y-2">
-                  {category.questions.map((faq, index) => (
-                    <AccordionItem 
-                      key={index} 
-                      value={`${categoryIndex}-${index}`}
-                      className="border border-gray-200 rounded-lg px-4"
-                    >
-                      <AccordionTrigger className="text-left hover:no-underline">
-                        {faq.question}
-                      </AccordionTrigger>
-                      <AccordionContent className="text-gray-600 pb-4">
-                        {faq.answer}
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-xl text-green-800">Frequently Asked Questions</CardTitle>
+        <p className="text-gray-600">Find answers to common questions about Bwana Shamba</p>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-6">
+          {faqData.map((category, categoryIndex) => (
+            <div key={categoryIndex}>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">{category.category}</h3>
+              <div className="space-y-2">
+                {category.questions.map((faq, questionIndex) => {
+                  const itemId = `${categoryIndex}-${questionIndex}`;
+                  const isOpen = openItems.includes(itemId);
+                  
+                  return (
+                    <Collapsible key={questionIndex}>
+                      <CollapsibleTrigger
+                        onClick={() => toggleItem(itemId)}
+                        className="flex items-center justify-between w-full p-4 text-left bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+                      >
+                        <span className="font-medium text-gray-900">{faq.question}</span>
+                        {isOpen ? (
+                          <ChevronDown className="w-5 h-5 text-gray-500" />
+                        ) : (
+                          <ChevronRight className="w-5 h-5 text-gray-500" />
+                        )}
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className={isOpen ? 'block' : 'hidden'}>
+                        <div className="p-4 bg-white border border-gray-200 rounded-b-lg">
+                          <p className="text-gray-700">{faq.answer}</p>
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  );
+                })}
               </div>
-            ))}
-            
-            {filteredFAQs.length === 0 && (
-              <div className="text-center py-8">
-                <p className="text-gray-500">No FAQs found matching your search.</p>
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
