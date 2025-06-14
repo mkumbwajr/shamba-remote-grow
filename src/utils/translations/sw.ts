@@ -1,3 +1,4 @@
+
 export const sw = {
   auth: "Uthibitishaji",
   welcome: "Karibu",
@@ -78,7 +79,6 @@ export const sw = {
   stayInformedAboutPlatform: "Pata habari kuhusu sasisho za jukwaa, ushirikiano, na hadithi za mafanikio",
   allNews: "Habari Zote",
   partnerships: "Ushirikiano",
-  testimonials: "Ushuhuda",
   updates: "Sasisho",
   readMore: "Soma Zaidi",
   readLess: "Soma Kidogo",

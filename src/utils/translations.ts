@@ -1,14 +1,15 @@
-import { enTranslations } from './translations/en';
-import { swTranslations } from './translations/sw';
+
+import { en } from './translations/en';
+import { sw } from './translations/sw';
 
 export type Language = 'en' | 'sw';
 
 export const translations = {
-  en: enTranslations,
-  sw: swTranslations,
+  en: en,
+  sw: sw,
 };
 
-// Type for the structure of individual translation files (e.g., enTranslations)
+// Type for the structure of individual translation files (e.g., en)
 // This is a simplified representation; a more precise type could be generated.
 export type TranslationSet = Record<string, any>; // Added export
 
