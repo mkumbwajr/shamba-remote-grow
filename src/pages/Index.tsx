@@ -42,6 +42,9 @@ const Index = () => {
     const fetchUserProfile = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
+        // Check if user needs onboarding
+        const isNewUser = user.user_metadata?.is_new_user;
+        
         const { data: profileData, error } = await (supabase.from('profiles') as any)
           .select('full_name')
           .eq('id', user.id)
@@ -49,6 +52,11 @@ const Index = () => {
         
         if (error) {
           console.error("Error fetching profile:", error.message);
+          // If no profile exists and user is new, redirect to onboarding
+          if (error.code === 'PGRST116' && isNewUser) {
+            navigate('/onboarding');
+            return;
+          }
         } else if (profileData) {
           setUserProfile(profileData as UserProfileData);
         }

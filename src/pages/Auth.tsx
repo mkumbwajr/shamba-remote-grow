@@ -56,8 +56,9 @@ const Auth = () => {
           preferred_crop: otherFields.preferredCrop || null,
           farming_experience: otherFields.farmingExperience || null,
           farm_size: otherFields.farmSize || null,
+          is_new_user: true, // Flag to identify new users for onboarding
         },
-        // emailRedirectTo: `${window.location.origin}/` // Recommended for email verification flows
+        emailRedirectTo: `${window.location.origin}/onboarding`,
       },
     });
 
@@ -68,13 +69,13 @@ const Auth = () => {
       const emailConfirmationRequired = signUpData.user.identities.some(id => id.identity_data?.email && !signUpData.session);
 
       if (emailConfirmationRequired) {
-        toast.success(t('createAccountSucceededCheckEmail') as string || 'Account created! Please check your email to verify.'); // Add 'createAccountSucceededCheckEmail' to translations
+        toast.success(t('createAccountSucceededCheckEmail') as string || 'Account created! Please check your email to verify.'); 
       } else {
-        toast.success(t('createAccountSucceeded') as string || 'Account created successfully!'); // Add 'createAccountSucceeded' to translations
-        navigate('/'); // Navigate if no email confirmation or auto-confirmed
+        toast.success(t('createAccountSucceeded') as string || 'Account created successfully!'); 
+        navigate('/onboarding'); // Redirect new users to onboarding
       }
     } else if (!signUpData.session && !signUpData.user) {
-      toast.info(t('checkEmailOrSignIn') as string || "Please check your email to verify your account or try signing in if already verified."); // Add 'checkEmailOrSignIn' to translations
+      toast.info(t('checkEmailOrSignIn') as string || "Please check your email to verify your account or try signing in if already verified."); 
     }
     setIsLoading(false);
   };
