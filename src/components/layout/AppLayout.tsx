@@ -36,8 +36,10 @@ const AppLayout = ({ userProfile, children }: AppLayoutProps) => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
         <AppSidebar userProfile={userProfile} />
-        <SidebarInset className="flex-1">
-          {children}
+        <SidebarInset className="flex-1 min-w-0">
+          <div className="flex flex-col min-h-screen">
+            {children}
+          </div>
         </SidebarInset>
         <ChatSidebar 
           isOpen={isChatOpen} 

@@ -96,6 +96,54 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  /* Responsive text handling */
+  .text-responsive {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+
+  .text-responsive-xl {
+    @apply text-lg sm:text-xl lg:text-2xl;
+  }
+
+  /* Better mobile touch targets */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  /* Responsive padding utilities */
+  .responsive-padding {
+    @apply p-3 sm:p-4 lg:p-6;
+  }
+
+  .responsive-margin {
+    @apply m-3 sm:m-4 lg:m-6;
+  }
+
+  /* Better scrollable areas */
+  .scrollable {
+    @apply overflow-auto;
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.gray.300') transparent;
+  }
+
+  .scrollable::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollable::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollable::-webkit-scrollbar-thumb {
+    background-color: theme('colors.gray.300');
+    border-radius: 3px;
+  }
+
+  .scrollable::-webkit-scrollbar-thumb:hover {
+    background-color: theme('colors.gray.400');
+  }
 }
 
 @layer components {
@@ -108,10 +156,69 @@
   }
   
   .crop-card {
-    @apply bg-gradient-to-br from-crop-50 to-forest-50 border border-forest-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow;
+    @apply bg-gradient-to-br from-crop-50 to-forest-50 border border-forest-200 rounded-lg p-3 sm:p-4 shadow-sm hover:shadow-md transition-shadow;
   }
   
   .farm-card {
-    @apply bg-white border border-earth-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-all hover:border-forest-300;
+    @apply bg-white border border-earth-200 rounded-lg p-3 sm:p-4 shadow-sm hover:shadow-md transition-all hover:border-forest-300;
+  }
+
+  /* Responsive grid utilities */
+  .responsive-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6;
+  }
+
+  .responsive-grid-2 {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 lg:gap-6;
+  }
+
+  /* Mobile-first button sizes */
+  .btn-responsive {
+    @apply px-3 py-2 sm:px-4 sm:py-2 text-sm sm:text-base;
+  }
+
+  /* Responsive flex utilities */
+  .flex-responsive {
+    @apply flex flex-col sm:flex-row gap-2 sm:gap-4;
+  }
+
+  /* Card responsive utilities */
+  .card-responsive {
+    @apply rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6;
+  }
+}
+
+@layer utilities {
+  /* Custom responsive breakpoint utilities */
+  .xs-only {
+    @media (max-width: 475px) {
+      display: block;
+    }
+    @media (min-width: 476px) {
+      display: none;
+    }
+  }
+
+  .xs-hidden {
+    @media (max-width: 475px) {
+      display: none;
+    }
+  }
+
+  /* Safe area utilities for mobile devices */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .safe-right {
+    padding-right: env(safe-area-inset-right);
   }
 }

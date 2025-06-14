@@ -56,20 +56,20 @@ const LandPlotMapContent: React.FC<LandPlotMapContentProps> = ({ plotId }) => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <LandPlotHeader plot={plot} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6">
         {/* Map Section */}
-        <div className="lg:col-span-2 space-y-6">
-          <Card className="h-[600px]">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Navigation className="h-5 w-5" />
+        <div className="xl:col-span-2 space-y-4 sm:space-y-6">
+          <Card className="h-[400px] sm:h-[500px] lg:h-[600px]">
+            <CardHeader className="pb-2 sm:pb-4">
+              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                <Navigation className="h-4 w-4 sm:h-5 sm:w-5" />
                 Satellite View & Location Features
               </CardTitle>
             </CardHeader>
-            <CardContent className="h-[500px] p-0">
+            <CardContent className="h-[320px] sm:h-[420px] lg:h-[500px] p-0">
               <GoogleMapComponent
                 coordinates={plot.coordinates!}
                 title={plot.title}
@@ -80,11 +80,18 @@ const LandPlotMapContent: React.FC<LandPlotMapContentProps> = ({ plotId }) => {
           </Card>
           
           {/* Farm Pictures Gallery */}
-          <FarmPicturesGallery />
+          <div className="block xl:hidden">
+            <FarmPicturesGallery />
+          </div>
         </div>
 
         {/* Details Section */}
-        <LandPlotDetails plot={plot} />
+        <div className="xl:col-span-1 space-y-4 sm:space-y-6">
+          <LandPlotDetails plot={plot} />
+          <div className="hidden xl:block">
+            <FarmPicturesGallery />
+          </div>
+        </div>
       </div>
     </div>
   );
