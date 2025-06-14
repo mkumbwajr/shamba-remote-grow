@@ -12,6 +12,7 @@ import { FarmUpdatesCard } from '@/components/dashboard/FarmUpdatesCard';
 import { MarketIntelligenceCard } from '@/components/dashboard/MarketIntelligenceCard';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useLanguage } from '@/contexts/LanguageContext';
+import EmailVerificationGuard from '@/components/auth/EmailVerificationGuard';
 import {
   SidebarProvider,
   SidebarInset,
@@ -24,6 +25,8 @@ interface UserProfileData {
 
 const Index = () => {
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [isEmailVerified, setIsEmailVerified] = useState<boolean | undefined>(undefined);
   const [showMarketChart, setShowMarketChart] = useState(false);
   const navigate = useNavigate();
   const { t } = useLanguage();
@@ -42,6 +45,9 @@ const Index = () => {
     const fetchUserProfile = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
+        setUserEmail(user.email || null);
+        setIsEmailVerified(user.email_confirmed_at !== null);
+        
         // Check if user needs onboarding
         const isNewUser = user.user_metadata?.is_new_user;
         
@@ -76,57 +82,59 @@ const Index = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gray-50">
-        <AppSidebar userProfile={userProfile} />
-        <SidebarInset className="flex-1">
-          {/* Header */}
-          <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-white px-4">
-            <SidebarTrigger className="-ml-1" />
-            <div className="flex-1 flex justify-between items-center">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800">
-                  {String(t('dashboard'))}
-                </h2>
-                <p className="text-gray-600 text-sm">Welcome back to your farming dashboard</p>
+    <EmailVerificationGuard userEmail={userEmail} isEmailVerified={isEmailVerified}>
+      <SidebarProvider>
+        <div className="min-h-screen flex w-full bg-gray-50">
+          <AppSidebar userProfile={userProfile} />
+          <SidebarInset className="flex-1">
+            {/* Header */}
+            <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-white px-4">
+              <SidebarTrigger className="-ml-1" />
+              <div className="flex-1 flex justify-between items-center">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    {String(t('dashboard'))}
+                  </h2>
+                  <p className="text-gray-600 text-sm">Welcome back to your farming dashboard</p>
+                </div>
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src="/placeholder-avatar.jpg" />
+                  <AvatarFallback>{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
+                </Avatar>
               </div>
-              <Avatar className="h-10 w-10">
-                <AvatarImage src="/placeholder-avatar.jpg" />
-                <AvatarFallback>{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
-              </Avatar>
-            </div>
-          </header>
+            </header>
 
-          {/* Main content */}
-          <main className="flex-1 p-6">
-            <div className="space-y-6">
-              <QuickStatsSection
-                activeFarmsCount={activeFarmsCount}
-                activeWorkersCount={activeWorkersCount}
-                onActiveFarmsClick={handleActiveFarmsClick}
-                onWorkersHiredClick={handleWorkersHiredClick}
-              />
-
-              {/* Farm Updates & Market Intelligence */}
-              <section className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                <FarmUpdatesCard />
-                <MarketIntelligenceCard
-                  showMarketChart={showMarketChart}
-                  onToggleChart={() => setShowMarketChart(!showMarketChart)}
+            {/* Main content */}
+            <main className="flex-1 p-6">
+              <div className="space-y-6">
+                <QuickStatsSection
+                  activeFarmsCount={activeFarmsCount}
+                  activeWorkersCount={activeWorkersCount}
+                  onActiveFarmsClick={handleActiveFarmsClick}
+                  onWorkersHiredClick={handleWorkersHiredClick}
                 />
-              </section>
 
-              {/* Market Intelligence Chart */}
-              {showMarketChart && (
-                <section>
-                  <MarketIntelligenceChart />
+                {/* Farm Updates & Market Intelligence */}
+                <section className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                  <FarmUpdatesCard />
+                  <MarketIntelligenceCard
+                    showMarketChart={showMarketChart}
+                    onToggleChart={() => setShowMarketChart(!showMarketChart)}
+                  />
                 </section>
-              )}
-            </div>
-          </main>
-        </SidebarInset>
-      </div>
-    </SidebarProvider>
+
+                {/* Market Intelligence Chart */}
+                {showMarketChart && (
+                  <section>
+                    <MarketIntelligenceChart />
+                  </section>
+                )}
+              </div>
+            </main>
+          </SidebarInset>
+        </div>
+      </SidebarProvider>
+    </EmailVerificationGuard>
   );
 };
 

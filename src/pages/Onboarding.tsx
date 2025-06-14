@@ -98,7 +98,24 @@ const Onboarding = () => {
 
       if (error) throw error;
 
+      // Update user metadata to mark onboarding as complete
+      const { error: updateError } = await supabase.auth.updateUser({
+        data: { 
+          is_new_user: false,
+          onboarding_completed: true 
+        }
+      });
+
+      if (updateError) console.warn('Failed to update user metadata:', updateError);
+
       toast.success('Onboarding completed successfully!');
+      
+      // Check if email is verified, if not, show appropriate message
+      const isEmailVerified = user.email_confirmed_at !== null;
+      if (!isEmailVerified) {
+        toast.info('Please verify your email to access all features');
+      }
+      
       navigate('/');
     } catch (error: any) {
       toast.error('Failed to complete onboarding: ' + error.message);

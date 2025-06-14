@@ -45,31 +45,25 @@ const Auth = () => {
     setIsLoading(true);
     const { email_param, password_param } = data;
 
+    // Sign up without email confirmation to allow immediate onboarding
     const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
       email: email_param,
       password: password_param,
       options: {
         data: {
-          is_new_user: true, // Flag to identify new users for onboarding
+          is_new_user: true,
+          email_verified: false, // Track verification status
         },
-        emailRedirectTo: `${window.location.origin}/onboarding`,
+        emailRedirectTo: `${window.location.origin}/profile`, // Email verification redirects to profile
       },
     });
 
     if (signUpError) {
       toast.error(signUpError.message);
-    } else if (signUpData.user && signUpData.user.identities && signUpData.user.identities.length > 0) {
-       // Check if email confirmation is required
-      const emailConfirmationRequired = signUpData.user.identities.some(id => id.identity_data?.email && !signUpData.session);
-
-      if (emailConfirmationRequired) {
-        toast.success(t('createAccountSucceededCheckEmail') as string || 'Account created! Please check your email to verify.'); 
-      } else {
-        toast.success(t('createAccountSucceeded') as string || 'Account created successfully!'); 
-        navigate('/onboarding'); // Redirect new users to onboarding
-      }
-    } else if (!signUpData.session && !signUpData.user) {
-      toast.info(t('checkEmailOrSignIn') as string || "Please check your email to verify your account or try signing in if already verified."); 
+    } else if (signUpData.user) {
+      toast.success(t('createAccountSucceeded') as string || 'Account created successfully!');
+      // Proceed directly to onboarding without waiting for email verification
+      navigate('/onboarding');
     }
     setIsLoading(false);
   };
