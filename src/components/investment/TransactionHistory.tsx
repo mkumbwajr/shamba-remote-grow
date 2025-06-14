@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowUpRight, ArrowDownLeft, Calendar, DollarSign } from 'lucide-react';
+import { formatTshAmount, convertUsdToTzs } from '@/utils/currency';
 
 const TransactionHistory = () => {
   const transactions = [
@@ -10,7 +11,7 @@ const TransactionHistory = () => {
       id: 1,
       type: 'investment',
       description: 'Initial Farm Investment',
-      amount: 5000,
+      amount: convertUsdToTzs(5000), // Convert 5000 USD to TSH
       date: '2024-06-10',
       category: 'Capital Investment',
       status: 'completed'
@@ -19,7 +20,7 @@ const TransactionHistory = () => {
       id: 2,
       type: 'expense',
       description: 'Seeds Purchase - Maize',
-      amount: 850,
+      amount: convertUsdToTzs(850), // Convert 850 USD to TSH
       date: '2024-06-08',
       category: 'Seeds & Materials',
       status: 'completed'
@@ -28,7 +29,7 @@ const TransactionHistory = () => {
       id: 3,
       type: 'expense',
       description: 'Farm Equipment Rental',
-      amount: 1200,
+      amount: convertUsdToTzs(1200), // Convert 1200 USD to TSH
       date: '2024-06-05',
       category: 'Equipment',
       status: 'completed'
@@ -37,7 +38,7 @@ const TransactionHistory = () => {
       id: 4,
       type: 'investment',
       description: 'Additional Funding',
-      amount: 3000,
+      amount: convertUsdToTzs(3000), // Convert 3000 USD to TSH
       date: '2024-06-01',
       category: 'Capital Investment',
       status: 'completed'
@@ -46,7 +47,7 @@ const TransactionHistory = () => {
       id: 5,
       type: 'expense',
       description: 'Worker Wages - Week 1',
-      amount: 450,
+      amount: convertUsdToTzs(450), // Convert 450 USD to TSH
       date: '2024-05-28',
       category: 'Labor',
       status: 'completed'
@@ -55,7 +56,7 @@ const TransactionHistory = () => {
       id: 6,
       type: 'expense',
       description: 'Fertilizer Purchase',
-      amount: 320,
+      amount: convertUsdToTzs(320), // Convert 320 USD to TSH
       date: '2024-05-25',
       category: 'Seeds & Materials',
       status: 'completed'
@@ -99,7 +100,7 @@ const TransactionHistory = () => {
                 <p className={`font-semibold ${
                   transaction.type === 'investment' ? 'text-green-600' : 'text-red-600'
                 }`}>
-                  {transaction.type === 'investment' ? '+' : '-'}${transaction.amount.toLocaleString()}
+                  {transaction.type === 'investment' ? '+' : '-'}{formatTshAmount(transaction.amount)}
                 </p>
                 <Badge 
                   variant={transaction.status === 'completed' ? 'default' : 'secondary'}

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, DollarSign, HardHat } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useNavigate } from 'react-router-dom';
+import { formatTshAmount } from '@/utils/currency';
 
 interface QuickStatsSectionProps {
   activeFarmsCount: number;
@@ -36,7 +37,7 @@ export const QuickStatsSection: React.FC<QuickStatsSectionProps> = ({
     },
     { 
       title: String(t('totalInvestment')), 
-      value: '$12,500', 
+      value: formatTshAmount(31250000), // 12,500 USD converted to TSH
       icon: DollarSign, 
       change: '+5%',
       onClick: handleTotalInvestmentClick,

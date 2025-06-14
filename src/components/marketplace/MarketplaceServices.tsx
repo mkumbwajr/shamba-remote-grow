@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Star } from 'lucide-react';
-import { formatTzsAmount } from '@/utils/currency';
+import { formatTshAmount } from '@/utils/currency';
 
 interface Service {
   id: number;
@@ -54,7 +54,7 @@ const MarketplaceServices: React.FC<MarketplaceServicesProps> = ({ services }) =
             <div className="bg-crop-50 border border-crop-200 rounded-lg p-3">
               <div className="flex items-center justify-between">
                 <span className="text-crop-800 font-medium text-sm">Price per acre</span>
-                <span className="text-xl sm:text-2xl font-bold text-crop-800">{formatTzsAmount(service.price)}</span>
+                <span className="text-xl sm:text-2xl font-bold text-crop-800">{formatTshAmount(service.price)}</span>
               </div>
             </div>
 

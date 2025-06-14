@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Calendar, MapPin, TrendingUp, DollarSign } from 'lucide-react';
 import { Tables } from '@/integrations/supabase/types';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { formatTshAmount, convertUsdToTzs } from '@/utils/currency';
 
 interface FarmCardProps {
   farm: Tables<'farms'>;
@@ -57,7 +58,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
         {farm.investment_amount && (
           <div className="flex items-center text-sm text-gray-600">
             <DollarSign className="h-4 w-4 mr-2" />
-            ${farm.investment_amount.toLocaleString()}
+            {formatTshAmount(convertUsdToTzs(farm.investment_amount))}
           </div>
         )}
 

@@ -2,26 +2,27 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DollarSign, TrendingUp, TrendingDown, Target } from 'lucide-react';
+import { formatTshAmount } from '@/utils/currency';
 
 const InvestmentOverview = () => {
   const overviewStats = [
     {
       title: 'Total Investment',
-      value: '$12,500',
+      value: formatTshAmount(31250000), // 12,500 USD converted to TSH
       change: '+15% from last month',
       icon: DollarSign,
       trend: 'up'
     },
     {
       title: 'Total Spent',
-      value: '$8,750',
+      value: formatTshAmount(21875000), // 8,750 USD converted to TSH
       change: '70% of investment used',
       icon: TrendingDown,
       trend: 'neutral'
     },
     {
       title: 'Available Balance',
-      value: '$3,750',
+      value: formatTshAmount(9375000), // 3,750 USD converted to TSH
       change: '30% remaining',
       icon: Target,
       trend: 'neutral'

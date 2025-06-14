@@ -5,13 +5,14 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 const SpendingChart = () => {
+  // Convert USD amounts to TSH (1 USD = 2500 TSH)
   const spendingData = [
-    { month: 'Jan', spending: 1200, investment: 2000 },
-    { month: 'Feb', spending: 1800, investment: 2500 },
-    { month: 'Mar', spending: 1500, investment: 2200 },
-    { month: 'Apr', spending: 2200, investment: 3000 },
-    { month: 'May', spending: 1900, investment: 2800 },
-    { month: 'Jun', spending: 2400, investment: 3200 }
+    { month: 'Jan', spending: 3000000, investment: 5000000 }, // 1200 USD -> 3M TSH, 2000 USD -> 5M TSH
+    { month: 'Feb', spending: 4500000, investment: 6250000 }, // 1800 USD -> 4.5M TSH, 2500 USD -> 6.25M TSH
+    { month: 'Mar', spending: 3750000, investment: 5500000 }, // 1500 USD -> 3.75M TSH, 2200 USD -> 5.5M TSH
+    { month: 'Apr', spending: 5500000, investment: 7500000 }, // 2200 USD -> 5.5M TSH, 3000 USD -> 7.5M TSH
+    { month: 'May', spending: 4750000, investment: 7000000 }, // 1900 USD -> 4.75M TSH, 2800 USD -> 7M TSH
+    { month: 'Jun', spending: 6000000, investment: 8000000 }  // 2400 USD -> 6M TSH, 3200 USD -> 8M TSH
   ];
 
   const chartConfig = {
@@ -23,6 +24,17 @@ const SpendingChart = () => {
       label: "Investment",
       color: "#22c55e",
     },
+  };
+
+  const formatTSH = (value: number) => {
+    return new Intl.NumberFormat('sw-TZ', {
+      style: 'currency',
+      currency: 'TZS',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+      notation: 'compact',
+      compactDisplay: 'short'
+    }).format(value);
   };
 
   return (
@@ -39,8 +51,11 @@ const SpendingChart = () => {
             <BarChart data={spendingData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" />
-              <YAxis />
-              <ChartTooltip content={<ChartTooltipContent />} />
+              <YAxis tickFormatter={formatTSH} />
+              <ChartTooltip 
+                content={<ChartTooltipContent />} 
+                formatter={(value: number) => [formatTSH(value), '']}
+              />
               <Bar dataKey="investment" fill="var(--color-investment)" name="Investment" />
               <Bar dataKey="spending" fill="var(--color-spending)" name="Spending" />
             </BarChart>

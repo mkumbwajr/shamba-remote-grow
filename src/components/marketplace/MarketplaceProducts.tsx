@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Star, MapPin, Package, Truck } from 'lucide-react';
-import { formatTzsAmount } from '@/utils/currency';
+import { formatTshAmount } from '@/utils/currency';
 
 interface Product {
   id: number;
@@ -48,7 +48,7 @@ const MarketplaceProducts: React.FC<MarketplaceProductsProps> = ({ products, onA
                 </div>
               </div>
               <div className="text-right flex-shrink-0">
-                <p className="text-lg sm:text-2xl font-bold text-forest-800">{formatTzsAmount(product.price)}</p>
+                <p className="text-lg sm:text-2xl font-bold text-forest-800">{formatTshAmount(product.price)}</p>
                 <p className="text-xs text-forest-600">per unit</p>
               </div>
             </div>
