@@ -5,6 +5,7 @@ import { Navigation } from 'lucide-react';
 import GoogleMapComponent from './GoogleMapComponent';
 import LandPlotHeader from './LandPlotHeader';
 import LandPlotDetails from './LandPlotDetails';
+import FarmPicturesGallery from './FarmPicturesGallery';
 import ApiKeyPrompt from './ApiKeyPrompt';
 import LandPlotNotFound from './LandPlotNotFound';
 import { landPlots, LandPlot } from './landPlotData';
@@ -60,7 +61,7 @@ const LandPlotMapContent: React.FC<LandPlotMapContentProps> = ({ plotId }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Map Section */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 space-y-6">
           <Card className="h-[600px]">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -77,6 +78,9 @@ const LandPlotMapContent: React.FC<LandPlotMapContentProps> = ({ plotId }) => {
               />
             </CardContent>
           </Card>
+          
+          {/* Farm Pictures Gallery */}
+          <FarmPicturesGallery />
         </div>
 
         {/* Details Section */}
