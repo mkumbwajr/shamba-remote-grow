@@ -5,11 +5,12 @@ import MarketplaceHeader from '@/components/marketplace/MarketplaceHeader';
 import MarketplaceSearch from '@/components/marketplace/MarketplaceSearch';
 import MarketplaceProducts from '@/components/marketplace/MarketplaceProducts';
 import MarketplaceServices from '@/components/marketplace/MarketplaceServices';
+import { useCart } from '@/contexts/CartContext';
 
 const Marketplace = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all-categories');
-  const [cartItems, setCartItems] = useState(0);
+  const { addToCart, getTotalItems } = useCart();
 
   console.log('Marketplace - selectedCategory:', selectedCategory);
 
@@ -144,14 +145,33 @@ const Marketplace = () => {
     return matchesSearch && matchesCategory;
   });
 
-  const addToCart = (product: any) => {
-    setCartItems(prev => prev + 1);
+  const addProductToCart = (product: any) => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      vendor: product.vendor,
+      image: product.image,
+      type: 'product'
+    });
     console.log(`Added ${product.name} to cart`);
+  };
+
+  const addServiceToCart = (service: any) => {
+    addToCart({
+      id: service.id + 1000, // Offset service IDs to avoid conflicts
+      name: service.name,
+      price: service.price,
+      vendor: service.provider,
+      image: '🛠️',
+      type: 'service'
+    });
+    console.log(`Added ${service.name} to cart`);
   };
 
   return (
     <div className="space-y-4 sm:space-y-6 p-4 sm:p-6">
-      <MarketplaceHeader cartItems={cartItems} />
+      <MarketplaceHeader cartItems={getTotalItems()} />
       
       <MarketplaceSearch
         searchTerm={searchTerm}
@@ -170,11 +190,11 @@ const Marketplace = () => {
         </div>
 
         <TabsContent value="products">
-          <MarketplaceProducts products={filteredProducts} onAddToCart={addToCart} />
+          <MarketplaceProducts products={filteredProducts} onAddToCart={addProductToCart} />
         </TabsContent>
 
         <TabsContent value="services">
-          <MarketplaceServices services={services} />
+          <MarketplaceServices services={services} onAddToCart={addServiceToCart} />
         </TabsContent>
       </Tabs>
     </div>

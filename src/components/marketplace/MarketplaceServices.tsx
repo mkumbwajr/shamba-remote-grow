@@ -18,9 +18,10 @@ interface Service {
 
 interface MarketplaceServicesProps {
   services: Service[];
+  onAddToCart?: (service: Service) => void;
 }
 
-const MarketplaceServices: React.FC<MarketplaceServicesProps> = ({ services }) => {
+const MarketplaceServices: React.FC<MarketplaceServicesProps> = ({ services, onAddToCart }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
       {services.map((service) => (
@@ -59,9 +60,14 @@ const MarketplaceServices: React.FC<MarketplaceServicesProps> = ({ services }) =
             </div>
 
             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-              <Button className="flex-1 bg-forest-600 hover:bg-forest-700 text-sm">
-                Book Service
-              </Button>
+              {onAddToCart && (
+                <Button 
+                  onClick={() => onAddToCart(service)}
+                  className="flex-1 bg-forest-600 hover:bg-forest-700 text-sm"
+                >
+                  Add to Cart
+                </Button>
+              )}
               <Button variant="outline" className="border-forest-200 sm:w-auto text-sm">
                 Contact
               </Button>
