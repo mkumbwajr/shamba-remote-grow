@@ -11,37 +11,64 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
+          bio: string | null
           country: string | null
           created_at: string | null
+          farm_location: string | null
           farm_size: string | null
           farming_experience: string | null
+          farming_goals: string | null
           full_name: string | null
           id: string
+          interested_services: string | null
+          investment_budget: string | null
+          languages_spoken: string | null
           phone: string | null
+          preferred_contact_method: string | null
           preferred_crop: string | null
+          social_media: string | null
           updated_at: string | null
+          website: string | null
         }
         Insert: {
+          bio?: string | null
           country?: string | null
           created_at?: string | null
+          farm_location?: string | null
           farm_size?: string | null
           farming_experience?: string | null
+          farming_goals?: string | null
           full_name?: string | null
           id: string
+          interested_services?: string | null
+          investment_budget?: string | null
+          languages_spoken?: string | null
           phone?: string | null
+          preferred_contact_method?: string | null
           preferred_crop?: string | null
+          social_media?: string | null
           updated_at?: string | null
+          website?: string | null
         }
         Update: {
+          bio?: string | null
           country?: string | null
           created_at?: string | null
+          farm_location?: string | null
           farm_size?: string | null
           farming_experience?: string | null
+          farming_goals?: string | null
           full_name?: string | null
           id?: string
+          interested_services?: string | null
+          investment_budget?: string | null
+          languages_spoken?: string | null
           phone?: string | null
+          preferred_contact_method?: string | null
           preferred_crop?: string | null
+          social_media?: string | null
           updated_at?: string | null
+          website?: string | null
         }
         Relationships: []
       }
