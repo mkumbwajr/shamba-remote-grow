@@ -23,6 +23,9 @@ const ProfileViewMode: React.FC<ProfileViewModeProps> = ({ userProfile, userEmai
           <ProfileDetailItem label={t('fullName') as string} value={userProfile?.full_name} />
           <ProfileDetailItem label={t('email') as string} value={userEmail} />
           <ProfileDetailItem label={t('phone') as string} value={userProfile?.phone} />
+          <ProfileDetailItem label={t('citizenship') as string} value={userProfile?.citizenship} />
+          <ProfileDetailItem label={t('nidaNumber') as string} value={userProfile?.nida_number} />
+          <ProfileDetailItem label={t('passportNumber') as string} value={userProfile?.passport_number} />
           <ProfileDetailItem label={t('country') as string} value={userProfile?.country ? t(`countries.${userProfile.country}`) as string : undefined} />
         </div>
       </div>

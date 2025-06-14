@@ -60,6 +60,33 @@ const ProfileEditMode: React.FC<ProfileEditModeProps> = ({ formData, onFormChang
             />
           </div>
           <div>
+            <Label htmlFor="citizenship-profileEdit">{t('citizenship') as string}</Label>
+            <Input
+              id="citizenship-profileEdit"
+              value={formData.citizenship || ''}
+              onChange={(e) => onFormChange('citizenship', e.target.value)}
+              placeholder={t('yourCitizenship') as string}
+            />
+          </div>
+          <div>
+            <Label htmlFor="nidaNumber-profileEdit">{t('nidaNumber') as string}</Label>
+            <Input
+              id="nidaNumber-profileEdit"
+              value={formData.nida_number || ''}
+              onChange={(e) => onFormChange('nida_number', e.target.value)}
+              placeholder={t('yourNidaNumber') as string}
+            />
+          </div>
+          <div>
+            <Label htmlFor="passportNumber-profileEdit">{t('passportNumber') as string}</Label>
+            <Input
+              id="passportNumber-profileEdit"
+              value={formData.passport_number || ''}
+              onChange={(e) => onFormChange('passport_number', e.target.value)}
+              placeholder={t('yourPassportNumber') as string}
+            />
+          </div>
+          <div>
             <Label htmlFor="country-profileEdit">{t('country') as string}</Label>
             <Select
               value={formData.country || undefined}

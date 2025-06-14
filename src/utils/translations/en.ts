@@ -1,3 +1,4 @@
+
 export const enTranslations = {
   // Auth page
   welcomeBack: 'Welcome Back',
@@ -82,6 +83,9 @@ export const enTranslations = {
   website: 'Website',
   socialMedia: 'Social Media',
   preferredContact: 'Preferred Contact Method',
+  citizenship: 'Citizenship',
+  nidaNumber: 'NIDA Number',
+  passportNumber: 'Passport Number',
   
   // Placeholders
   tellUsAboutYourself: 'Tell us about yourself, your farming background, and interests...',
@@ -93,6 +97,9 @@ export const enTranslations = {
   yourWebsite: 'https://yourwebsite.com',
   socialMediaHandles: 'e.g., @yourhandle',
   selectContactMethod: 'Select preferred contact method',
+  yourCitizenship: 'e.g., Tanzanian',
+  yourNidaNumber: 'e.g., 12345678901234567890',
+  yourPassportNumber: 'e.g., AB1234567',
   
   // Common
   loading: 'Loading...',

@@ -1,3 +1,4 @@
+
 export const swTranslations = {
   // Auth page
   welcomeBack: 'Karibu Tena',
@@ -82,6 +83,9 @@ export const swTranslations = {
   website: 'Tovuti',
   socialMedia: 'Mitandao ya Kijamii',
   preferredContact: 'Njia ya Mawasiliano Unayopendelea',
+  citizenship: 'Uraia',
+  nidaNumber: 'Nambari ya NIDA',
+  passportNumber: 'Nambari ya Paspoti',
   
   // Placeholders
   tellUsAboutYourself: 'Tuambie kuhusu wewe, mazingira yako ya kilimo, na mapendeleo...',
@@ -93,6 +97,9 @@ export const swTranslations = {
   yourWebsite: 'https://tovutiyako.com',
   socialMediaHandles: 'mfano, @jinalako',
   selectContactMethod: 'Chagua njia ya mawasiliano unayopendelea',
+  yourCitizenship: 'mfano, Mtanzania',
+  yourNidaNumber: 'mfano, 12345678901234567890',
+  yourPassportNumber: 'mfano, AB1234567',
   
   // Common
   loading: 'Inapakia...',
