@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Heart, MessageCircle, Share2, MoreHorizontal } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { usePostLikes, usePostComments, useToggleLike } from '@/hooks/useCommunity';
+import { usePostLikes, usePostComments, useToggleLike } from '@/hooks/community';
 import CommentSection from './CommentSection';
 import { toast } from 'sonner';
 

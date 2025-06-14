@@ -1,9 +1,10 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Send } from 'lucide-react';
-import { usePostComments, useCreateComment } from '@/hooks/useCommunity';
+import { usePostComments, useCreateComment } from '@/hooks/community';
 import { formatDistanceToNow } from 'date-fns';
 import { toast } from 'sonner';
 

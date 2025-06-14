@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { usePosts } from '@/hooks/useCommunity';
+import { usePosts } from '@/hooks/community';
 import PostCard from './PostCard';
 import { Skeleton } from '@/components/ui/skeleton';
 

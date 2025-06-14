@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { ImageIcon, Send } from 'lucide-react';
-import { useCreatePost } from '@/hooks/useCommunity';
+import { useCreatePost } from '@/hooks/community';
 import { toast } from 'sonner';
 
 interface PostCreatorProps {
