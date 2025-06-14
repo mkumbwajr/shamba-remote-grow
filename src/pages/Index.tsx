@@ -5,9 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { BarChart, DollarSign, HardHat, Home, Info, LogOut, MapPinned, Settings, ShoppingCart, Tractor, Users, Wheat } from 'lucide-react';
+import { BarChart, DollarSign, HardHat, Home, Info, LogOut, MapPinned, Settings, ShoppingCart, Tractor, Users, Wheat, ChevronDown, ChevronUp } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageToggle from '@/components/LanguageToggle';
+import MarketIntelligenceChart from '@/components/dashboard/MarketIntelligenceChart';
 
 interface UserProfileData {
   full_name?: string | null;
@@ -16,6 +17,7 @@ interface UserProfileData {
 
 const Index = () => {
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
+  const [showMarketChart, setShowMarketChart] = useState(false);
   const navigate = useNavigate();
   const { t } = useLanguage();
 
@@ -136,7 +138,7 @@ const Index = () => {
         </section>
 
         {/* Farm Updates & Market Intelligence */}
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle className="text-xl text-gray-800">{t('farmUpdates') as string}</CardTitle>
@@ -179,14 +181,48 @@ const Index = () => {
                     <Info className="h-5 w-5 text-blue-500 mr-3 flex-shrink-0"/>
                     <p className="text-sm">Report: Coffee futures trending upwards for next quarter.</p>
                 </div>
+                <div className="flex items-center">
+                    <BarChart className="h-5 w-5 text-purple-500 mr-3 flex-shrink-0"/>
+                    <p className="text-sm">Rice export demand increased by 8% in East Africa.</p>
+                </div>
+                <div className="flex items-center">
+                    <DollarSign className="h-5 w-5 text-orange-500 mr-3 flex-shrink-0"/>
+                    <p className="text-sm">Tea prices stable, good harvest season expected.</p>
+                </div>
+                <div className="pt-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => setShowMarketChart(!showMarketChart)}
+                    className="w-full"
+                  >
+                    {showMarketChart ? (
+                      <>
+                        <ChevronUp className="h-4 w-4 mr-2" />
+                        Hide Chart
+                      </>
+                    ) : (
+                      <>
+                        <ChevronDown className="h-4 w-4 mr-2" />
+                        See More - Global Prices
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
         </section>
+
+        {/* Market Intelligence Chart */}
+        {showMarketChart && (
+          <section className="mb-8">
+            <MarketIntelligenceChart />
+          </section>
+        )}
       </main>
     </div>
   );
 };
 
 export default Index;
-
