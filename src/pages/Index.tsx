@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import MarketIntelligenceChart from '@/components/dashboard/MarketIntelligenceChart';
-import FarmsPage from '@/components/farms/FarmsPage';
 import { useFarms } from '@/hooks/useFarms';
 import { useHiredWorkers } from '@/hooks/useHiredWorkers';
 import { AppSidebar } from '@/components/layout/AppSidebar';
@@ -26,7 +25,6 @@ interface UserProfileData {
 const Index = () => {
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
   const [showMarketChart, setShowMarketChart] = useState(false);
-  const [showFarms, setShowFarms] = useState(false);
   const navigate = useNavigate();
   const { t } = useLanguage();
   
@@ -62,21 +60,12 @@ const Index = () => {
   }, [navigate]);
 
   const handleActiveFarmsClick = () => {
-    setShowFarms(true);
+    navigate('/farms');
   };
 
   const handleWorkersHiredClick = () => {
     navigate('/hired-workers');
   };
-
-  const handleBackToDashboard = () => {
-    setShowFarms(false);
-  };
-
-  // If showing farms page, render it instead of dashboard
-  if (showFarms) {
-    return <FarmsPage onBack={handleBackToDashboard} />;
-  }
 
   return (
     <SidebarProvider>
