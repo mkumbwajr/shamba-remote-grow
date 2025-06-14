@@ -4,28 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Ruler, Calendar, Droplets, Mountain } from 'lucide-react';
-
-interface LandPlot {
-  id: number;
-  title: string;
-  location: string;
-  size: number;
-  pricePerAcre: number;
-  duration: string;
-  soilType: string;
-  waterAccess: string;
-  elevation: string;
-  rainfall: string;
-  temperature: string;
-  rating: number;
-  owner: string;
-  features: string[];
-  suitableCrops: string[];
-  image: string;
-  available: boolean;
-  coordinates?: { lat: number; lng: number };
-  address?: string;
-}
+import { LandPlot } from './landPlotData';
 
 interface LandPlotDetailsProps {
   plot: LandPlot;

@@ -17,6 +17,8 @@ export interface LandPlot {
   suitableCrops: string[];
   image: string;
   available: boolean;
+  coordinates?: { lat: number; lng: number };
+  address?: string;
 }
 
 export const landPlots: LandPlot[] = [
@@ -37,7 +39,9 @@ export const landPlots: LandPlot[] = [
     features: ['Irrigation ready', 'Fertile soil', 'Road access', 'Storage facility'],
     suitableCrops: ['Coffee', 'Maize', 'Beans', 'Bananas'],
     image: '🏔️',
-    available: true
+    available: true,
+    coordinates: { lat: -3.0674, lng: 37.3556 },
+    address: 'Kilimanjaro Valley, Moshi, Tanzania'
   },
   {
     id: 2,
@@ -56,7 +60,9 @@ export const landPlots: LandPlot[] = [
     features: ['Organic certified', 'Fenced', 'Equipment shed', 'Labor housing'],
     suitableCrops: ['Maize', 'Tomatoes', 'Onions', 'Wheat'],
     image: '🌾',
-    available: true
+    available: true,
+    coordinates: { lat: -3.3869, lng: 36.6830 },
+    address: 'Arusha Plains, Arusha, Tanzania'
   },
   {
     id: 3,
@@ -75,7 +81,9 @@ export const landPlots: LandPlot[] = [
     features: ['Coffee trees planted', 'Processing facility', 'Expert support', 'Export connections'],
     suitableCrops: ['Coffee', 'Beans', 'Irish Potatoes'],
     image: '☕',
-    available: true
+    available: true,
+    coordinates: { lat: -8.9094, lng: 33.4608 },
+    address: 'Mbeya Highlands, Mbeya, Tanzania'
   },
   {
     id: 4,
@@ -94,7 +102,9 @@ export const landPlots: LandPlot[] = [
     features: ['Large plot', 'Drought resistant area', 'Local market access'],
     suitableCrops: ['Sorghum', 'Sunflower', 'Groundnuts', 'Sesame'],
     image: '🌻',
-    available: true
+    available: true,
+    coordinates: { lat: -6.1622, lng: 35.7516 },
+    address: 'Dodoma Central, Dodoma, Tanzania'
   },
   {
     id: 5,
@@ -113,7 +123,9 @@ export const landPlots: LandPlot[] = [
     features: ['Flood irrigation', 'Rice terraces', 'Processing mill nearby', 'Transport access'],
     suitableCrops: ['Rice', 'Vegetables', 'Sugarcane'],
     image: '🌾',
-    available: false
+    available: false,
+    coordinates: { lat: -6.8269, lng: 37.6564 },
+    address: 'Morogoro Valley, Morogoro, Tanzania'
   },
   {
     id: 6,
@@ -132,6 +144,8 @@ export const landPlots: LandPlot[] = [
     features: ['Lake access', 'Fish farming potential', 'Tourist area', 'Good climate'],
     suitableCrops: ['Cotton', 'Cassava', 'Sweet Potatoes', 'Vegetables'],
     image: '🐟',
-    available: true
+    available: true,
+    coordinates: { lat: -2.5164, lng: 32.9175 },
+    address: 'Mwanza Lakeside, Mwanza, Tanzania'
   }
 ];
