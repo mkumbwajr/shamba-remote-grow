@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -69,6 +67,9 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
               <h1 className="text-lg font-semibold text-green-800 truncate">
                 Bwana Shamba
               </h1>
+              <p className="text-sm text-green-600 truncate">
+                Remote Digital Farming
+              </p>
             </div>
           )}
         </div>
