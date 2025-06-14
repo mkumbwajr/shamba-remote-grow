@@ -156,7 +156,10 @@ const FarmsPage = ({ onBack }: FarmsPageProps) => {
             <p className="text-gray-600">Manage your farming operations</p>
           </div>
           <div className="flex items-center space-x-4">
-            <Button className="bg-green-600 hover:bg-green-700 text-white">
+            <Button 
+              className="bg-green-600 hover:bg-green-700 text-white"
+              onClick={() => navigate('/add-farm')}
+            >
               <Plus className="h-4 w-4 mr-2" />
               Add New Farm
             </Button>

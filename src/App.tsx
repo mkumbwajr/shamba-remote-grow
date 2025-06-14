@@ -12,6 +12,7 @@ import CropMatcher from "./pages/CropMatcher";
 import Marketplace from "./pages/Marketplace";
 import Workers from "./pages/Workers";
 import LandRental from "./pages/LandRental";
+import AddFarm from "./pages/AddFarm";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/workers" element={<Workers />} />
             <Route path="/land-rental" element={<LandRental />} />
+            <Route path="/add-farm" element={<AddFarm />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
