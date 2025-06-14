@@ -52,6 +52,10 @@ const Index = () => {
     setShowFarms(true);
   };
 
+  const handleWorkersHiredClick = () => {
+    navigate('/hired-workers');
+  };
+
   const handleBackToDashboard = () => {
     setShowFarms(false);
   };
@@ -79,7 +83,14 @@ const Index = () => {
       clickable: true
     },
     { title: t('totalInvestment') as string, value: '$12,500', icon: DollarSign, change: '+5%' },
-    { title: t('workersHired') as string, value: '23', icon: HardHat, change: '+3 new' },
+    { 
+      title: t('workersHired') as string, 
+      value: '23', 
+      icon: HardHat, 
+      change: '+3 new',
+      onClick: handleWorkersHiredClick,
+      clickable: true
+    },
     { title: t('nextHarvest') as string, value: `30 ${t('days') as string}`, icon: BarChart, change: 'Maize' },
   ];
 
