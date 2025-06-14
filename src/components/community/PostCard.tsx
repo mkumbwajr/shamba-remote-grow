@@ -115,7 +115,7 @@ const PostCard = ({ post }: PostCardProps) => {
                   onClick={() => setShowComments(!showComments)}
                   className="hover:underline"
                 >
-                  {comments.length} {comments.length === 1 ? t('comment') : `${t('comment')}s`}
+                  {comments.length} {comments.length === 1 ? String(t('comment')) : `${String(t('comment'))}s`}
                 </button>
               )}
             </div>
@@ -135,7 +135,7 @@ const PostCard = ({ post }: PostCardProps) => {
             }`}
           >
             <Heart className={`h-5 w-5 mr-2 ${isLiked ? 'fill-current' : ''}`} />
-            {t('like') as string}
+            {String(t('like'))}
           </Button>
           
           <Button
@@ -145,7 +145,7 @@ const PostCard = ({ post }: PostCardProps) => {
             className="flex-1 h-10 rounded-lg mx-1 text-gray-600 hover:text-gray-700 hover:bg-gray-100"
           >
             <MessageCircle className="h-5 w-5 mr-2" />
-            {t('comment') as string}
+            {String(t('comment'))}
           </Button>
           
           <Button
@@ -155,7 +155,7 @@ const PostCard = ({ post }: PostCardProps) => {
             className="flex-1 h-10 rounded-lg mx-1 text-gray-600 hover:text-gray-700 hover:bg-gray-100"
           >
             <Share2 className="h-5 w-5 mr-2" />
-            {t('share') as string}
+            {String(t('share'))}
           </Button>
         </div>
 
