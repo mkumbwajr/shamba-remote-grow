@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -98,6 +97,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
         </SidebarGroup>
       </SidebarContent>
 
+      
       <SidebarFooter className="p-4 space-y-2">
         {state === "expanded" && (
           <div className="mb-2">
