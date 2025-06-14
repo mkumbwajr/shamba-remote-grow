@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +9,8 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageToggle from '@/components/LanguageToggle';
 import MarketIntelligenceChart from '@/components/dashboard/MarketIntelligenceChart';
 import FarmsPage from '@/components/farms/FarmsPage';
+import { useFarms } from '@/hooks/useFarms';
+import { useHiredWorkers } from '@/hooks/useHiredWorkers';
 
 interface UserProfileData {
   full_name?: string | null;
@@ -21,6 +22,16 @@ const Index = () => {
   const [showFarms, setShowFarms] = useState(false);
   const navigate = useNavigate();
   const { t } = useLanguage();
+  
+  // Fetch real data using hooks
+  const { data: farms = [] } = useFarms();
+  const { data: hiredWorkers = [] } = useHiredWorkers();
+
+  // Calculate active farms count
+  const activeFarmsCount = farms.filter(farm => farm.status === 'active').length;
+  
+  // Calculate active hired workers count
+  const activeWorkersCount = hiredWorkers.filter(worker => worker.status === 'active').length;
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -76,18 +87,18 @@ const Index = () => {
   const quickStats = [
     { 
       title: t('activeFarms') as string, 
-      value: '5', 
+      value: activeFarmsCount.toString(), 
       icon: Tractor, 
-      change: '+2 this month',
+      change: `${activeFarmsCount > 0 ? '+' : ''}${activeFarmsCount} active`,
       onClick: handleActiveFarmsClick,
       clickable: true
     },
     { title: t('totalInvestment') as string, value: '$12,500', icon: DollarSign, change: '+5%' },
     { 
       title: t('workersHired') as string, 
-      value: '23', 
+      value: activeWorkersCount.toString(), 
       icon: HardHat, 
-      change: '+3 new',
+      change: `${activeWorkersCount > 0 ? '+' : ''}${activeWorkersCount} active`,
       onClick: handleWorkersHiredClick,
       clickable: true
     },
