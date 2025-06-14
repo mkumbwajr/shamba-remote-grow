@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useNavigate } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { MapPin, Calendar, DollarSign, Ruler, Droplets, Thermometer, Star, Filter } from 'lucide-react';
+import { MapPin, Calendar, DollarSign, Ruler, Droplets, Thermometer, Star, Filter, Map } from 'lucide-react';
 
 const LandRental = () => {
+  const navigate = useNavigate();
   const [priceRange, setPriceRange] = useState([50, 500]);
   const [sizeRange, setSizeRange] = useState([1, 50]);
   const [selectedRegion, setSelectedRegion] = useState('');
@@ -144,6 +145,10 @@ const LandRental = () => {
     return matchesRegion && matchesSoil && matchesPrice && matchesSize;
   });
 
+  const handleShowMap = (plotId: number) => {
+    navigate(`/land-plot-map/${plotId}`);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -197,7 +202,7 @@ const LandRental = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-3">
               <label className="text-sm font-medium text-forest-800">
-                Price Range: ${priceRange[0]} - ${priceRange[1]} per acre/year
+                Price Range: TSh {(priceRange[0] * 2800).toLocaleString()} - TSh {(priceRange[1] * 2800).toLocaleString()} per acre/year
               </label>
               <Slider
                 value={priceRange}
@@ -287,7 +292,7 @@ const LandRental = () => {
                       <DollarSign className="h-4 w-4 text-crop-600" />
                       <span className="text-sm text-forest-600">Price/acre</span>
                     </div>
-                    <p className="font-medium text-forest-800">${plot.pricePerAcre}/year</p>
+                    <p className="font-medium text-forest-800">TSh {(plot.pricePerAcre * 2800).toLocaleString()}/year</p>
                   </div>
                   <div className="space-y-1">
                     <div className="flex items-center space-x-2">
@@ -357,7 +362,7 @@ const LandRental = () => {
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-sm text-forest-600">Owner: {plot.owner}</span>
                     <span className="text-lg font-bold text-forest-800">
-                      Total: ${plot.pricePerAcre * plot.size}/year
+                      Total: TSh {((plot.pricePerAcre * plot.size) * 2800).toLocaleString()}/year
                     </span>
                   </div>
 
@@ -368,8 +373,13 @@ const LandRental = () => {
                     >
                       {plot.available ? 'Rent This Land' : 'Currently Rented'}
                     </Button>
-                    <Button variant="outline" className="border-forest-200">
-                      View Details
+                    <Button 
+                      variant="outline" 
+                      className="border-forest-200"
+                      onClick={() => handleShowMap(plot.id)}
+                    >
+                      <Map className="h-4 w-4 mr-1" />
+                      Show Map
                     </Button>
                   </div>
                 </div>

@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import CropMatcherPage from "./pages/CropMatcher";
 import MarketplacePage from "./pages/Marketplace";
 import LandRentalPage from "./pages/LandRental";
+import LandPlotMapPage from "./pages/LandPlotMap";
 import WorkersPage from "./pages/Workers";
 import HiredWorkersPage from "./pages/HiredWorkers";
 import InvestmentPage from "./pages/Investment";
@@ -42,6 +43,7 @@ const App = () => (
                 <Route path="/crop-matcher" element={<CropMatcherPage />} />
                 <Route path="/marketplace" element={<MarketplacePage />} />
                 <Route path="/land-rental" element={<LandRentalPage />} />
+                <Route path="/land-plot-map/:plotId" element={<LandPlotMapPage />} />
                 <Route path="/workers" element={<WorkersPage />} />
                 <Route path="/hired-workers" element={<HiredWorkersPage />} />
                 <Route path="/investment" element={<InvestmentPage />} />
