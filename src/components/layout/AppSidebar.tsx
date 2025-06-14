@@ -15,7 +15,8 @@ import {
   LogOut,
   TrendingUp,
   Package,
-  MessageSquare
+  MessageSquare,
+  Heart
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageToggle from '@/components/LanguageToggle';
@@ -65,6 +66,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
     { name: String(t('land')), icon: MapPinned, path: '/land-rental' },
     { name: String(t('workers')), icon: Users, path: '/workers' },
     { name: 'Messages', icon: MessageSquare, path: '/messages' },
+    { name: 'Community', icon: Heart, path: '/community' },
     { name: 'Investment', icon: TrendingUp, path: '/investment' },
   ];
 

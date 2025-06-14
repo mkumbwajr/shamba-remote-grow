@@ -25,6 +25,7 @@ import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import InventoryPage from "./pages/Inventory";
 import MessagesPage from "./pages/Messages";
+import CommunityPage from "./pages/Community";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -55,6 +56,7 @@ const App = () => (
                 <Route path="/farms" element={<Farms />} />
                 <Route path="/inventory" element={<InventoryPage />} />
                 <Route path="/messages" element={<MessagesPage />} />
+                <Route path="/community" element={<CommunityPage />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/order-success" element={<OrderSuccess />} />
                 <Route path="*" element={<NotFound />} />
