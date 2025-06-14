@@ -6,31 +6,40 @@ import { toast } from 'sonner';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Tables } from '@/integrations/supabase/types';
 
+// Extended type to include missing fields
+type ExtendedProfile = Tables<'profiles'> & {
+  citizenship?: string | null;
+  nida_number?: string | null;
+  passport_number?: string | null;
+};
+
 export const useProfileEdit = (profile: Tables<'profiles'> | null, onSuccess: () => void) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const navigate = useNavigate();
   const { t } = useLanguage();
 
-  const [editData, setEditData] = useState<Partial<Tables<'profiles'>>>({
-    full_name: profile?.full_name || null,
-    country: profile?.country || null,
-    phone: profile?.phone || null,
-    citizenship: profile?.citizenship || null,
-    nida_number: profile?.nida_number || null,
-    passport_number: profile?.passport_number || null,
-    preferred_crop: profile?.preferred_crop || null,
-    farming_experience: profile?.farming_experience || null,
-    farm_size: profile?.farm_size || null,
-    bio: profile?.bio || null,
-    farm_location: profile?.farm_location || null,
-    farming_goals: profile?.farming_goals || null,
-    interested_services: profile?.interested_services || null,
-    investment_budget: profile?.investment_budget || null,
-    languages_spoken: profile?.languages_spoken || null,
-    website: profile?.website || null,
-    social_media: profile?.social_media || null,
-    preferred_contact_method: profile?.preferred_contact_method || null,
+  const extendedProfile = profile as ExtendedProfile;
+
+  const [editData, setEditData] = useState<Partial<ExtendedProfile>>({
+    full_name: extendedProfile?.full_name || null,
+    country: extendedProfile?.country || null,
+    phone: extendedProfile?.phone || null,
+    citizenship: extendedProfile?.citizenship || null,
+    nida_number: extendedProfile?.nida_number || null,
+    passport_number: extendedProfile?.passport_number || null,
+    preferred_crop: extendedProfile?.preferred_crop || null,
+    farming_experience: extendedProfile?.farming_experience || null,
+    farm_size: extendedProfile?.farm_size || null,
+    bio: extendedProfile?.bio || null,
+    farm_location: extendedProfile?.farm_location || null,
+    farming_goals: extendedProfile?.farming_goals || null,
+    interested_services: extendedProfile?.interested_services || null,
+    investment_budget: extendedProfile?.investment_budget || null,
+    languages_spoken: extendedProfile?.languages_spoken || null,
+    website: extendedProfile?.website || null,
+    social_media: extendedProfile?.social_media || null,
+    preferred_contact_method: extendedProfile?.preferred_contact_method || null,
   });
 
   const handleSave = async () => {
@@ -43,7 +52,7 @@ export const useProfileEdit = (profile: Tables<'profiles'> | null, onSuccess: ()
         return; 
       }
 
-      const updates: Partial<Omit<Tables<'profiles'>, 'id' | 'created_at'>> = {
+      const updates: Record<string, any> = {
         full_name: editData.full_name || null,
         country: editData.country || null,
         phone: editData.phone || null,
@@ -89,33 +98,33 @@ export const useProfileEdit = (profile: Tables<'profiles'> | null, onSuccess: ()
   };
 
   const handleEditDataChange = (
-    field: keyof Omit<Tables<'profiles'>, 'id' | 'created_at' | 'updated_at'>,
+    field: string,
     value: string | null
   ) => {
     setEditData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleCancelEdit = () => {
-    if (profile) {
+    if (extendedProfile) {
       setEditData({
-        full_name: profile.full_name || null,
-        country: profile.country || null,
-        phone: profile.phone || null,
-        citizenship: profile.citizenship || null,
-        nida_number: profile.nida_number || null,
-        passport_number: profile.passport_number || null,
-        preferred_crop: profile.preferred_crop || null,
-        farming_experience: profile.farming_experience || null,
-        farm_size: profile.farm_size || null,
-        bio: profile.bio || null,
-        farm_location: profile.farm_location || null,
-        farming_goals: profile.farming_goals || null,
-        interested_services: profile.interested_services || null,
-        investment_budget: profile.investment_budget || null,
-        languages_spoken: profile.languages_spoken || null,
-        website: profile.website || null,
-        social_media: profile.social_media || null,
-        preferred_contact_method: profile.preferred_contact_method || null,
+        full_name: extendedProfile.full_name || null,
+        country: extendedProfile.country || null,
+        phone: extendedProfile.phone || null,
+        citizenship: extendedProfile.citizenship || null,
+        nida_number: extendedProfile.nida_number || null,
+        passport_number: extendedProfile.passport_number || null,
+        preferred_crop: extendedProfile.preferred_crop || null,
+        farming_experience: extendedProfile.farming_experience || null,
+        farm_size: extendedProfile.farm_size || null,
+        bio: extendedProfile.bio || null,
+        farm_location: extendedProfile.farm_location || null,
+        farming_goals: extendedProfile.farming_goals || null,
+        interested_services: extendedProfile.interested_services || null,
+        investment_budget: extendedProfile.investment_budget || null,
+        languages_spoken: extendedProfile.languages_spoken || null,
+        website: extendedProfile.website || null,
+        social_media: extendedProfile.social_media || null,
+        preferred_contact_method: extendedProfile.preferred_contact_method || null,
       });
     } else {
       setEditData({
@@ -131,26 +140,26 @@ export const useProfileEdit = (profile: Tables<'profiles'> | null, onSuccess: ()
 
   // Update editData when profile changes
   React.useEffect(() => {
-    if (profile) {
+    if (extendedProfile) {
       setEditData({
-        full_name: profile.full_name || null,
-        country: profile.country || null,
-        phone: profile.phone || null,
-        citizenship: profile.citizenship || null,
-        nida_number: profile.nida_number || null,
-        passport_number: profile.passport_number || null,
-        preferred_crop: profile.preferred_crop || null,
-        farming_experience: profile.farming_experience || null,
-        farm_size: profile.farm_size || null,
-        bio: profile.bio || null,
-        farm_location: profile.farm_location || null,
-        farming_goals: profile.farming_goals || null,
-        interested_services: profile.interested_services || null,
-        investment_budget: profile.investment_budget || null,
-        languages_spoken: profile.languages_spoken || null,
-        website: profile.website || null,
-        social_media: profile.social_media || null,
-        preferred_contact_method: profile.preferred_contact_method || null,
+        full_name: extendedProfile.full_name || null,
+        country: extendedProfile.country || null,
+        phone: extendedProfile.phone || null,
+        citizenship: extendedProfile.citizenship || null,
+        nida_number: extendedProfile.nida_number || null,
+        passport_number: extendedProfile.passport_number || null,
+        preferred_crop: extendedProfile.preferred_crop || null,
+        farming_experience: extendedProfile.farming_experience || null,
+        farm_size: extendedProfile.farm_size || null,
+        bio: extendedProfile.bio || null,
+        farm_location: extendedProfile.farm_location || null,
+        farming_goals: extendedProfile.farming_goals || null,
+        interested_services: extendedProfile.interested_services || null,
+        investment_budget: extendedProfile.investment_budget || null,
+        languages_spoken: extendedProfile.languages_spoken || null,
+        website: extendedProfile.website || null,
+        social_media: extendedProfile.social_media || null,
+        preferred_contact_method: extendedProfile.preferred_contact_method || null,
       });
     }
   }, [profile]);
