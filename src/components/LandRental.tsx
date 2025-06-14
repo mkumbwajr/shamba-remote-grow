@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -138,8 +137,8 @@ const LandRental = () => {
   ];
 
   const filteredPlots = landPlots.filter(plot => {
-    const matchesRegion = !selectedRegion || plot.location.includes(selectedRegion);
-    const matchesSoil = !soilType || plot.soilType.toLowerCase().includes(soilType.toLowerCase());
+    const matchesRegion = selectedRegion === 'all-regions' || !selectedRegion || plot.location.includes(selectedRegion);
+    const matchesSoil = soilType === 'all-types' || !soilType || plot.soilType.toLowerCase().includes(soilType.toLowerCase());
     const matchesPrice = plot.pricePerAcre >= priceRange[0] && plot.pricePerAcre <= priceRange[1];
     const matchesSize = plot.size >= sizeRange[0] && plot.size <= sizeRange[1];
     return matchesRegion && matchesSoil && matchesPrice && matchesSize;
@@ -170,7 +169,7 @@ const LandRental = () => {
                   <SelectValue placeholder="Select region" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Regions</SelectItem>
+                  <SelectItem value="all-regions">All Regions</SelectItem>
                   {regions.map((region) => (
                     <SelectItem key={region} value={region}>{region}</SelectItem>
                   ))}
@@ -184,7 +183,7 @@ const LandRental = () => {
                   <SelectValue placeholder="Select soil type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Types</SelectItem>
+                  <SelectItem value="all-types">All Types</SelectItem>
                   <SelectItem value="loam">Loam</SelectItem>
                   <SelectItem value="clay">Clay</SelectItem>
                   <SelectItem value="sandy">Sandy</SelectItem>
