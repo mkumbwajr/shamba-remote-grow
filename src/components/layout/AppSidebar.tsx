@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -66,7 +67,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
           {state === "expanded" && (
             <div className="min-w-0">
               <h1 className="text-lg font-semibold text-green-800 truncate">
-                {String(t('remoteFarmingPlatform'))}
+                Bwana Shamba
               </h1>
             </div>
           )}
