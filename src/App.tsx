@@ -58,6 +58,7 @@ const App = () => (
                 <Route path="/inventory" element={<InventoryPage />} />
                 <Route path="/messages" element={<MessagesPage />} />
                 <Route path="/community" element={<CommunityPage />} />
+                <Route path="/support" element={<Support />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/order-success" element={<OrderSuccess />} />
                 <Route path="*" element={<NotFound />} />
