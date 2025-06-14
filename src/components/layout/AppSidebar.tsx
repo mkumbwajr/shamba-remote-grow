@@ -16,7 +16,8 @@ import {
   TrendingUp,
   Package,
   MessageSquare,
-  Heart
+  Heart,
+  Newspaper
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageToggle from '@/components/LanguageToggle';
@@ -68,6 +69,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
     { name: String(t('investment')), icon: TrendingUp, path: '/investment' },
     { name: String(t('messages')), icon: MessageSquare, path: '/messages' },
     { name: String(t('community')), icon: Heart, path: '/community' },
+    { name: String(t('news')), icon: Newspaper, path: '/news' },
     { name: String(t('supportHelpCenter')), icon: Settings, path: '/support' },
   ];
 
