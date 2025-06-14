@@ -1,137 +1,80 @@
 
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
-import MarketIntelligenceChart from '@/components/dashboard/MarketIntelligenceChart';
-import { useFarms } from '@/hooks/useFarms';
-import { useHiredWorkers } from '@/hooks/useHiredWorkers';
-import { AppSidebar } from '@/components/layout/AppSidebar';
-import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
-import { QuickStatsSection } from '@/components/dashboard/QuickStatsSection';
-import { FarmUpdatesCard } from '@/components/dashboard/FarmUpdatesCard';
-import { MarketIntelligenceCard } from '@/components/dashboard/MarketIntelligenceCard';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/AppSidebar";
+import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import QuickStatsSection from '@/components/dashboard/QuickStatsSection';
+import MarketIntelligenceCard from '@/components/dashboard/MarketIntelligenceCard';
+import FarmUpdatesCard from '@/components/dashboard/FarmUpdatesCard';
 import EmailVerificationGuard from '@/components/auth/EmailVerificationGuard';
-import {
-  SidebarProvider,
-  SidebarInset,
-  SidebarTrigger,
-} from '@/components/ui/sidebar';
-
-interface UserProfileData {
-  full_name?: string | null;
-}
 
 const Index = () => {
-  const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
+  const [user, setUser] = useState<any>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [isEmailVerified, setIsEmailVerified] = useState<boolean | undefined>(undefined);
-  const [showMarketChart, setShowMarketChart] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const { t } = useLanguage();
-  
-  // Fetch real data using hooks
-  const { data: farms = [] } = useFarms();
-  const { data: hiredWorkers = [] } = useHiredWorkers();
-
-  // Calculate active farms count
-  const activeFarmsCount = farms.filter(farm => farm.status === 'active').length;
-  
-  // Calculate active hired workers count
-  const activeWorkersCount = hiredWorkers.filter(worker => worker.status === 'active').length;
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setUserEmail(user.email || null);
-        setIsEmailVerified(user.email_confirmed_at !== null);
-        
-        // Check if user needs onboarding
-        const isNewUser = user.user_metadata?.is_new_user;
-        
-        const { data: profileData, error } = await (supabase.from('profiles') as any)
-          .select('full_name')
-          .eq('id', user.id)
-          .single();
-        
-        if (error) {
-          console.error("Error fetching profile:", error.message);
-          // If no profile exists and user is new, redirect to onboarding
-          if (error.code === 'PGRST116' && isNewUser) {
-            navigate('/onboarding');
-            return;
-          }
-        } else if (profileData) {
-          setUserProfile(profileData as UserProfileData);
-        }
-      } else {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
         navigate('/auth');
+        return;
       }
+
+      setUser(session.user);
+      setUserEmail(session.user.email || null);
+      setIsEmailVerified(session.user.email_confirmed_at !== null);
+      setLoading(false);
     };
-    fetchUserProfile();
+
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === 'SIGNED_OUT' || !session) {
+          navigate('/auth');
+        } else if (session) {
+          setUser(session.user);
+          setUserEmail(session.user.email || null);
+          setIsEmailVerified(session.user.email_confirmed_at !== null);
+          setLoading(false);
+        }
+      }
+    );
+
+    return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const handleActiveFarmsClick = () => {
-    navigate('/farms');
-  };
-
-  const handleWorkersHiredClick = () => {
-    navigate('/hired-workers');
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-600"></div>
+      </div>
+    );
+  }
 
   return (
     <EmailVerificationGuard userEmail={userEmail} isEmailVerified={isEmailVerified}>
       <SidebarProvider>
-        <div className="min-h-screen flex w-full bg-gray-50">
-          <AppSidebar userProfile={userProfile} />
-          <SidebarInset className="flex-1">
-            {/* Header */}
-            <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-white px-4">
-              <SidebarTrigger className="-ml-1" />
-              <div className="flex-1 flex justify-between items-center">
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-800">
-                    {String(t('dashboard'))}
-                  </h2>
-                  <p className="text-gray-600 text-sm">Welcome back to your farming dashboard</p>
-                </div>
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src="/placeholder-avatar.jpg" />
-                  <AvatarFallback>{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
-                </Avatar>
-              </div>
-            </header>
-
-            {/* Main content */}
-            <main className="flex-1 p-6">
-              <div className="space-y-6">
-                <QuickStatsSection
-                  activeFarmsCount={activeFarmsCount}
-                  activeWorkersCount={activeWorkersCount}
-                  onActiveFarmsClick={handleActiveFarmsClick}
-                  onWorkersHiredClick={handleWorkersHiredClick}
-                />
-
-                {/* Farm Updates & Market Intelligence */}
-                <section className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div className="min-h-screen flex w-full bg-gradient-to-br from-green-50 via-blue-50 to-yellow-50">
+          <AppSidebar />
+          <main className="flex-1 flex flex-col overflow-hidden">
+            <DashboardHeader />
+            <div className="flex-1 overflow-auto p-6">
+              <div className="max-w-7xl mx-auto space-y-6">
+                <QuickStatsSection />
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <MarketIntelligenceCard />
                   <FarmUpdatesCard />
-                  <MarketIntelligenceCard
-                    showMarketChart={showMarketChart}
-                    onToggleChart={() => setShowMarketChart(!showMarketChart)}
-                  />
-                </section>
-
-                {/* Market Intelligence Chart */}
-                {showMarketChart && (
-                  <section>
-                    <MarketIntelligenceChart />
-                  </section>
-                )}
+                </div>
               </div>
-            </main>
-          </SidebarInset>
+            </div>
+          </main>
         </div>
       </SidebarProvider>
     </EmailVerificationGuard>
