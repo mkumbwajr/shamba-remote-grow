@@ -14,9 +14,11 @@ import { format } from 'date-fns';
 interface ChatSidebarProps {
   isOpen: boolean;
   onToggle: () => void;
+  onClose?: () => void;
+  initialSelectedWorker?: string | null;
 }
 
-const ChatSidebar = ({ isOpen, onToggle }: ChatSidebarProps) => {
+const ChatSidebar = ({ isOpen, onToggle, onClose, initialSelectedWorker }: ChatSidebarProps) => {
   const { data: hiredWorkers } = useHiredWorkers();
   const [selectedWorker, setSelectedWorker] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState('');
@@ -24,6 +26,13 @@ const ChatSidebar = ({ isOpen, onToggle }: ChatSidebarProps) => {
 
   // Filter active workers only
   const activeWorkers = hiredWorkers?.filter(worker => worker.status === 'active') || [];
+
+  // Set initial selected worker when provided
+  useEffect(() => {
+    if (initialSelectedWorker && activeWorkers.some(w => w.id === initialSelectedWorker)) {
+      setSelectedWorker(initialSelectedWorker);
+    }
+  }, [initialSelectedWorker, activeWorkers]);
 
   const { data: messages = [] } = useChatMessages(selectedWorker || undefined);
   const sendMessage = useSendMessage();
@@ -57,6 +66,14 @@ const ChatSidebar = ({ isOpen, onToggle }: ChatSidebarProps) => {
     }
   };
 
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    } else {
+      onToggle();
+    }
+  };
+
   const selectedWorkerData = activeWorkers.find(w => w.id === selectedWorker);
 
   if (!isOpen) {
@@ -86,7 +103,7 @@ const ChatSidebar = ({ isOpen, onToggle }: ChatSidebarProps) => {
             <Button variant="ghost" size="sm" onClick={onToggle}>
               {selectedWorker ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
             </Button>
-            <Button variant="ghost" size="sm" onClick={onToggle}>
+            <Button variant="ghost" size="sm" onClick={handleClose}>
               <X className="h-4 w-4" />
             </Button>
           </div>

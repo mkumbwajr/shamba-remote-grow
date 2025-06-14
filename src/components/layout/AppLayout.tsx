@@ -18,17 +18,34 @@ interface AppLayoutProps {
 
 const AppLayout = ({ userProfile, children }: AppLayoutProps) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [selectedWorkerId, setSelectedWorkerId] = useState<string | null>(null);
+
+  const handleOpenChat = (workerId?: string) => {
+    setIsChatOpen(true);
+    if (workerId) {
+      setSelectedWorkerId(workerId);
+    }
+  };
+
+  const handleCloseChat = () => {
+    setIsChatOpen(false);
+    setSelectedWorkerId(null);
+  };
 
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
         <AppSidebar userProfile={userProfile} />
         <SidebarInset className="flex-1">
-          {children}
+          {React.cloneElement(children as React.ReactElement, { 
+            onOpenChat: handleOpenChat 
+          })}
         </SidebarInset>
         <ChatSidebar 
           isOpen={isChatOpen} 
-          onToggle={() => setIsChatOpen(!isChatOpen)} 
+          onToggle={() => setIsChatOpen(!isChatOpen)}
+          onClose={handleCloseChat}
+          initialSelectedWorker={selectedWorkerId}
         />
       </div>
     </SidebarProvider>

@@ -11,7 +11,11 @@ interface UserProfileData {
   full_name?: string | null;
 }
 
-const HiredWorkersPage = () => {
+interface HiredWorkersPageProps {
+  onOpenChat?: (workerId: string) => void;
+}
+
+const HiredWorkersPage = ({ onOpenChat }: HiredWorkersPageProps) => {
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
   const navigate = useNavigate();
 
@@ -55,7 +59,7 @@ const HiredWorkersPage = () => {
 
       {/* Main content */}
       <main className="flex-1 p-6 max-w-7xl mx-auto">
-        <HiredWorkersContent />
+        <HiredWorkersContent onOpenChat={onOpenChat} />
       </main>
     </AppLayout>
   );

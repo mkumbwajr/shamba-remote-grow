@@ -11,7 +11,11 @@ import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 import { formatTshPrice } from '@/utils/currency';
 
-const HiredWorkersContent = () => {
+interface HiredWorkersContentProps {
+  onOpenChat?: (workerId: string) => void;
+}
+
+const HiredWorkersContent = ({ onOpenChat }: HiredWorkersContentProps) => {
   const { data: hiredWorkers, isLoading, refetch } = useHiredWorkers();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -46,12 +50,14 @@ const HiredWorkersContent = () => {
   };
 
   const handleContactWorker = (workerId: string) => {
-    // This will be handled by the chat sidebar component
-    // For now, we'll show a toast indicating the chat feature
-    toast({
-      title: "Chat Feature",
-      description: "Use the chat button in the bottom right to message this worker.",
-    });
+    if (onOpenChat) {
+      onOpenChat(workerId);
+    } else {
+      toast({
+        title: "Chat Feature",
+        description: "Use the chat button in the bottom right to message this worker.",
+      });
+    }
   };
 
   if (isLoading) {

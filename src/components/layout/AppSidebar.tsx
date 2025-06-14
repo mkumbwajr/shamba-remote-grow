@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -14,8 +13,7 @@ import {
   Wheat, 
   LogOut,
   TrendingUp,
-  Package,
-  UserCheck
+  Package
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageToggle from '@/components/LanguageToggle';
@@ -64,7 +62,6 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
     { name: 'Inventory', icon: Package, path: '/inventory' },
     { name: String(t('land')), icon: MapPinned, path: '/land-rental' },
     { name: String(t('workers')), icon: Users, path: '/workers' },
-    { name: 'Hired Workers', icon: UserCheck, path: '/hired-workers' },
     { name: 'Investment', icon: TrendingUp, path: '/investment' },
   ];
 
