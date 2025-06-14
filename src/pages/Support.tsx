@@ -10,11 +10,11 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 const Support = () => {
-  const { userProfile } = useProfileData();
+  const { profile } = useProfileData();
   const navigate = useNavigate();
 
   return (
-    <AppLayout userProfile={userProfile}>
+    <AppLayout userProfile={profile}>
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-6">
