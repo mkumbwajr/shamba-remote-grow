@@ -158,7 +158,7 @@ const FarmsPage = ({ onBack }: FarmsPageProps) => {
           <div className="flex items-center space-x-4">
             <Button 
               className="bg-green-600 hover:bg-green-700 text-white"
-              onClick={() => navigate('/add-farm')}
+              onClick={() => navigate('/land-rental')}
             >
               <Plus className="h-4 w-4 mr-2" />
               Add New Farm
