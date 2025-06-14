@@ -48,16 +48,16 @@ const MarketplacePage = () => {
         <AppSidebar userProfile={userProfile} />
         <SidebarInset className="flex-1">
           {/* Header */}
-          <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-white px-4">
+          <header className="sticky top-0 z-10 flex h-14 sm:h-16 shrink-0 items-center gap-2 border-b bg-white px-3 sm:px-4">
             <SidebarTrigger className="-ml-1" />
-            <div className="flex-1 flex justify-between items-center">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800">
+            <div className="flex-1 flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
+              <div className="min-w-0">
+                <h2 className="text-lg sm:text-2xl font-bold text-gray-800 truncate">
                   {t('marketplace') as string}
                 </h2>
-                <p className="text-gray-600 text-sm">Seeds, tools, and services for your farming needs</p>
+                <p className="text-gray-600 text-xs sm:text-sm hidden sm:block">Seeds, tools, and services for your farming needs</p>
               </div>
-              <Avatar className="h-10 w-10">
+              <Avatar className="h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0">
                 <AvatarImage src="/placeholder-avatar.jpg" />
                 <AvatarFallback>{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
               </Avatar>
@@ -65,7 +65,7 @@ const MarketplacePage = () => {
           </header>
 
           {/* Main content */}
-          <main className="flex-1 p-6">
+          <main className="flex-1 overflow-auto">
             <Marketplace />
           </main>
         </SidebarInset>
