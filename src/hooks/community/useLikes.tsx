@@ -1,11 +1,12 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import type { Like } from './types';
 
 export const usePostLikes = (postId: string) => {
   const queryClient = useQueryClient();
+  const channelRef = useRef<any>(null);
 
   const query = useQuery({
     queryKey: ['likes', postId],
@@ -20,10 +21,17 @@ export const usePostLikes = (postId: string) => {
     },
   });
 
-  // Set up real-time subscription for likes with unique channel name
+  // Set up real-time subscription with proper cleanup
   useEffect(() => {
+    // Clean up existing channel first
+    if (channelRef.current) {
+      supabase.removeChannel(channelRef.current);
+      channelRef.current = null;
+    }
+
+    const channelName = `likes-${postId}-${Date.now()}`;
     const channel = supabase
-      .channel(`likes-realtime-${postId}`)
+      .channel(channelName)
       .on(
         'postgres_changes',
         {
@@ -38,8 +46,13 @@ export const usePostLikes = (postId: string) => {
       )
       .subscribe();
 
+    channelRef.current = channel;
+
     return () => {
-      supabase.removeChannel(channel);
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+        channelRef.current = null;
+      }
     };
   }, [postId, queryClient]);
 

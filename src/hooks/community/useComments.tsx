@@ -1,11 +1,12 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import type { Comment } from './types';
 
 export const usePostComments = (postId: string) => {
   const queryClient = useQueryClient();
+  const channelRef = useRef<any>(null);
 
   const query = useQuery({
     queryKey: ['comments', postId],
@@ -21,10 +22,17 @@ export const usePostComments = (postId: string) => {
     },
   });
 
-  // Set up real-time subscription for comments with unique channel name
+  // Set up real-time subscription with proper cleanup
   useEffect(() => {
+    // Clean up existing channel first
+    if (channelRef.current) {
+      supabase.removeChannel(channelRef.current);
+      channelRef.current = null;
+    }
+
+    const channelName = `comments-${postId}-${Date.now()}`;
     const channel = supabase
-      .channel(`comments-realtime-${postId}`)
+      .channel(channelName)
       .on(
         'postgres_changes',
         {
@@ -39,8 +47,13 @@ export const usePostComments = (postId: string) => {
       )
       .subscribe();
 
+    channelRef.current = channel;
+
     return () => {
-      supabase.removeChannel(channel);
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+        channelRef.current = null;
+      }
     };
   }, [postId, queryClient]);
 

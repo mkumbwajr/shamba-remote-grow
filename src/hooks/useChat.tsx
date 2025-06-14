@@ -1,7 +1,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export interface ChatMessage {
   id: string;
@@ -15,6 +15,7 @@ export interface ChatMessage {
 
 export const useChatMessages = (hiredWorkerId?: string) => {
   const queryClient = useQueryClient();
+  const channelRef = useRef<any>(null);
 
   const query = useQuery({
     queryKey: ['chat-messages', hiredWorkerId],
@@ -36,11 +37,17 @@ export const useChatMessages = (hiredWorkerId?: string) => {
     enabled: !!hiredWorkerId,
   });
 
-  // Set up real-time subscription with unique channel name per worker
+  // Set up real-time subscription with proper cleanup
   useEffect(() => {
     if (!hiredWorkerId) return;
 
-    const channelName = `chat-messages-${hiredWorkerId}`;
+    // Clean up existing channel first
+    if (channelRef.current) {
+      supabase.removeChannel(channelRef.current);
+      channelRef.current = null;
+    }
+
+    const channelName = `chat-messages-${hiredWorkerId}-${Date.now()}`;
     const channel = supabase
       .channel(channelName)
       .on(
@@ -57,8 +64,13 @@ export const useChatMessages = (hiredWorkerId?: string) => {
       )
       .subscribe();
 
+    channelRef.current = channel;
+
     return () => {
-      supabase.removeChannel(channel);
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+        channelRef.current = null;
+      }
     };
   }, [hiredWorkerId, queryClient]);
 
