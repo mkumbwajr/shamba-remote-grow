@@ -11,11 +11,7 @@ interface UserProfileData {
   full_name?: string | null;
 }
 
-interface HiredWorkersPageProps {
-  onOpenChat?: (workerId: string) => void;
-}
-
-const HiredWorkersPage = ({ onOpenChat }: HiredWorkersPageProps) => {
+const HiredWorkersPage = () => {
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
   const navigate = useNavigate();
 
@@ -40,6 +36,15 @@ const HiredWorkersPage = ({ onOpenChat }: HiredWorkersPageProps) => {
     fetchUserProfile();
   }, [navigate]);
 
+  const handleOpenChat = (workerId: string) => {
+    // This will be handled by the ChatSidebar in AppLayout
+    // We need to communicate with the ChatSidebar through events or a context
+    console.log('Opening chat for worker:', workerId);
+    // For now, we'll trigger the chat sidebar to open
+    const chatEvent = new CustomEvent('openWorkerChat', { detail: { workerId } });
+    window.dispatchEvent(chatEvent);
+  };
+
   return (
     <AppLayout userProfile={userProfile}>
       {/* Header */}
@@ -59,7 +64,7 @@ const HiredWorkersPage = ({ onOpenChat }: HiredWorkersPageProps) => {
 
       {/* Main content */}
       <main className="flex-1 p-6 max-w-7xl mx-auto">
-        <HiredWorkersContent onOpenChat={onOpenChat} />
+        <HiredWorkersContent onOpenChat={handleOpenChat} />
       </main>
     </AppLayout>
   );

@@ -37,9 +37,7 @@ const AppLayout = ({ userProfile, children }: AppLayoutProps) => {
       <div className="min-h-screen flex w-full bg-gray-50">
         <AppSidebar userProfile={userProfile} />
         <SidebarInset className="flex-1">
-          {React.cloneElement(children as React.ReactElement, { 
-            onOpenChat: handleOpenChat 
-          })}
+          {children}
         </SidebarInset>
         <ChatSidebar 
           isOpen={isChatOpen} 

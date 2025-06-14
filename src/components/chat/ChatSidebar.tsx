@@ -22,6 +22,7 @@ const ChatSidebar = ({ isOpen, onToggle, onClose, initialSelectedWorker }: ChatS
   const { data: hiredWorkers } = useHiredWorkers();
   const [selectedWorker, setSelectedWorker] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState('');
+  const [internalIsOpen, setInternalIsOpen] = useState(isOpen);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Filter active workers only
@@ -33,6 +34,27 @@ const ChatSidebar = ({ isOpen, onToggle, onClose, initialSelectedWorker }: ChatS
       setSelectedWorker(initialSelectedWorker);
     }
   }, [initialSelectedWorker, activeWorkers]);
+
+  // Listen for custom events to open chat with specific worker
+  useEffect(() => {
+    const handleOpenWorkerChat = (event: any) => {
+      const { workerId } = event.detail;
+      if (activeWorkers.some(w => w.id === workerId)) {
+        setSelectedWorker(workerId);
+        setInternalIsOpen(true);
+      }
+    };
+
+    window.addEventListener('openWorkerChat', handleOpenWorkerChat);
+    return () => {
+      window.removeEventListener('openWorkerChat', handleOpenWorkerChat);
+    };
+  }, [activeWorkers]);
+
+  // Sync internal state with prop
+  useEffect(() => {
+    setInternalIsOpen(isOpen);
+  }, [isOpen]);
 
   const { data: messages = [] } = useChatMessages(selectedWorker || undefined);
   const sendMessage = useSendMessage();
@@ -67,6 +89,7 @@ const ChatSidebar = ({ isOpen, onToggle, onClose, initialSelectedWorker }: ChatS
   };
 
   const handleClose = () => {
+    setInternalIsOpen(false);
     if (onClose) {
       onClose();
     } else {
@@ -74,13 +97,18 @@ const ChatSidebar = ({ isOpen, onToggle, onClose, initialSelectedWorker }: ChatS
     }
   };
 
+  const handleToggle = () => {
+    setInternalIsOpen(!internalIsOpen);
+    onToggle();
+  };
+
   const selectedWorkerData = activeWorkers.find(w => w.id === selectedWorker);
 
-  if (!isOpen) {
+  if (!internalIsOpen) {
     return (
       <div className="fixed bottom-4 right-4 z-50">
         <Button
-          onClick={onToggle}
+          onClick={handleToggle}
           size="lg"
           className="rounded-full shadow-lg bg-forest-600 hover:bg-forest-700"
         >
@@ -100,7 +128,7 @@ const ChatSidebar = ({ isOpen, onToggle, onClose, initialSelectedWorker }: ChatS
             <span className="font-medium text-forest-800">Worker Chat</span>
           </div>
           <div className="flex items-center space-x-1">
-            <Button variant="ghost" size="sm" onClick={onToggle}>
+            <Button variant="ghost" size="sm" onClick={handleToggle}>
               {selectedWorker ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
             </Button>
             <Button variant="ghost" size="sm" onClick={handleClose}>
