@@ -77,8 +77,32 @@ const Onboarding = () => {
   const handleComplete = async () => {
     setIsLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('No user found');
+      // Wait a bit and retry getting user if not found initially
+      let user = null;
+      let attempts = 0;
+      const maxAttempts = 3;
+
+      while (!user && attempts < maxAttempts) {
+        const { data: { user: currentUser }, error: userError } = await supabase.auth.getUser();
+        if (userError) {
+          console.warn('Error getting user:', userError);
+        }
+        user = currentUser;
+        
+        if (!user && attempts < maxAttempts - 1) {
+          // Wait 1 second before retrying
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+        attempts++;
+      }
+
+      if (!user) {
+        toast.error('Authentication session expired. Please sign in again.');
+        navigate('/auth');
+        return;
+      }
+
+      console.log('User found:', user.id);
 
       // Update the user's profile with onboarding data
       const { error } = await supabase
@@ -96,7 +120,10 @@ const Onboarding = () => {
           farming_goals: onboardingData.investmentInfo.investmentGoals,
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Profile update error:', error);
+        throw error;
+      }
 
       // Update user metadata to mark onboarding as complete
       const { error: updateError } = await supabase.auth.updateUser({
@@ -106,7 +133,10 @@ const Onboarding = () => {
         }
       });
 
-      if (updateError) console.warn('Failed to update user metadata:', updateError);
+      if (updateError) {
+        console.warn('Failed to update user metadata:', updateError);
+        // Don't throw here as the profile was saved successfully
+      }
 
       toast.success('Onboarding completed successfully!');
       
@@ -118,6 +148,7 @@ const Onboarding = () => {
       
       navigate('/');
     } catch (error: any) {
+      console.error('Onboarding completion error:', error);
       toast.error('Failed to complete onboarding: ' + error.message);
     } finally {
       setIsLoading(false);
