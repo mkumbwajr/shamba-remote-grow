@@ -12,6 +12,7 @@ export type Database = {
       profiles: {
         Row: {
           bio: string | null
+          citizenship: string | null
           country: string | null
           created_at: string | null
           farm_location: string | null
@@ -23,6 +24,8 @@ export type Database = {
           interested_services: string | null
           investment_budget: string | null
           languages_spoken: string | null
+          nida_number: string | null
+          passport_number: string | null
           phone: string | null
           preferred_contact_method: string | null
           preferred_crop: string | null
@@ -32,6 +35,7 @@ export type Database = {
         }
         Insert: {
           bio?: string | null
+          citizenship?: string | null
           country?: string | null
           created_at?: string | null
           farm_location?: string | null
@@ -43,6 +47,8 @@ export type Database = {
           interested_services?: string | null
           investment_budget?: string | null
           languages_spoken?: string | null
+          nida_number?: string | null
+          passport_number?: string | null
           phone?: string | null
           preferred_contact_method?: string | null
           preferred_crop?: string | null
@@ -52,6 +58,7 @@ export type Database = {
         }
         Update: {
           bio?: string | null
+          citizenship?: string | null
           country?: string | null
           created_at?: string | null
           farm_location?: string | null
@@ -63,6 +70,8 @@ export type Database = {
           interested_services?: string | null
           investment_budget?: string | null
           languages_spoken?: string | null
+          nida_number?: string | null
+          passport_number?: string | null
           phone?: string | null
           preferred_contact_method?: string | null
           preferred_crop?: string | null

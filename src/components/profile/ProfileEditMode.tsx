@@ -7,15 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useLanguage, TranslationSet } from '@/contexts/LanguageContext';
 import { Tables } from '@/integrations/supabase/types';
 
-// Extended type to include missing fields
-type ExtendedProfile = Tables<'profiles'> & {
-  citizenship?: string | null;
-  nida_number?: string | null;
-  passport_number?: string | null;
-};
-
 interface ProfileEditModeProps {
-  formData: Partial<ExtendedProfile>;
+  formData: Partial<Tables<'profiles'>>;
   onFormChange: (field: string, value: string) => void;
   userEmail?: string | null;
 }
