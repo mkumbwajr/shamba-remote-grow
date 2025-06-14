@@ -76,19 +76,19 @@ const SupportSection = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Button
               onClick={() => setIsChatOpen(true)}
-              className="h-20 bg-green-600 hover:bg-green-700 flex flex-col items-center justify-center space-y-2"
+              className="h-20 bg-green-600 hover:bg-green-700 text-white flex flex-col items-center justify-center gap-2 p-4"
             >
               <MessageSquare className="w-6 h-6" />
-              <span>Live Chat Support</span>
+              <span className="font-medium">Live Chat Support</span>
               <span className="text-xs opacity-90">Available 24/7</span>
             </Button>
             <Button
               onClick={() => handleCall('+255 22 123 4567')}
               variant="outline"
-              className="h-20 border-green-300 hover:bg-green-50 flex flex-col items-center justify-center space-y-2"
+              className="h-20 border-green-300 hover:bg-green-50 text-green-600 hover:text-green-700 flex flex-col items-center justify-center gap-2 p-4"
             >
-              <Phone className="w-6 h-6 text-green-600" />
-              <span className="text-green-600">Call Main Support</span>
+              <Phone className="w-6 h-6" />
+              <span className="font-medium">Call Main Support</span>
               <span className="text-xs text-gray-500">+255 22 123 4567</span>
             </Button>
           </div>
