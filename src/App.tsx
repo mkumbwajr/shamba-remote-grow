@@ -26,6 +26,7 @@ import OrderSuccess from "./pages/OrderSuccess";
 import InventoryPage from "./pages/Inventory";
 import MessagesPage from "./pages/Messages";
 import CommunityPage from "./pages/Community";
+import Support from "./pages/Support";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
