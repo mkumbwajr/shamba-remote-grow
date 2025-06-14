@@ -64,10 +64,10 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
     { name: 'Inventory', icon: Package, path: '/inventory' },
     { name: String(t('land')), icon: MapPinned, path: '/land-rental' },
     { name: String(t('workers')), icon: Users, path: '/workers' },
+    { name: 'Investment', icon: TrendingUp, path: '/investment' },
     { name: 'Messages', icon: MessageSquare, path: '/messages' },
     { name: 'Community', icon: Heart, path: '/community' },
     { name: 'Support & Help Center', icon: Settings, path: '/support' },
-    { name: 'Investment', icon: TrendingUp, path: '/investment' },
   ];
 
   return (
