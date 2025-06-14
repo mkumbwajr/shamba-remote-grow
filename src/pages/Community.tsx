@@ -40,23 +40,25 @@ const CommunityPage = () => {
   return (
     <AppLayout userProfile={userProfile}>
       {/* Header */}
-      <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-white px-4">
+      <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-white px-4 shadow-sm">
         <SidebarTrigger className="-ml-1" />
         <div className="flex-1 flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Community</h2>
-            <p className="text-gray-600 text-sm">Connect with fellow farmers</p>
+            <h2 className="text-xl font-bold text-gray-900">Community</h2>
+            <p className="text-gray-500 text-sm">Connect with fellow farmers</p>
           </div>
-          <Avatar className="h-10 w-10">
+          <Avatar className="h-9 w-9 ring-2 ring-gray-100">
             <AvatarImage src="/placeholder-avatar.jpg" />
-            <AvatarFallback>{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
+            <AvatarFallback className="bg-blue-500 text-white font-semibold">
+              {userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}
+            </AvatarFallback>
           </Avatar>
         </div>
       </header>
 
       {/* Main content */}
       <main className="flex-1 bg-gray-100 min-h-screen">
-        <div className="max-w-2xl mx-auto py-6 px-4">
+        <div className="max-w-2xl mx-auto py-4 px-4">
           <PostCreator userProfile={userProfile} />
           <PostFeed />
         </div>

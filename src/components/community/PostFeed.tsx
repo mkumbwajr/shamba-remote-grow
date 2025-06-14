@@ -55,9 +55,9 @@ const PostFeed = () => {
 
   if (isLoading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-white rounded-lg shadow-sm p-4">
+          <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center space-x-3 mb-4">
               <Skeleton className="h-10 w-10 rounded-full" />
               <div className="space-y-2">
@@ -81,14 +81,19 @@ const PostFeed = () => {
   const postsToShow = posts && posts.length > 0 ? posts : fakePosts;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {postsToShow.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
       
       {posts && posts.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-gray-500 text-lg mb-2">No posts yet</p>
+        <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-200">
+          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.477 8-10 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.477-8 10-8s10 3.582 10 8z" />
+            </svg>
+          </div>
+          <p className="text-gray-500 text-lg mb-2 font-medium">No posts yet</p>
           <p className="text-gray-400">Be the first to share something with the community!</p>
         </div>
       )}

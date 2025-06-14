@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
-import { ImageIcon, Send } from 'lucide-react';
+import { ImageIcon, Smile, MapPin } from 'lucide-react';
 import { useCreatePost } from '@/hooks/community';
 import { toast } from 'sonner';
 
@@ -41,52 +41,77 @@ const PostCreator = ({ userProfile }: PostCreatorProps) => {
   };
 
   return (
-    <Card className="mb-6 shadow-sm">
+    <Card className="mb-4 bg-white rounded-xl shadow-sm border border-gray-200">
       <CardContent className="p-4">
         <div className="flex space-x-3">
-          <Avatar className="h-10 w-10">
+          <Avatar className="h-10 w-10 ring-2 ring-gray-100">
             <AvatarImage src="/placeholder-avatar.jpg" />
-            <AvatarFallback className="bg-blue-100 text-blue-800">
+            <AvatarFallback className="bg-blue-500 text-white font-semibold">
               {userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}
             </AvatarFallback>
           </Avatar>
           
           <div className="flex-1">
             <Textarea
-              placeholder="What's on your mind?"
+              placeholder={`What's on your mind, ${userProfile?.full_name?.split(' ')[0] || 'there'}?`}
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="border-0 resize-none focus-visible:ring-0 text-lg placeholder:text-gray-500"
-              rows={3}
+              className="border-0 resize-none focus-visible:ring-0 text-base placeholder:text-gray-500 bg-gray-50 rounded-3xl px-4 py-3 min-h-[48px]"
+              rows={1}
+              style={{ resize: 'none' }}
+              onInput={(e) => {
+                const target = e.target as HTMLTextAreaElement;
+                target.style.height = 'auto';
+                target.style.height = Math.max(48, target.scrollHeight) + 'px';
+              }}
             />
             
             {showImageInput && (
               <div className="mt-3">
                 <Input
-                  placeholder="Enter image URL..."
+                  placeholder="Paste image URL here..."
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
-                  className="border border-gray-200"
+                  className="border border-gray-200 rounded-lg"
                 />
               </div>
             )}
             
-            <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-100">
-              <Button
-                variant="ghost"
-                onClick={() => setShowImageInput(!showImageInput)}
-                className="text-gray-600 hover:bg-gray-50"
-              >
-                <ImageIcon className="h-5 w-5 mr-2" />
-                Photo
-              </Button>
+            <div className="flex justify-between items-center mt-3">
+              <div className="flex space-x-2">
+                <Button
+                  variant="ghost"
+                  onClick={() => setShowImageInput(!showImageInput)}
+                  className="text-gray-600 hover:bg-gray-100 rounded-lg px-3 py-2 h-9"
+                >
+                  <ImageIcon className="h-5 w-5 mr-2 text-green-600" />
+                  <span className="text-sm font-medium">Photo</span>
+                </Button>
+                
+                <Button
+                  variant="ghost"
+                  className="text-gray-600 hover:bg-gray-100 rounded-lg px-3 py-2 h-9"
+                  disabled
+                >
+                  <Smile className="h-5 w-5 mr-2 text-yellow-600" />
+                  <span className="text-sm font-medium">Feeling</span>
+                </Button>
+                
+                <Button
+                  variant="ghost"
+                  className="text-gray-600 hover:bg-gray-100 rounded-lg px-3 py-2 h-9"
+                  disabled
+                >
+                  <MapPin className="h-5 w-5 mr-2 text-red-600" />
+                  <span className="text-sm font-medium">Location</span>
+                </Button>
+              </div>
               
               <Button
                 onClick={handleSubmit}
                 disabled={createPost.isPending || (!content.trim() && !imageUrl.trim())}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-6 py-2 h-9 text-sm font-medium disabled:opacity-50"
               >
-                <Send className="h-4 w-4 mr-2" />
                 Post
               </Button>
             </div>
