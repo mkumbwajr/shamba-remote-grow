@@ -1,8 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useLanguage } from '@/contexts/LanguageContext';
 import WorkerDirectory from '@/components/WorkerDirectory';
@@ -58,18 +56,10 @@ const WorkersPage = () => {
                 </h2>
                 <p className="text-gray-600 text-sm">Find and hire skilled farm workers</p>
               </div>
-              <div className="flex items-center space-x-4">
-                <Button 
-                  variant="outline"
-                  onClick={() => navigate('/hired-workers')}
-                >
-                  My Hired Workers
-                </Button>
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src="/placeholder-avatar.jpg" />
-                  <AvatarFallback>{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
-                </Avatar>
-              </div>
+              <Avatar className="h-10 w-10">
+                <AvatarImage src="/placeholder-avatar.jpg" />
+                <AvatarFallback>{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
+              </Avatar>
             </div>
           </header>
 
