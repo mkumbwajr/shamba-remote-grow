@@ -1,20 +1,21 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Leaf, ArrowLeft } from 'lucide-react';
+import { Leaf } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageToggle from '@/components/LanguageToggle';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   // Login form state
   const [loginData, setLoginData] = useState({
@@ -146,22 +147,25 @@ const Auth = () => {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
+          <div className="flex justify-end mb-4">
+            <LanguageToggle />
+          </div>
           <div className="h-16 w-16 bg-gradient-to-br from-forest-600 to-crop-600 rounded-lg flex items-center justify-center mx-auto mb-4">
             <Leaf className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-forest-800">Bwana Shamba</h1>
-          <p className="text-forest-600 mt-2">A Remote Digital Farming Platform</p>
+          <p className="text-forest-600 mt-2">{t('remoteFarmingPlatform')}</p>
         </div>
 
         <Card className="bg-white border-forest-200 shadow-lg">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl text-forest-800">
-              {isLogin ? 'Welcome Back' : 'Join Bwana Shamba'}
+              {isLogin ? t('welcomeBack') : t('joinBwanaShamba')}
             </CardTitle>
             <CardDescription>
               {isLogin 
-                ? 'Sign in to access your farming dashboard' 
-                : 'Create your account to start remote digital farming'
+                ? t('signInToAccess') 
+                : t('createAccountToStart')
               }
             </CardDescription>
           </CardHeader>
@@ -170,11 +174,11 @@ const Auth = () => {
             {isLogin ? (
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">{t('email')}</Label>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder={t('enterEmail')}
                     value={loginData.email}
                     onChange={(e) => setLoginData(prev => ({ ...prev, email: e.target.value }))}
                     required
@@ -182,11 +186,11 @@ const Auth = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">{t('password')}</Label>
                   <Input
                     id="password"
                     type="password"
-                    placeholder="Enter your password"
+                    placeholder={t('enterPassword')}
                     value={loginData.password}
                     onChange={(e) => setLoginData(prev => ({ ...prev, password: e.target.value }))}
                     required
@@ -198,17 +202,17 @@ const Auth = () => {
                   className="w-full bg-forest-600 hover:bg-forest-700"
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Signing In...' : 'Sign In'}
+                  {isLoading ? t('signingIn') : t('signIn')}
                 </Button>
               </form>
             ) : (
               <form onSubmit={handleSignup} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="fullName">Full Name</Label>
+                    <Label htmlFor="fullName">{t('fullName')}</Label>
                     <Input
                       id="fullName"
-                      placeholder="Your full name"
+                      placeholder={t('yourFullName')}
                       value={signupData.fullName}
                       onChange={(e) => setSignupData(prev => ({ ...prev, fullName: e.target.value }))}
                       required
@@ -216,18 +220,18 @@ const Auth = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="country">Country</Label>
+                    <Label htmlFor="country">{t('country')}</Label>
                     <Select 
                       value={signupData.country} 
                       onValueChange={(value) => setSignupData(prev => ({ ...prev, country: value }))}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select country" />
+                        <SelectValue placeholder={t('selectCountry')} />
                       </SelectTrigger>
                       <SelectContent>
                         {countries.map((country) => (
                           <SelectItem key={country} value={country}>
-                            {country}
+                            {t(`countries.${country}`)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -236,11 +240,11 @@ const Auth = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">{t('email')}</Label>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder={t('enterEmail')}
                     value={signupData.email}
                     onChange={(e) => setSignupData(prev => ({ ...prev, email: e.target.value }))}
                     required
@@ -248,11 +252,11 @@ const Auth = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="phone">Phone (Optional)</Label>
+                  <Label htmlFor="phone">{t('phone')}</Label>
                   <Input
                     id="phone"
                     type="tel"
-                    placeholder="Your phone number"
+                    placeholder={t('yourPhoneNumber')}
                     value={signupData.phone}
                     onChange={(e) => setSignupData(prev => ({ ...prev, phone: e.target.value }))}
                   />
@@ -260,18 +264,18 @@ const Auth = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="preferredCrop">Preferred Crop</Label>
+                    <Label htmlFor="preferredCrop">{t('preferredCrop')}</Label>
                     <Select 
                       value={signupData.preferredCrop} 
                       onValueChange={(value) => setSignupData(prev => ({ ...prev, preferredCrop: value }))}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select crop" />
+                        <SelectValue placeholder={t('selectCrop')} />
                       </SelectTrigger>
                       <SelectContent>
                         {crops.map((crop) => (
                           <SelectItem key={crop} value={crop}>
-                            {crop}
+                            {t(`crops.${crop}`)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -279,18 +283,18 @@ const Auth = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="farmSize">Farm Size</Label>
+                    <Label htmlFor="farmSize">{t('farmSize')}</Label>
                     <Select 
                       value={signupData.farmSize} 
                       onValueChange={(value) => setSignupData(prev => ({ ...prev, farmSize: value }))}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select size" />
+                        <SelectValue placeholder={t('selectSize')} />
                       </SelectTrigger>
                       <SelectContent>
                         {farmSizes.map((size) => (
                           <SelectItem key={size} value={size}>
-                            {size}
+                            {t(`farmSizes.${size}`)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -299,18 +303,18 @@ const Auth = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="experience">Farming Experience</Label>
+                  <Label htmlFor="experience">{t('farmingExperience')}</Label>
                   <Select 
                     value={signupData.farmingExperience} 
                     onValueChange={(value) => setSignupData(prev => ({ ...prev, farmingExperience: value }))}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select experience level" />
+                      <SelectValue placeholder={t('selectExperience')} />
                     </SelectTrigger>
                     <SelectContent>
                       {experienceLevels.map((level) => (
                         <SelectItem key={level} value={level}>
-                          {level}
+                          {t(`experienceLevels.${level}`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -319,11 +323,11 @@ const Auth = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">{t('password')}</Label>
                     <Input
                       id="password"
                       type="password"
-                      placeholder="Create password"
+                      placeholder={t('createPassword')}
                       value={signupData.password}
                       onChange={(e) => setSignupData(prev => ({ ...prev, password: e.target.value }))}
                       required
@@ -331,11 +335,11 @@ const Auth = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">Confirm Password</Label>
+                    <Label htmlFor="confirmPassword">{t('confirmPassword')}</Label>
                     <Input
                       id="confirmPassword"
                       type="password"
-                      placeholder="Confirm password"
+                      placeholder={t('confirmPasswordPlaceholder')}
                       value={signupData.confirmPassword}
                       onChange={(e) => setSignupData(prev => ({ ...prev, confirmPassword: e.target.value }))}
                       required
@@ -348,7 +352,7 @@ const Auth = () => {
                   className="w-full bg-crop-600 hover:bg-crop-700"
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Creating Account...' : 'Create Account'}
+                  {isLoading ? t('creatingAccount') : t('createAccount')}
                 </Button>
               </form>
             )}
@@ -359,10 +363,7 @@ const Auth = () => {
                 onClick={() => setIsLogin(!isLogin)}
                 className="text-forest-600 hover:text-forest-700"
               >
-                {isLogin 
-                  ? "Don't have an account? Sign up" 
-                  : "Already have an account? Sign in"
-                }
+                {isLogin ? t('dontHaveAccount') : t('alreadyHaveAccount')}
               </Button>
             </div>
           </CardContent>
