@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, DollarSign, HardHat } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useNavigate } from 'react-router-dom';
 
 interface QuickStatsSectionProps {
   activeFarmsCount: number;
@@ -18,6 +19,11 @@ export const QuickStatsSection: React.FC<QuickStatsSectionProps> = ({
   onWorkersHiredClick,
 }) => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
+
+  const handleTotalInvestmentClick = () => {
+    navigate('/investment');
+  };
 
   const quickStats = [
     { 
@@ -28,7 +34,14 @@ export const QuickStatsSection: React.FC<QuickStatsSectionProps> = ({
       onClick: onActiveFarmsClick,
       clickable: true
     },
-    { title: String(t('totalInvestment')), value: '$12,500', icon: DollarSign, change: '+5%' },
+    { 
+      title: String(t('totalInvestment')), 
+      value: '$12,500', 
+      icon: DollarSign, 
+      change: '+5%',
+      onClick: handleTotalInvestmentClick,
+      clickable: true
+    },
     { 
       title: String(t('workersHired')), 
       value: activeWorkersCount.toString(), 

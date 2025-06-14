@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,11 +8,12 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
-import CropMatcher from "./pages/CropMatcher";
-import Marketplace from "./pages/Marketplace";
-import Workers from "./pages/Workers";
-import LandRental from "./pages/LandRental";
-import HiredWorkers from "./pages/HiredWorkers";
+import CropMatcherPage from "./pages/CropMatcher";
+import MarketplacePage from "./pages/Marketplace";
+import LandRentalPage from "./pages/LandRental";
+import WorkersPage from "./pages/Workers";
+import HiredWorkersPage from "./pages/HiredWorkers";
+import InvestmentPage from "./pages/Investment";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,12 +29,12 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/crop-matcher" element={<CropMatcher />} />
-            <Route path="/marketplace" element={<Marketplace />} />
-            <Route path="/workers" element={<Workers />} />
-            <Route path="/hired-workers" element={<HiredWorkers />} />
-            <Route path="/land-rental" element={<LandRental />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="/crop-matcher" element={<CropMatcherPage />} />
+            <Route path="/marketplace" element={<MarketplacePage />} />
+            <Route path="/land-rental" element={<LandRentalPage />} />
+            <Route path="/workers" element={<WorkersPage />} />
+            <Route path="/hired-workers" element={<HiredWorkersPage />} />
+            <Route path="/investment" element={<InvestmentPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
