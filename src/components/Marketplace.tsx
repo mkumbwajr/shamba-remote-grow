@@ -1,13 +1,10 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ShoppingCart, Search, MapPin, Star, Package, Truck, Leaf, Settings } from 'lucide-react';
-import { formatTzsAmount } from '@/utils/currency';
+import MarketplaceHeader from '@/components/marketplace/MarketplaceHeader';
+import MarketplaceSearch from '@/components/marketplace/MarketplaceSearch';
+import MarketplaceProducts from '@/components/marketplace/MarketplaceProducts';
+import MarketplaceServices from '@/components/marketplace/MarketplaceServices';
 
 const Marketplace = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -154,64 +151,16 @@ const Marketplace = () => {
 
   return (
     <div className="space-y-4 sm:space-y-6 p-4 sm:p-6">
-      {/* Header - Improved mobile layout */}
-      <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
-        <div className="text-center sm:text-left">
-          <h2 className="text-xl sm:text-2xl font-bold text-forest-800">Marketplace</h2>
-          <p className="text-sm sm:text-base text-forest-600 mt-1">Seeds, tools, and services for your farming needs</p>
-        </div>
-        <div className="flex justify-center sm:justify-end">
-          <Button variant="outline" className="border-forest-200 relative w-full sm:w-auto">
-            <ShoppingCart className="h-4 w-4 mr-2" />
-            <span className="sm:inline">Cart</span>
-            {cartItems > 0 && (
-              <Badge className="absolute -top-2 -right-2 bg-crop-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
-                {cartItems}
-              </Badge>
-            )}
-          </Button>
-        </div>
-      </div>
+      <MarketplaceHeader cartItems={cartItems} />
+      
+      <MarketplaceSearch
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        categories={categories}
+      />
 
-      {/* Search and Filters - Enhanced responsive design */}
-      <Card className="bg-white border-forest-200">
-        <CardContent className="p-3 sm:p-4">
-          <div className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:space-x-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-forest-400" />
-              <Input
-                placeholder="Search products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 border-forest-200 text-sm sm:text-base"
-              />
-            </div>
-            <Select value={selectedCategory} onValueChange={(value) => {
-              console.log('Marketplace - Category selected:', value);
-              setSelectedCategory(value);
-            }}>
-              <SelectTrigger className="w-full sm:w-48 border-forest-200">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all-categories">All Categories</SelectItem>
-                {categories.map((category) => {
-                  console.log('Marketplace - Rendering SelectItem for category:', category, 'length:', category.length, 'type:', typeof category);
-                  if (!category || typeof category !== 'string' || category.trim() === '') {
-                    console.error('Marketplace - Skipping invalid category:', category);
-                    return null;
-                  }
-                  return (
-                    <SelectItem key={category} value={category}>{category}</SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Main Content - Enhanced responsive tabs */}
       <Tabs defaultValue="products" className="space-y-4">
         <div className="flex justify-center sm:justify-start">
           <TabsList className="bg-white border border-forest-200 w-full sm:w-auto">
@@ -221,129 +170,11 @@ const Marketplace = () => {
         </div>
 
         <TabsContent value="products">
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-            {filteredProducts.map((product) => (
-              <Card key={product.id} className="bg-white border-forest-200 hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between space-x-3">
-                    <div className="flex items-center space-x-3 min-w-0 flex-1">
-                      <div className="text-2xl sm:text-3xl flex-shrink-0">{product.image}</div>
-                      <div className="min-w-0 flex-1">
-                        <CardTitle className="text-forest-800 text-base sm:text-lg leading-tight">{product.name}</CardTitle>
-                        <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2 mt-1">
-                          <Badge variant="outline" className="bg-crop-50 border-crop-300 text-crop-700 text-xs w-fit">
-                            {product.category}
-                          </Badge>
-                          <div className="flex items-center space-x-1">
-                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                            <span className="text-xs text-forest-600">{product.rating}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-right flex-shrink-0">
-                      <p className="text-lg sm:text-2xl font-bold text-forest-800">{formatTzsAmount(product.price)}</p>
-                      <p className="text-xs text-forest-600">per unit</p>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <p className="text-sm text-forest-600 leading-relaxed">{product.description}</p>
-                  
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-forest-600">Vendor:</span>
-                      <span className="text-forest-800 font-medium text-right">{product.vendor}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-forest-600 flex items-center">
-                        <MapPin className="h-3 w-3 mr-1" />
-                        Location:
-                      </span>
-                      <span className="text-forest-800">{product.location}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-forest-600 flex items-center">
-                        <Package className="h-3 w-3 mr-1" />
-                        Stock:
-                      </span>
-                      <span className="text-forest-800">{product.stock} units</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-forest-600 flex items-center">
-                        <Truck className="h-3 w-3 mr-1" />
-                        Delivery:
-                      </span>
-                      <span className="text-forest-800">{product.delivery}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 pt-2">
-                    <Button
-                      onClick={() => addToCart(product)}
-                      className="flex-1 bg-forest-600 hover:bg-forest-700 text-sm"
-                    >
-                      Add to Cart
-                    </Button>
-                    <Button variant="outline" className="border-forest-200 sm:w-auto text-sm">
-                      Details
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <MarketplaceProducts products={filteredProducts} onAddToCart={addToCart} />
         </TabsContent>
 
         <TabsContent value="services">
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-            {services.map((service) => (
-              <Card key={service.id} className="bg-white border-forest-200 hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="text-forest-800 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
-                    <span className="text-base sm:text-lg leading-tight">{service.name}</span>
-                    <div className="flex items-center space-x-1">
-                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm text-forest-600">{service.rating}</span>
-                    </div>
-                  </CardTitle>
-                  <CardDescription className="text-sm leading-relaxed">{service.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-forest-600">Provider:</span>
-                      <span className="text-forest-800 font-medium text-right">{service.provider}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-forest-600">Duration:</span>
-                      <span className="text-forest-800">{service.duration}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-forest-600">Coverage:</span>
-                      <span className="text-forest-800">{service.location}</span>
-                    </div>
-                  </div>
-
-                  <div className="bg-crop-50 border border-crop-200 rounded-lg p-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-crop-800 font-medium text-sm">Price per acre</span>
-                      <span className="text-xl sm:text-2xl font-bold text-crop-800">{formatTzsAmount(service.price)}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                    <Button className="flex-1 bg-forest-600 hover:bg-forest-700 text-sm">
-                      Book Service
-                    </Button>
-                    <Button variant="outline" className="border-forest-200 sm:w-auto text-sm">
-                      Contact
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <MarketplaceServices services={services} />
         </TabsContent>
       </Tabs>
     </div>
