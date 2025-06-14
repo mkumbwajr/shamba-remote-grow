@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Star, MapPin, Calendar, DollarSign, Users, Phone, Search, MessageSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { formatTshPrice } from '@/utils/currency';
 
 const WorkerDirectory = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -51,7 +52,7 @@ const WorkerDirectory = () => {
       experience: '8 years',
       location: 'Arusha Region',
       availability: 'Available',
-      rate: 25,
+      rate: 62500, // 25 USD converted to TSH
       rateType: 'per day',
       skills: ['Farm Supervision', 'Crop Management', 'Land Preparation', 'Team Leadership'],
       languages: ['Swahili', 'English'],
@@ -70,7 +71,7 @@ const WorkerDirectory = () => {
       experience: '6 years',
       location: 'Kilimanjaro Region',
       availability: 'Available',
-      rate: 20,
+      rate: 50000, // 20 USD converted to TSH
       rateType: 'per day',
       skills: ['Planting', 'Pest Control', 'Irrigation', 'Harvesting'],
       languages: ['Swahili', 'English', 'Chagga'],
@@ -89,7 +90,7 @@ const WorkerDirectory = () => {
       experience: '5 years',
       location: 'Mbeya Region',
       availability: 'Busy until Dec 20',
-      rate: 30,
+      rate: 75000, // 30 USD converted to TSH
       rateType: 'per day',
       skills: ['Equipment Operation', 'Land Preparation', 'Irrigation', 'Maintenance'],
       languages: ['Swahili', 'English'],
@@ -108,7 +109,7 @@ const WorkerDirectory = () => {
       experience: '7 years',
       location: 'Mwanza Region',
       availability: 'Available',
-      rate: 22,
+      rate: 55000, // 22 USD converted to TSH
       rateType: 'per day',
       skills: ['Livestock Care', 'Animal Health', 'Dairy Management', 'Feeding'],
       languages: ['Swahili', 'English', 'Sukuma'],
@@ -127,7 +128,7 @@ const WorkerDirectory = () => {
       experience: '4 years',
       location: 'Dodoma Region',
       availability: 'Available',
-      rate: 28,
+      rate: 70000, // 28 USD converted to TSH
       rateType: 'per day',
       skills: ['Irrigation', 'Water Management', 'System Installation', 'Maintenance'],
       languages: ['Swahili', 'English'],
@@ -146,7 +147,7 @@ const WorkerDirectory = () => {
       experience: '6 years',
       location: 'Morogoro Region',
       availability: 'Available',
-      rate: 18,
+      rate: 45000, // 18 USD converted to TSH
       rateType: 'per day',
       skills: ['Harvesting', 'Post-Harvest Processing', 'Quality Control', 'Team Management'],
       languages: ['Swahili', 'English'],
@@ -328,7 +329,7 @@ const WorkerDirectory = () => {
                   </div>
                   <div className="space-y-1">
                     <p className="text-sm text-forest-600">Rate</p>
-                    <p className="font-medium text-forest-800">${worker.rate}/{worker.rateType}</p>
+                    <p className="font-medium text-forest-800">{formatTshPrice(worker.rate)}/{worker.rateType}</p>
                   </div>
                 </div>
 

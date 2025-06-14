@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -16,6 +15,7 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { MapPin, DollarSign, Calendar, FileText, AlertTriangle, XCircle } from 'lucide-react';
+import { formatTshPrice } from '@/utils/currency';
 
 interface UserProfileData {
   full_name?: string | null;
@@ -178,7 +178,7 @@ const EndContractPage = () => {
                       <p className="text-forest-600">{worker.worker_specialization}</p>
                       <div className="flex items-center space-x-4 mt-2 text-sm text-forest-600">
                         <span className="flex items-center"><MapPin className="h-3 w-3 mr-1" />{worker.farm_location}</span>
-                        <span className="flex items-center"><DollarSign className="h-3 w-3 mr-1" />${worker.rate}/{worker.rate_type}</span>
+                        <span className="flex items-center"><DollarSign className="h-3 w-3 mr-1" />{formatTshPrice(worker.rate)}/{worker.rate_type}</span>
                         <span className="flex items-center"><Calendar className="h-3 w-3 mr-1" />Hired: {new Date(worker.hire_date).toLocaleDateString()}</span>
                       </div>
                     </div>

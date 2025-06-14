@@ -17,6 +17,7 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { MapPin, DollarSign, Calendar, FileText, AlertTriangle } from 'lucide-react';
+import { formatTshPrice } from '@/utils/currency';
 
 interface UserProfileData {
   full_name?: string | null;
@@ -42,7 +43,7 @@ const HireWorkerPage = () => {
     specialization: 'Farm Supervisor',
     rating: 4.9,
     location: 'Arusha Region',
-    rate: 25,
+    rate: 62500, // 25 USD converted to TSH
     rateType: 'per day',
     phone: '+255 123 456 789',
     experience: '8 years',
@@ -164,7 +165,7 @@ const HireWorkerPage = () => {
                       <p className="text-forest-600">{worker.specialization}</p>
                       <div className="flex items-center space-x-4 mt-2 text-sm text-forest-600">
                         <span className="flex items-center"><MapPin className="h-3 w-3 mr-1" />{worker.location}</span>
-                        <span className="flex items-center"><DollarSign className="h-3 w-3 mr-1" />${worker.rate}/{worker.rateType}</span>
+                        <span className="flex items-center"><DollarSign className="h-3 w-3 mr-1" />{formatTshPrice(worker.rate)}/{worker.rateType}</span>
                       </div>
                     </div>
                   </CardTitle>
@@ -274,7 +275,7 @@ const HireWorkerPage = () => {
                       <p><strong>Employer:</strong> {userProfile?.full_name || 'User'}</p>
                       <p><strong>Worker:</strong> {worker.name}</p>
                       <p><strong>Position:</strong> {worker.specialization}</p>
-                      <p><strong>Rate:</strong> ${worker.rate} {worker.rateType}</p>
+                      <p><strong>Rate:</strong> {formatTshPrice(worker.rate)} {worker.rateType}</p>
                       <p><strong>Work Location:</strong> {farmLocation || 'To be specified'}</p>
                       <p><strong>Start Date:</strong> {startDate || 'To be specified'}</p>
                       {endDate && <p><strong>End Date:</strong> {endDate}</p>}

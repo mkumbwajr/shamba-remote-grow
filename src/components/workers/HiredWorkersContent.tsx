@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
+import { formatTshPrice } from '@/utils/currency';
 
 const HiredWorkersContent = () => {
   const { data: hiredWorkers, isLoading, refetch } = useHiredWorkers();
@@ -196,7 +196,7 @@ const HiredWorkersContent = () => {
               <DollarSign className="h-3 w-3 text-forest-600" />
               <span className="text-forest-600">Rate:</span>
               <span className="font-medium text-forest-800">
-                ${worker.rate}/{worker.rate_type}
+                {formatTshPrice(worker.rate)}/{worker.rate_type}
               </span>
             </div>
             {worker.farm_location && (
