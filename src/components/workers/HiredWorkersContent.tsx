@@ -45,6 +45,15 @@ const HiredWorkersContent = () => {
     }
   };
 
+  const handleContactWorker = (workerId: string) => {
+    // This will be handled by the chat sidebar component
+    // For now, we'll show a toast indicating the chat feature
+    toast({
+      title: "Chat Feature",
+      description: "Use the chat button in the bottom right to message this worker.",
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -227,10 +236,16 @@ const HiredWorkersContent = () => {
           </div>
 
           <div className="flex space-x-2">
-            <Button variant="outline" className="flex-1 border-forest-200">
-              <MessageSquare className="h-4 w-4 mr-1" />
-              Contact
-            </Button>
+            {worker.status === 'active' && (
+              <Button 
+                variant="outline" 
+                className="flex-1 border-forest-200"
+                onClick={() => handleContactWorker(worker.id)}
+              >
+                <MessageSquare className="h-4 w-4 mr-1" />
+                Chat
+              </Button>
+            )}
             
             {worker.status === 'pending_user_approval' && (
               <Button 

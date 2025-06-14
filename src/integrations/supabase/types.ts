@@ -9,6 +9,44 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      chat_messages: {
+        Row: {
+          created_at: string
+          hired_worker_id: string
+          id: string
+          message: string
+          read_at: string | null
+          sender_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          hired_worker_id: string
+          id?: string
+          message: string
+          read_at?: string | null
+          sender_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          hired_worker_id?: string
+          id?: string
+          message?: string
+          read_at?: string | null
+          sender_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_hired_worker_id_fkey"
+            columns: ["hired_worker_id"]
+            isOneToOne: false
+            referencedRelation: "hired_workers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       farms: {
         Row: {
           actual_yield: number | null
