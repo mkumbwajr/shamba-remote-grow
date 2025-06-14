@@ -32,31 +32,38 @@ const ProfileContainer: React.FC<ProfileContainerProps> = ({
 }) => {
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <Card className="bg-white border-forest-200 shadow-lg rounded-lg overflow-hidden">
-          <CardContent className="p-6">
-            <ProfileCardHeaderDisplay userProfile={profile} />
-            <hr className="my-6 border-gray-200" />
-            <ProfileInformationActions
-              isEditing={isEditing}
-              isSaving={isSaving}
-              onStartEdit={onStartEdit}
-              onCancelEdit={onCancelEdit}
-              onSave={onSave}
-            />
-            <div className="mt-6">
-              {isEditing ? (
-                <ProfileEditMode
-                  formData={editData}
-                  onFormChange={onFormChange}
-                  userEmail={userEmail}
+          <CardContent className="p-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Header section spans full width */}
+              <div className="lg:col-span-3">
+                <ProfileCardHeaderDisplay userProfile={profile} />
+                <hr className="my-6 border-gray-200" />
+                <ProfileInformationActions
+                  isEditing={isEditing}
+                  isSaving={isSaving}
+                  onStartEdit={onStartEdit}
+                  onCancelEdit={onCancelEdit}
+                  onSave={onSave}
                 />
-              ) : (
-                <ProfileViewMode 
-                  userProfile={profile} 
-                  userEmail={userEmail}
-                />
-              )}
+              </div>
+              
+              {/* Profile content spans full width */}
+              <div className="lg:col-span-3">
+                {isEditing ? (
+                  <ProfileEditMode
+                    formData={editData}
+                    onFormChange={onFormChange}
+                    userEmail={userEmail}
+                  />
+                ) : (
+                  <ProfileViewMode 
+                    userProfile={profile} 
+                    userEmail={userEmail}
+                  />
+                )}
+              </div>
             </div>
           </CardContent>
         </Card>

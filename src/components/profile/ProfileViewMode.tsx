@@ -13,13 +13,13 @@ const ProfileViewMode: React.FC<ProfileViewModeProps> = ({ userProfile, userEmai
   const { t } = useLanguage();
   
   return (
-    <div className="space-y-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       {/* Personal Information Section */}
-      <div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b border-gray-200 pb-2">
+      <div className="bg-gray-50 rounded-lg p-6">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
           {t('personalInformation') as string}
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <ProfileDetailItem label={t('fullName') as string} value={userProfile?.full_name} />
           <ProfileDetailItem label={t('email') as string} value={userEmail} />
           <ProfileDetailItem label={t('phone') as string} value={userProfile?.phone} />
@@ -28,19 +28,19 @@ const ProfileViewMode: React.FC<ProfileViewModeProps> = ({ userProfile, userEmai
       </div>
 
       {/* Bio Section */}
-      <div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b border-gray-200 pb-2">
+      <div className="bg-gray-50 rounded-lg p-6">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
           {t('about') as string}
         </h3>
         <ProfileDetailItem label={t('bio') as string} value={userProfile?.bio} />
       </div>
 
       {/* Farming Information Section */}
-      <div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b border-gray-200 pb-2">
+      <div className="bg-gray-50 rounded-lg p-6">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
           {t('farmingInformation') as string}
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <ProfileDetailItem label={t('preferredCrop') as string} value={userProfile?.preferred_crop ? t(`cropsList.${userProfile.preferred_crop}`) as string : undefined} />
           <ProfileDetailItem label={t('farmSize') as string} value={userProfile?.farm_size ? t(`farmSizes.${userProfile.farm_size}`) as string : undefined} />
           <ProfileDetailItem label={t('farmingExperience') as string} value={userProfile?.farming_experience ? t(`experienceLevels.${userProfile.farming_experience}`) as string : undefined} />
@@ -49,11 +49,11 @@ const ProfileViewMode: React.FC<ProfileViewModeProps> = ({ userProfile, userEmai
       </div>
 
       {/* Goals and Interests Section */}
-      <div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b border-gray-200 pb-2">
+      <div className="bg-gray-50 rounded-lg p-6">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
           {t('goalsAndInterests') as string}
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <ProfileDetailItem label={t('farmingGoals') as string} value={userProfile?.farming_goals} />
           <ProfileDetailItem label={t('interestedServices') as string} value={userProfile?.interested_services} />
           <ProfileDetailItem label={t('investmentBudget') as string} value={userProfile?.investment_budget} />
@@ -61,12 +61,12 @@ const ProfileViewMode: React.FC<ProfileViewModeProps> = ({ userProfile, userEmai
         </div>
       </div>
 
-      {/* Contact and Social Section */}
-      <div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b border-gray-200 pb-2">
+      {/* Contact and Social Section - spans both columns */}
+      <div className="bg-gray-50 rounded-lg p-6 lg:col-span-2">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
           {t('contactAndSocial') as string}
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <ProfileDetailItem label={t('website') as string} value={userProfile?.website} />
           <ProfileDetailItem label={t('socialMedia') as string} value={userProfile?.social_media} />
           <ProfileDetailItem label={t('preferredContact') as string} value={userProfile?.preferred_contact_method} />
