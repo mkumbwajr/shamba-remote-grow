@@ -52,7 +52,7 @@ export const enTranslations = {
   profile: 'Profile',
   signOut: 'Sign Out',
   
-  // Profile page
+  // Profile page basics
   backToDashboard: 'Back to Dashboard',
   yourProfile: 'Your Profile',
   memberSince: 'Member since',
@@ -63,7 +63,36 @@ export const enTranslations = {
   saving: 'Saving...',
   notProvided: 'Not provided',
   experience: 'Experience',
-  noProfileFound: 'Profile not found. You can create one by editing.', // Added new key
+  noProfileFound: 'Profile not found. You can create one by editing.',
+  
+  // New profile sections
+  personalInformation: 'Personal Information',
+  about: 'About',
+  farmingInformation: 'Farming Information',
+  goalsAndInterests: 'Goals & Interests',
+  contactAndSocial: 'Contact & Social',
+  
+  // New profile fields
+  bio: 'Bio',
+  farmLocation: 'Farm Location',
+  farmingGoals: 'Farming Goals',
+  interestedServices: 'Interested Services',
+  investmentBudget: 'Investment Budget',
+  languagesSpoken: 'Languages Spoken',
+  website: 'Website',
+  socialMedia: 'Social Media',
+  preferredContact: 'Preferred Contact Method',
+  
+  // Placeholders
+  tellUsAboutYourself: 'Tell us about yourself, your farming background, and interests...',
+  yourFarmLocation: 'e.g., Nairobi County, Kenya',
+  describeYourFarmingGoals: 'Describe what you want to achieve in farming...',
+  selectServices: 'Select interested services',
+  selectBudgetRange: 'Select budget range',
+  languagesYouSpeak: 'e.g., English, Swahili, French',
+  yourWebsite: 'https://yourwebsite.com',
+  socialMediaHandles: 'e.g., @yourhandle',
+  selectContactMethod: 'Select preferred contact method',
   
   // Common
   loading: 'Loading...',
@@ -101,5 +130,31 @@ export const enTranslations = {
     'Medium (3-10 acres)': 'Medium (3-10 acres)',
     'Large (11-50 acres)': 'Large (11-50 acres)',
     'Very Large (50+ acres)': 'Very Large (50+ acres)'
+  },
+  
+  // New categories for enhanced profile
+  servicesList: {
+    'Crop Advisory': 'Crop Advisory',
+    'Soil Testing': 'Soil Testing',
+    'Equipment Rental': 'Equipment Rental',
+    'Worker Hiring': 'Worker Hiring',
+    'Land Rental': 'Land Rental',
+    'Market Access': 'Market Access',
+    'Financial Services': 'Financial Services',
+    'Insurance': 'Insurance'
+  },
+  budgetRanges: {
+    'Under $500': 'Under $500',
+    '$500 - $2,000': '$500 - $2,000',
+    '$2,000 - $10,000': '$2,000 - $10,000',
+    '$10,000 - $50,000': '$10,000 - $50,000',
+    'Over $50,000': 'Over $50,000'
+  },
+  contactMethods: {
+    'Email': 'Email',
+    'Phone': 'Phone',
+    'SMS': 'SMS',
+    'WhatsApp': 'WhatsApp',
+    'Social Media': 'Social Media'
   }
 };

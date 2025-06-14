@@ -65,6 +65,35 @@ export const swTranslations = {
   experience: 'Uzoefu',
   noProfileFound: 'Wasifu haupatikani. Unaweza kuunda kwa kuhariri.',
 
+  // New profile sections
+  personalInformation: 'Maelezo ya Kibinafsi',
+  about: 'Kuhusu',
+  farmingInformation: 'Maelezo ya Kilimo',
+  goalsAndInterests: 'Malengo na Mapendeleo',
+  contactAndSocial: 'Mawasiliano na Mitandao',
+  
+  // New profile fields
+  bio: 'Wasifu',
+  farmLocation: 'Mahali pa Shamba',
+  farmingGoals: 'Malengo ya Kilimo',
+  interestedServices: 'Huduma za Kupenda',
+  investmentBudget: 'Bajeti ya Uwekezaji',
+  languagesSpoken: 'Lugha Unazozungumza',
+  website: 'Tovuti',
+  socialMedia: 'Mitandao ya Kijamii',
+  preferredContact: 'Njia ya Mawasiliano Unayopendelea',
+  
+  // Placeholders
+  tellUsAboutYourself: 'Tuambie kuhusu wewe, mazingira yako ya kilimo, na mapendeleo...',
+  yourFarmLocation: 'mfano, Kaunti ya Nairobi, Kenya',
+  describeYourFarmingGoals: 'Elezea unachotaka kufikia katika kilimo...',
+  selectServices: 'Chagua huduma unazopenda',
+  selectBudgetRange: 'Chagua kiwango cha bajeti',
+  languagesYouSpeak: 'mfano, Kiingereza, Kiswahili, Kifaransa',
+  yourWebsite: 'https://tovutiyako.com',
+  socialMediaHandles: 'mfano, @jinalako',
+  selectContactMethod: 'Chagua njia ya mawasiliano unayopendelea',
+  
   // Common
   loading: 'Inapakia...',
   loadingProfile: 'Inapakia wasifu...',
@@ -101,5 +130,31 @@ export const swTranslations = {
     'Medium (3-10 acres)': 'Kati (ekari 3-10)',
     'Large (11-50 acres)': 'Kubwa (ekari 11-50)',
     'Very Large (50+ acres)': 'Kubwa Sana (ekari 50+)'
+  },
+  
+  // New categories for enhanced profile
+  servicesList: {
+    'Crop Advisory': 'Ushauri wa Mazao',
+    'Soil Testing': 'Upimaji wa Udongo',
+    'Equipment Rental': 'Kukodisha Vifaa',
+    'Worker Hiring': 'Kuajiri Wafanyakazi',
+    'Land Rental': 'Kukodisha Ardhi',
+    'Market Access': 'Upatikanaji wa Soko',
+    'Financial Services': 'Huduma za Kifedha',
+    'Insurance': 'Bima'
+  },
+  budgetRanges: {
+    'Under $500': 'Chini ya $500',
+    '$500 - $2,000': '$500 - $2,000',
+    '$2,000 - $10,000': '$2,000 - $10,000',
+    '$10,000 - $50,000': '$10,000 - $50,000',
+    'Over $50,000': 'Zaidi ya $50,000'
+  },
+  contactMethods: {
+    'Email': 'Barua pepe',
+    'Phone': 'Simu',
+    'SMS': 'SMS',
+    'WhatsApp': 'WhatsApp',
+    'Social Media': 'Mitandao ya Kijamii'
   }
 };
