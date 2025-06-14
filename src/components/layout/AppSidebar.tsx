@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
@@ -39,12 +40,17 @@ interface AppSidebarProps {
 
 export function AppSidebar({ userProfile }: AppSidebarProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useLanguage();
   const { state } = useSidebar();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate('/auth');
+  };
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
   };
 
   const menuItems = [
@@ -82,9 +88,10 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.name}>
                   <SidebarMenuButton
-                    onClick={() => navigate(item.path)}
+                    onClick={() => handleNavigation(item.path)}
                     tooltip={state === "collapsed" ? item.name : undefined}
                     className="hover:bg-green-50 hover:text-green-700 data-[active=true]:bg-green-100 data-[active=true]:text-green-800"
+                    isActive={location.pathname === item.path}
                   >
                     <item.icon className="h-5 w-5" />
                     <span>{item.name}</span>
