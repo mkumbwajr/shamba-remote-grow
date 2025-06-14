@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useCart } from '@/contexts/CartContext';
 import { useInventory } from '@/contexts/InventoryContext';
-import { formatTshAmount } from '@/utils/currency';
+import { formatTshAmount, getPriceBreakdown } from '@/utils/currency';
 import { ArrowLeft, CreditCard, Truck } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -55,6 +56,10 @@ const Checkout = () => {
     navigate('/order-success');
     setIsLoading(false);
   };
+
+  // Calculate order totals with breakdown
+  const orderTotal = getTotalPrice();
+  const priceBreakdown = getPriceBreakdown(orderTotal);
 
   if (items.length === 0) {
     return (
@@ -112,10 +117,23 @@ const Checkout = () => {
                     </div>
                   </div>
                 ))}
-                <div className="border-t pt-4">
-                  <div className="flex justify-between items-center text-lg font-bold">
+                
+                <div className="border-t pt-4 space-y-2">
+                  <div className="flex justify-between items-center text-sm">
+                    <span>Subtotal:</span>
+                    <span>{formatTshAmount(priceBreakdown.baseAmount)}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span>Service Charge (10%):</span>
+                    <span>{formatTshAmount(priceBreakdown.serviceCharge)}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span>VAT (18%):</span>
+                    <span>{formatTshAmount(priceBreakdown.vat)}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-lg font-bold border-t pt-2">
                     <span>Total:</span>
-                    <span className="text-forest-800">{formatTshAmount(getTotalPrice())}</span>
+                    <span className="text-forest-800">{formatTshAmount(priceBreakdown.total)}</span>
                   </div>
                 </div>
               </CardContent>
@@ -259,7 +277,7 @@ const Checkout = () => {
                 disabled={isLoading || !formData.fullName || !formData.email || !formData.phone || !formData.address || !formData.city || !formData.region || !formData.paymentMethod}
                 className="w-full bg-forest-600 hover:bg-forest-700 text-lg py-6"
               >
-                {isLoading ? 'Processing Order...' : `Place Order - ${formatTshAmount(getTotalPrice())}`}
+                {isLoading ? 'Processing Order...' : `Place Order - ${formatTshAmount(priceBreakdown.total)}`}
               </Button>
             </form>
           </div>

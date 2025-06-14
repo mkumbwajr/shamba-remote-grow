@@ -3,12 +3,17 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MapPin, Star } from 'lucide-react';
 import { LandPlot } from './landPlotData';
+import { calculateTotalPrice, formatTshAmount } from '@/utils/currency';
 
 interface LandPlotHeaderProps {
   plot: LandPlot;
 }
 
 const LandPlotHeader: React.FC<LandPlotHeaderProps> = ({ plot }) => {
+  const basePrice = plot.pricePerAcre * plot.size * 2800;
+  const totalPrice = calculateTotalPrice(basePrice);
+  const totalPricePerAcre = calculateTotalPrice(plot.pricePerAcre * 2800);
+
   return (
     <Card className="bg-white border-forest-200">
       <CardHeader>
@@ -29,10 +34,13 @@ const LandPlotHeader: React.FC<LandPlotHeaderProps> = ({ plot }) => {
           </div>
           <div className="text-right">
             <div className="text-2xl font-bold text-forest-800">
-              TSh {(plot.pricePerAcre * plot.size * 2800).toLocaleString()}/year
+              {formatTshAmount(totalPrice)}/year
             </div>
             <div className="text-sm text-forest-600">
-              TSh {(plot.pricePerAcre * 2800).toLocaleString()}/acre
+              {formatTshAmount(totalPricePerAcre)}/acre (incl. VAT)
+            </div>
+            <div className="text-xs text-gray-500">
+              Base: {formatTshAmount(basePrice)}/year
             </div>
           </div>
         </div>
