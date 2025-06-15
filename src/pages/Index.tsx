@@ -2,8 +2,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/layout/AppSidebar";
+import AppLayout from '@/components/layout/AppLayout';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { QuickStatsSection } from '@/components/dashboard/QuickStatsSection';
 import { MarketIntelligenceCard } from '@/components/dashboard/MarketIntelligenceCard';
@@ -81,31 +80,26 @@ const Index = () => {
 
   return (
     <EmailVerificationGuard userEmail={userEmail} isEmailVerified={isEmailVerified}>
-      <SidebarProvider>
-        <div className="min-h-screen flex w-full bg-gradient-to-br from-green-50 via-blue-50 to-yellow-50">
-          <AppSidebar userProfile={userProfile} />
-          <main className="flex-1 flex flex-col overflow-hidden">
-            <DashboardHeader userProfile={userProfile} />
-            <div className="flex-1 overflow-auto p-6">
-              <div className="max-w-7xl mx-auto space-y-6">
-                <QuickStatsSection 
-                  activeFarmsCount={0}
-                  activeWorkersCount={0}
-                  onActiveFarmsClick={() => navigate('/farms')}
-                  onWorkersHiredClick={() => navigate('/workers')}
-                />
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <MarketIntelligenceCard 
-                    showMarketChart={false}
-                    onToggleChart={() => {}}
-                  />
-                  <FarmUpdatesCard />
-                </div>
-              </div>
+      <AppLayout userProfile={userProfile}>
+        <DashboardHeader userProfile={userProfile} />
+        <div className="flex-1 overflow-auto p-6">
+          <div className="max-w-7xl mx-auto space-y-6">
+            <QuickStatsSection 
+              activeFarmsCount={0}
+              activeWorkersCount={0}
+              onActiveFarmsClick={() => navigate('/farms')}
+              onWorkersHiredClick={() => navigate('/workers')}
+            />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <MarketIntelligenceCard 
+                showMarketChart={false}
+                onToggleChart={() => {}}
+              />
+              <FarmUpdatesCard />
             </div>
-          </main>
+          </div>
         </div>
-      </SidebarProvider>
+      </AppLayout>
     </EmailVerificationGuard>
   );
 };
