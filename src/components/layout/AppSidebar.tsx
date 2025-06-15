@@ -106,7 +106,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
                     isActive={location.pathname === item.path}
                   >
                     <item.icon className="h-5 w-5" />
-                    <span>{item.name}</span>
+                    {state === "expanded" && <span>{item.name}</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -131,7 +131,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
               className="hover:bg-green-50 hover:text-green-700"
             >
               <Settings className="h-5 w-5" />
-              <span>{String(t('profile'))}</span>
+              {state === "expanded" && <span>{String(t('profile'))}</span>}
             </SidebarMenuButton>
           </SidebarMenuItem>
           
@@ -142,7 +142,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
               className="hover:bg-red-50 hover:text-red-600"
             >
               <LogOut className="h-5 w-5" />
-              <span>{String(t('signOut'))}</span>
+              {state === "expanded" && <span>{String(t('signOut'))}</span>}
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
