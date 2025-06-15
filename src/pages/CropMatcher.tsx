@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
@@ -55,7 +54,6 @@ const CropMatcherPage = () => {
                 <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 truncate">
                   {t('crops') as string}
                 </h2>
-                <p className="text-gray-600 text-xs sm:text-sm truncate">{t('aiPoweredRecommendations') as string}</p>
               </div>
               <Avatar className="h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0 ml-2">
                 <AvatarImage src="/placeholder-avatar.jpg" />

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -71,7 +70,6 @@ const LandPlotMapPage = () => {
                 </Button>
                 <div className="hidden sm:block">
                   <h2 className="text-lg sm:text-2xl font-bold text-gray-800">Land Plot Map</h2>
-                  <p className="text-xs sm:text-sm text-gray-600">Detailed location view with satellite imagery</p>
                 </div>
               </div>
               <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
@@ -84,7 +82,6 @@ const LandPlotMapPage = () => {
           {/* Mobile header for smaller screens */}
           <div className="sm:hidden px-3 py-2 border-b bg-white">
             <h2 className="text-lg font-bold text-gray-800">Land Plot Map</h2>
-            <p className="text-xs text-gray-600">Detailed location view</p>
           </div>
 
           {/* Main content */}
