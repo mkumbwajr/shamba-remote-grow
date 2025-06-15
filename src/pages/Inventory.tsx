@@ -1,15 +1,10 @@
-
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { AppSidebar } from '@/components/layout/AppSidebar';
-import {
-  SidebarProvider,
-  SidebarInset,
-  SidebarTrigger,
-} from '@/components/ui/sidebar';
+import AppLayout from '@/components/layout/AppLayout';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 import InventoryContent from '@/components/inventory/InventoryContent';
 
 interface UserProfileData {
@@ -43,32 +38,27 @@ const InventoryPage = () => {
   }, [navigate]);
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gray-50">
-        <AppSidebar userProfile={userProfile} />
-        <SidebarInset className="flex-1">
-          {/* Header */}
-          <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-white px-4">
-            <SidebarTrigger className="-ml-1" />
-            <div className="flex-1 flex justify-between items-center">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800">{t('inventory') as string}</h2>
-                <p className="text-gray-600 text-sm">{t('trackPurchasesStock') as string}</p>
-              </div>
-              <Avatar className="h-10 w-10">
-                <AvatarImage src="/placeholder-avatar.jpg" />
-                <AvatarFallback>{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
-              </Avatar>
-            </div>
-          </header>
+    <AppLayout userProfile={userProfile}>
+      {/* Header */}
+      <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-white px-4">
+        <SidebarTrigger className="-ml-1" />
+        <div className="flex-1 flex justify-between items-center">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800">{t('inventory') as string}</h2>
+            <p className="text-gray-600 text-sm">{t('trackPurchasesStock') as string}</p>
+          </div>
+          <Avatar className="h-10 w-10">
+            <AvatarImage src="/placeholder-avatar.jpg" />
+            <AvatarFallback>{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
+          </Avatar>
+        </div>
+      </header>
 
-          {/* Main content */}
-          <main className="flex-1 p-6">
-            <InventoryContent />
-          </main>
-        </SidebarInset>
-      </div>
-    </SidebarProvider>
+      {/* Main content */}
+      <main className="flex-1 p-6">
+        <InventoryContent />
+      </main>
+    </AppLayout>
   );
 };
 
