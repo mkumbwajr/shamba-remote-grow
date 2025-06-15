@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -26,6 +27,8 @@ interface MarketplaceProductsProps {
 }
 
 const MarketplaceProducts: React.FC<MarketplaceProductsProps> = ({ products, onAddToCart }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
       {products.map((product) => {
@@ -95,7 +98,11 @@ const MarketplaceProducts: React.FC<MarketplaceProductsProps> = ({ products, onA
                 >
                   Add to Cart
                 </Button>
-                <Button variant="outline" className="border-forest-200 sm:w-auto text-sm">
+                <Button 
+                  variant="outline" 
+                  className="border-forest-200 sm:w-auto text-sm"
+                  onClick={() => navigate(`/product/${product.id}`)}
+                >
                   Details
                 </Button>
               </div>

@@ -326,6 +326,63 @@ export type Database = {
         }
         Relationships: []
       }
+      product_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          product_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          product_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          product_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      product_ratings: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          rating: number
+          review: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          rating: number
+          review?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          rating?: number
+          review?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           bio: string | null
