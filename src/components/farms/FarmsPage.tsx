@@ -30,7 +30,7 @@ const FarmsPage = ({ onBack }: FarmsPageProps) => {
   ) || [];
 
   if (isLoading) {
-    return <FarmsPageLoading userProfile={userProfile} />;
+    return <FarmsPageLoading />;
   }
 
   return (

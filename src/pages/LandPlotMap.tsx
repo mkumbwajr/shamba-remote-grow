@@ -52,7 +52,7 @@ const LandPlotMapPage = () => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
-        <AppSidebar userProfile={userProfile} />
+        <AppSidebar />
         <SidebarInset className="flex-1">
           {/* Header */}
           <header className="sticky top-0 z-10 flex h-14 sm:h-16 shrink-0 items-center gap-2 border-b bg-white px-3 sm:px-4">
