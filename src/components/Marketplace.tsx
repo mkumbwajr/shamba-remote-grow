@@ -113,7 +113,8 @@ const Marketplace = () => {
       duration: '2-3 days',
       rating: 4.9,
       description: 'Comprehensive soil analysis with recommendations',
-      location: 'Mobile Service'
+      location: 'Mobile Service',
+      image: 'https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=400&h=400&fit=crop'
     },
     {
       id: 2,
@@ -123,7 +124,8 @@ const Marketplace = () => {
       duration: '1 day',
       rating: 4.7,
       description: 'Professional pesticide application per acre',
-      location: 'Arusha Region'
+      location: 'Arusha Region',
+      image: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=400&fit=crop'
     },
     {
       id: 3,
@@ -133,7 +135,8 @@ const Marketplace = () => {
       duration: '1-2 days',
       rating: 4.8,
       description: 'Professional harvesting team per acre',
-      location: 'Northern Tanzania'
+      location: 'Northern Tanzania',
+      image: 'https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=400&h=400&fit=crop'
     }
   ];
 

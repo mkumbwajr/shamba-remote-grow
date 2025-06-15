@@ -14,6 +14,7 @@ interface Service {
   rating: number;
   description: string;
   location: string;
+  image: string;
 }
 
 interface MarketplaceServicesProps {
@@ -29,17 +30,34 @@ const MarketplaceServices: React.FC<MarketplaceServicesProps> = ({ services, onA
         
         return (
           <Card key={service.id} className="bg-white border-forest-200 hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <CardTitle className="text-forest-800 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
-                <span className="text-base sm:text-lg leading-tight">{service.name}</span>
-                <div className="flex items-center space-x-1">
-                  <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                  <span className="text-sm text-forest-600">{service.rating}</span>
+            <CardHeader className="pb-3">
+              <div className="flex items-start justify-between space-x-3">
+                <div className="flex items-center space-x-3 min-w-0 flex-1">
+                  <div className="flex-shrink-0">
+                    <img 
+                      src={service.image} 
+                      alt={service.name}
+                      className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-lg"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <CardTitle className="text-forest-800 text-base sm:text-lg leading-tight">{service.name}</CardTitle>
+                    <div className="flex items-center space-x-1 mt-1">
+                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                      <span className="text-xs text-forest-600">{service.rating}</span>
+                    </div>
+                  </div>
                 </div>
-              </CardTitle>
-              <CardDescription className="text-sm leading-relaxed">{service.description}</CardDescription>
+                <div className="text-right flex-shrink-0">
+                  <p className="text-lg sm:text-2xl font-bold text-forest-800">{formatTshAmount(totalPrice)}</p>
+                  <p className="text-xs text-forest-600">per acre (incl. VAT)</p>
+                  <p className="text-xs text-gray-500">Base: {formatTshAmount(service.price)}</p>
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="space-y-3">
+              <p className="text-sm text-forest-600 leading-relaxed">{service.description}</p>
+              
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-forest-600">Provider:</span>
@@ -55,15 +73,7 @@ const MarketplaceServices: React.FC<MarketplaceServicesProps> = ({ services, onA
                 </div>
               </div>
 
-              <div className="bg-crop-50 border border-crop-200 rounded-lg p-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-crop-800 font-medium text-sm">Price per acre (incl. VAT)</span>
-                  <span className="text-xl sm:text-2xl font-bold text-crop-800">{formatTshAmount(totalPrice)}</span>
-                </div>
-                <div className="text-xs text-gray-500 text-right">Base: {formatTshAmount(service.price)}</div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 pt-2">
                 {onAddToCart && (
                   <Button 
                     onClick={() => onAddToCart({ ...service, price: totalPrice })}
