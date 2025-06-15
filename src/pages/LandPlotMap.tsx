@@ -57,24 +57,23 @@ const LandPlotMapPage = () => {
           {/* Header */}
           <header className="sticky top-0 z-10 flex h-14 sm:h-16 shrink-0 items-center gap-2 border-b bg-white px-3 sm:px-4">
             <SidebarTrigger className="-ml-1" />
-            <div className="flex-1 flex justify-between items-center">
-              <div className="flex items-center gap-2 sm:gap-4">
+            <div className="flex-1 flex justify-between items-center min-w-0">
+              <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={handleGoBack}
-                  className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2"
+                  className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2 flex-shrink-0"
                 >
                   <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span className="hidden xs:inline">Back to Land Rental</span>
                   <span className="xs:hidden">Back</span>
                 </Button>
-                <div className="hidden sm:block">
-                  <h2 className="text-lg sm:text-2xl font-bold text-gray-800">Land Plot Map</h2>
-                  <p className="text-xs sm:text-sm text-gray-600">Detailed location view with satellite imagery</p>
+                <div className="hidden sm:block min-w-0 flex-1">
+                  <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 truncate">Land Plot Map</h2>
                 </div>
               </div>
-              <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
+              <Avatar className="h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0 ml-2">
                 <AvatarImage src="/placeholder-avatar.jpg" />
                 <AvatarFallback className="text-xs sm:text-sm">{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
               </Avatar>
@@ -83,8 +82,7 @@ const LandPlotMapPage = () => {
 
           {/* Mobile header for smaller screens */}
           <div className="sm:hidden px-3 py-2 border-b bg-white">
-            <h2 className="text-lg font-bold text-gray-800">Land Plot Map</h2>
-            <p className="text-xs text-gray-600">Detailed location view</p>
+            <h2 className="text-lg font-bold text-gray-800 truncate">Land Plot Map</h2>
           </div>
 
           {/* Main content */}

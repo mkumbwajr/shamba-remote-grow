@@ -22,12 +22,11 @@ const FarmsPageHeader: React.FC<FarmsPageHeaderProps> = ({ userProfile }) => {
   return (
     <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-white px-4">
       <SidebarTrigger className="-ml-1" />
-      <div className="flex-1 flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800">{t('myFarms') as string}</h2>
-          <p className="text-gray-600 text-sm">{t('manageFarmOperations') as string}</p>
+      <div className="flex-1 flex justify-between items-center min-w-0">
+        <div className="min-w-0 flex-1">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 truncate">{t('myFarms') as string}</h2>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 flex-shrink-0 ml-2">
           <Button 
             className="bg-green-600 hover:bg-green-700 text-white"
             onClick={() => navigate('/land-rental')}
@@ -35,9 +34,9 @@ const FarmsPageHeader: React.FC<FarmsPageHeaderProps> = ({ userProfile }) => {
             <Plus className="h-4 w-4 mr-2" />
             {t('addNewFarm') as string}
           </Button>
-          <Avatar className="h-10 w-10">
+          <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
             <AvatarImage src="/placeholder-avatar.jpg" />
-            <AvatarFallback>{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
+            <AvatarFallback className="text-xs sm:text-sm">{userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}</AvatarFallback>
           </Avatar>
         </div>
       </div>
