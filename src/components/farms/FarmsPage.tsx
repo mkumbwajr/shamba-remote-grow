@@ -2,14 +2,10 @@
 import React from 'react';
 import { useFarms } from '@/hooks/useFarms';
 import { useFarmsUserProfile } from '@/hooks/useFarmsUserProfile';
-import { AppSidebar } from '@/components/layout/AppSidebar';
+import AppLayout from '@/components/layout/AppLayout';
 import FarmsPageHeader from './FarmsPageHeader';
 import FarmsPageSections from './FarmsPageSections';
 import FarmsPageLoading from './FarmsPageLoading';
-import {
-  SidebarProvider,
-  SidebarInset,
-} from '@/components/ui/sidebar';
 
 interface FarmsPageProps {
   onBack: () => void;
@@ -38,23 +34,18 @@ const FarmsPage = ({ onBack }: FarmsPageProps) => {
   }
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gray-50">
-        <AppSidebar userProfile={userProfile} />
-        <SidebarInset className="flex-1">
-          <FarmsPageHeader userProfile={userProfile} />
-          
-          {/* Main content */}
-          <main className="flex-1 p-6">
-            <FarmsPageSections
-              newFarms={newFarms}
-              oldFarms={oldFarms}
-              historicalFarms={historicalFarms}
-            />
-          </main>
-        </SidebarInset>
-      </div>
-    </SidebarProvider>
+    <AppLayout userProfile={userProfile}>
+      <FarmsPageHeader userProfile={userProfile} />
+      
+      {/* Main content */}
+      <main className="flex-1 p-6">
+        <FarmsPageSections
+          newFarms={newFarms}
+          oldFarms={oldFarms}
+          historicalFarms={historicalFarms}
+        />
+      </main>
+    </AppLayout>
   );
 };
 
