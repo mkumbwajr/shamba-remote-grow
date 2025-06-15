@@ -43,7 +43,7 @@ const MarketplaceProducts: React.FC<MarketplaceProductsProps> = ({ products, onA
                     <img 
                       src={product.image} 
                       alt={product.name}
-                      className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-lg"
+                      className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg"
                     />
                   </div>
                   <div className="min-w-0 flex-1">

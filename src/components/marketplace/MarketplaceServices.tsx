@@ -37,7 +37,7 @@ const MarketplaceServices: React.FC<MarketplaceServicesProps> = ({ services, onA
                     <img 
                       src={service.image} 
                       alt={service.name}
-                      className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-lg"
+                      className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg"
                     />
                   </div>
                   <div className="min-w-0 flex-1">
