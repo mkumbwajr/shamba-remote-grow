@@ -74,7 +74,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
   ];
 
   return (
-    <Sidebar className="border-r border-green-200">
+    <Sidebar className="border-r border-green-200" collapsible="icon">
       <SidebarHeader className="p-6">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -105,7 +105,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
                     className="hover:bg-green-50 hover:text-green-700 data-[active=true]:bg-green-100 data-[active=true]:text-green-800"
                     isActive={location.pathname === item.path}
                   >
-                    <item.icon className="h-5 w-5" />
+                    <item.icon className="h-5 w-5 flex-shrink-0" />
                     {state === "expanded" && <span>{item.name}</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -130,7 +130,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
               tooltip={state === "collapsed" ? String(t('profile')) : undefined}
               className="hover:bg-green-50 hover:text-green-700"
             >
-              <Settings className="h-5 w-5" />
+              <Settings className="h-5 w-5 flex-shrink-0" />
               {state === "expanded" && <span>{String(t('profile'))}</span>}
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -141,7 +141,7 @@ export function AppSidebar({ userProfile }: AppSidebarProps) {
               tooltip={state === "collapsed" ? String(t('signOut')) : undefined}
               className="hover:bg-red-50 hover:text-red-600"
             >
-              <LogOut className="h-5 w-5" />
+              <LogOut className="h-5 w-5 flex-shrink-0" />
               {state === "expanded" && <span>{String(t('signOut'))}</span>}
             </SidebarMenuButton>
           </SidebarMenuItem>
