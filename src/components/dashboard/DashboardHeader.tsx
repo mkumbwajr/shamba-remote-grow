@@ -23,6 +23,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ userProfile })
           <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 truncate">
             {String(t('welcomeBack'))}, {userProfile?.full_name || 'Farmer'}!
           </h2>
+          <p className="text-gray-600 text-xs sm:text-sm truncate">{String(t('operations'))}</p>
         </div>
         <Avatar className="h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0 ml-2">
           <AvatarImage src="/placeholder-avatar.jpg" />

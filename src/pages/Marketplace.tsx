@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
@@ -54,6 +55,7 @@ const MarketplacePage = () => {
                 <h2 className="text-2xl font-bold text-gray-800">
                   {t('marketplace') as string}
                 </h2>
+                <p className="text-gray-600 text-sm">Seeds, tools, and services for your farming needs</p>
               </div>
               <Avatar className="h-10 w-10">
                 <AvatarImage src="/placeholder-avatar.jpg" />

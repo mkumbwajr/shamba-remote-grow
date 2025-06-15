@@ -25,6 +25,7 @@ const FarmsPageHeader: React.FC<FarmsPageHeaderProps> = ({ userProfile }) => {
       <div className="flex-1 flex justify-between items-center min-w-0">
         <div className="min-w-0 flex-1">
           <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 truncate">{t('myFarms') as string}</h2>
+          <p className="text-gray-600 text-xs sm:text-sm truncate">{t('manageFarmOperations') as string}</p>
         </div>
         <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
           <Button 
