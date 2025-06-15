@@ -1,143 +1,168 @@
 
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { 
+  BarChart, 
+  Home, 
+  MapPinned, 
+  Settings, 
+  ShoppingCart, 
+  Tractor, 
+  Users, 
+  Wheat, 
+  LogOut,
+  TrendingUp,
+  Package,
+  MessageSquare,
+  Heart,
+  Newspaper
+} from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageToggle from '@/components/LanguageToggle';
+import { supabase } from '@/integrations/supabase/client';
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarHeader,
-} from "@/components/ui/sidebar"
-import { 
-  Home, 
-  Sprout, 
-  Users, 
-  ShoppingCart, 
-  Package, 
-  DollarSign, 
-  MapPin, 
-  Brain, 
-  MessageCircle, 
-  Newspaper, 
-  HelpCircle,
-  Settings
-} from "lucide-react"
-import { Link, useLocation } from "react-router-dom"
-import { useLanguage } from "@/contexts/LanguageContext"
-import LanguageToggle from "@/components/LanguageToggle"
-import { useEffect, useState } from "react"
-import { supabase } from "@/integrations/supabase/client"
+  useSidebar,
+} from '@/components/ui/sidebar';
 
-const AppSidebar = () => {
-  const location = useLocation()
-  const { t } = useLanguage()
-  const [userRole, setUserRole] = useState<string | null>(null)
-
-  useEffect(() => {
-    const checkUserRole = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        const { data: roleData } = await supabase
-          .rpc('get_user_role', { _user_id: user.id })
-        setUserRole(roleData)
-      }
-    }
-
-    checkUserRole()
-  }, [])
-
-  const mainMenuItems = [
-    { title: String(t('dashboard')), url: "/", icon: Home },
-    { title: String(t('farms')), url: "/farms", icon: Sprout },
-    { title: String(t('workers')), url: "/workers", icon: Users },
-    { title: String(t('marketplace')), url: "/marketplace", icon: ShoppingCart },
-    { title: String(t('inventory')), url: "/inventory", icon: Package },
-    { title: String(t('investment')), url: "/investment", icon: DollarSign },
-    { title: String(t('landRental')), url: "/land-rental", icon: MapPin },
-    { title: String(t('cropMatcher')), url: "/crop-matcher", icon: Brain },
-  ]
-
-  const communicationItems = [
-    { title: String(t('community')), url: "/community", icon: MessageCircle },
-    { title: String(t('messages')), url: "/messages", icon: MessageCircle },
-    { title: String(t('news')), url: "/news", icon: Newspaper },
-    { title: String(t('support')), url: "/support", icon: HelpCircle },
-  ]
-
-  const adminItems = [
-    { title: "Admin Dashboard", url: "/admin", icon: Settings },
-  ]
-
-  return (
-    <Sidebar>
-      <SidebarHeader className="p-4">
-        <h2 className="text-lg font-semibold text-green-600">Bwana Shamba</h2>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>{String(t('mainMenu'))}</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {mainMenuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={location.pathname === item.url}>
-                    <Link to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        
-        <SidebarGroup>
-          <SidebarGroupLabel>{String(t('communication'))}</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {communicationItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={location.pathname === item.url}>
-                    <Link to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        {(userRole === 'admin' || userRole === 'super_admin') && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Administration</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {adminItems.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={location.pathname === item.url}>
-                      <Link to={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
-      </SidebarContent>
-      <SidebarFooter className="p-4">
-        <LanguageToggle />
-      </SidebarFooter>
-    </Sidebar>
-  )
+interface UserProfileData {
+  full_name?: string | null;
 }
 
-export { AppSidebar }
+interface AppSidebarProps {
+  userProfile: UserProfileData | null;
+}
+
+export function AppSidebar({ userProfile }: AppSidebarProps) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { t } = useLanguage();
+  const { state } = useSidebar();
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate('/auth');
+  };
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
+  const menuItems = [
+    { name: String(t('dashboard')), icon: Home, path: '/' },
+    { name: String(t('crops')), icon: Wheat, path: '/crop-matcher' },
+    { name: String(t('myFarms')), icon: Tractor, path: '/farms' },
+    { name: String(t('marketplace')), icon: ShoppingCart, path: '/marketplace' },
+    { name: String(t('inventory')), icon: Package, path: '/inventory' },
+    { name: String(t('land')), icon: MapPinned, path: '/land-rental' },
+    { name: String(t('workers')), icon: Users, path: '/workers' },
+    { name: String(t('investment')), icon: TrendingUp, path: '/investment' },
+    { name: String(t('messages')), icon: MessageSquare, path: '/messages' },
+    { name: String(t('community')), icon: Heart, path: '/community' },
+    { name: String(t('news')), icon: Newspaper, path: '/news' },
+    { name: String(t('supportHelpCenter')), icon: Settings, path: '/support' },
+  ];
+
+  return (
+    <Sidebar className="border-r border-green-200" collapsible="icon">
+      <SidebarHeader className="p-6">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Tractor className="w-4 h-4 text-white" />
+          </div>
+          {state === "expanded" && (
+            <div className="min-w-0">
+              <h1 className="text-lg font-semibold text-green-800 truncate">
+                Bwana Shamba
+              </h1>
+              <p className="text-sm text-green-600 truncate">
+                {String(t('remoteFarmingPlatform'))}
+              </p>
+            </div>
+          )}
+        </div>
+      </SidebarHeader>
+
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {menuItems.map((item) => (
+                <SidebarMenuItem key={item.name}>
+                  <SidebarMenuButton
+                    onClick={() => handleNavigation(item.path)}
+                    tooltip={state === "collapsed" ? item.name : undefined}
+                    className="hover:bg-green-50 hover:text-green-700 data-[active=true]:bg-green-100 data-[active=true]:text-green-800"
+                    isActive={location.pathname === item.path}
+                  >
+                    <item.icon className="h-5 w-5 flex-shrink-0" />
+                    {state === "expanded" && <span>{item.name}</span>}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+
+      
+      <SidebarFooter className="p-4 space-y-2">
+        {state === "expanded" && (
+          <div className="mb-2">
+            <LanguageToggle />
+          </div>
+        )}
+        
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={() => navigate('/profile')}
+              tooltip={state === "collapsed" ? String(t('profile')) : undefined}
+              className="hover:bg-green-50 hover:text-green-700"
+            >
+              <Settings className="h-5 w-5 flex-shrink-0" />
+              {state === "expanded" && <span>{String(t('profile'))}</span>}
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={handleSignOut}
+              tooltip={state === "collapsed" ? String(t('signOut')) : undefined}
+              className="hover:bg-red-50 hover:text-red-600"
+            >
+              <LogOut className="h-5 w-5 flex-shrink-0" />
+              {state === "expanded" && <span>{String(t('signOut'))}</span>}
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+
+        {state === "expanded" && (
+          <div className="flex items-center gap-3 p-2 rounded-lg bg-green-50 mt-4">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src="/placeholder-avatar.jpg" />
+              <AvatarFallback className="bg-green-600 text-white">
+                {userProfile?.full_name ? userProfile.full_name.charAt(0).toUpperCase() : 'F'}
+              </AvatarFallback>
+            </Avatar>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-green-800 truncate">
+                {userProfile?.full_name || 'Farmer'}
+              </p>
+            </div>
+          </div>
+        )}
+      </SidebarFooter>
+    </Sidebar>
+  );
+}

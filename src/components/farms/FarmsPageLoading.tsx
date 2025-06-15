@@ -7,11 +7,19 @@ import {
   SidebarInset,
 } from '@/components/ui/sidebar';
 
-const FarmsPageLoading: React.FC = () => {
+interface UserProfileData {
+  full_name?: string | null;
+}
+
+interface FarmsPageLoadingProps {
+  userProfile: UserProfileData | null;
+}
+
+const FarmsPageLoading: React.FC<FarmsPageLoadingProps> = ({ userProfile }) => {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
-        <AppSidebar />
+        <AppSidebar userProfile={userProfile} />
         <SidebarInset className="flex-1">
           <div className="flex items-center justify-center min-h-[60vh]">
             <div className="text-center">

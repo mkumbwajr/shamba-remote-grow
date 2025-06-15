@@ -4,7 +4,6 @@ import { AppSidebar } from '@/components/layout/AppSidebar';
 import ChatSidebar from '@/components/chat/ChatSidebar';
 import {
   SidebarInset,
-  SidebarProvider,
 } from '@/components/ui/sidebar';
 
 interface UserProfileData {
@@ -33,22 +32,20 @@ const AppLayout = ({ userProfile, children }: AppLayoutProps) => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gray-50">
-        <AppSidebar />
-        <SidebarInset className="flex-1 min-w-0">
-          <div className="flex flex-col min-h-screen">
-            {children}
-          </div>
-        </SidebarInset>
-        <ChatSidebar 
-          isOpen={isChatOpen} 
-          onToggle={() => setIsChatOpen(!isChatOpen)}
-          onClose={handleCloseChat}
-          initialSelectedWorker={selectedWorkerId}
-        />
-      </div>
-    </SidebarProvider>
+    <div className="min-h-screen flex w-full bg-gray-50">
+      <AppSidebar userProfile={userProfile} />
+      <SidebarInset className="flex-1 min-w-0">
+        <div className="flex flex-col min-h-screen">
+          {children}
+        </div>
+      </SidebarInset>
+      <ChatSidebar 
+        isOpen={isChatOpen} 
+        onToggle={() => setIsChatOpen(!isChatOpen)}
+        onClose={handleCloseChat}
+        initialSelectedWorker={selectedWorkerId}
+      />
+    </div>
   );
 };
 
