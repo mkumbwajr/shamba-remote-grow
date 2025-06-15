@@ -1,19 +1,34 @@
 
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Tables } from '@/integrations/supabase/types';
-import { formatTshAmount } from '@/utils/currency';
-import { MapPin, Droplets, Zap, Car } from 'lucide-react';
+import { MapPin, DollarSign, Ruler, Droplets, Zap, Car } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
-type LandPlot = Tables<'land_plots'>;
+interface LandPlot {
+  id: string;
+  title: string;
+  description: string;
+  location: string;
+  size_acres: number;
+  price_per_acre: number;
+  total_price: number;
+  soil_type: string;
+  water_access: boolean;
+  electricity_access: boolean;
+  road_access: boolean;
+  owner_name: string;
+  owner_contact: string;
+  availability_status: string;
+  created_at: string;
+}
 
 const AdminLandPlots = () => {
   const [landPlots, setLandPlots] = useState<LandPlot[]>([]);
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchLandPlots = async () => {
@@ -23,141 +38,159 @@ const AdminLandPlots = () => {
           .select('*')
           .order('created_at', { ascending: false });
 
-        if (error) {
-          console.error('Error fetching land plots:', error);
-        } else {
-          setLandPlots(data || []);
-        }
+        if (error) throw error;
+        setLandPlots(data || []);
       } catch (error) {
         console.error('Error fetching land plots:', error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch land plots.",
+          variant: "destructive"
+        });
       } finally {
         setLoading(false);
       }
     };
 
     fetchLandPlots();
-  }, []);
+  }, [toast]);
 
-  const getStatusBadgeColor = (status: string) => {
-    switch (status) {
-      case 'available':
-        return 'bg-green-100 text-green-800';
-      case 'rented':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'unavailable':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
+  const handleStatusChange = async (plotId: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from('land_plots')
+        .update({ availability_status: newStatus })
+        .eq('id', plotId);
+
+      if (error) throw error;
+
+      setLandPlots(prev => 
+        prev.map(plot => 
+          plot.id === plotId 
+            ? { ...plot, availability_status: newStatus }
+            : plot
+        )
+      );
+
+      toast({
+        title: "Success",
+        description: "Land plot status updated successfully."
+      });
+    } catch (error) {
+      console.error('Error updating status:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update land plot status.",
+        variant: "destructive"
+      });
     }
   };
 
   if (loading) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Land Plots Management</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {[...Array(5)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded w-3/4"></div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <div className="space-y-4">
+        <div className="h-8 bg-gray-200 rounded animate-pulse"></div>
+        <div className="h-32 bg-gray-200 rounded animate-pulse"></div>
+        <div className="h-32 bg-gray-200 rounded animate-pulse"></div>
+      </div>
     );
   }
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
         <div>
-          <CardTitle>Land Plots Management</CardTitle>
-          <p className="text-sm text-gray-600">
-            Manage all land plots available for rental
-          </p>
+          <h2 className="text-2xl font-bold">Land Plots Management</h2>
+          <p className="text-gray-600">Manage available land plots for rental</p>
         </div>
-        <Button>Add Land Plot</Button>
-      </CardHeader>
-      <CardContent>
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Plot Details</TableHead>
-                <TableHead>Location</TableHead>
-                <TableHead>Size & Price</TableHead>
-                <TableHead>Utilities</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {landPlots.map((plot) => (
-                <TableRow key={plot.id}>
-                  <TableCell>
-                    <div>
-                      <div className="font-medium">{plot.title}</div>
-                      <div className="text-sm text-gray-500">
-                        {plot.soil_type || 'Soil type not specified'}
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center space-x-1">
-                      <MapPin className="h-4 w-4 text-gray-400" />
-                      <span className="text-sm">{plot.location}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div>
-                      <div className="font-medium">{plot.size_acres} acres</div>
-                      <div className="text-sm text-gray-500">
-                        {formatTshAmount(plot.price_per_acre)}/acre
-                      </div>
-                      <div className="text-xs text-green-600 font-medium">
-                        Total: {formatTshAmount(plot.total_price || 0)}
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex space-x-2">
-                      {plot.water_access && (
-                        <Droplets className="h-4 w-4 text-blue-500" title="Water access" />
-                      )}
-                      {plot.electricity_access && (
-                        <Zap className="h-4 w-4 text-yellow-500" title="Electricity access" />
-                      )}
-                      {plot.road_access && (
-                        <Car className="h-4 w-4 text-gray-600" title="Road access" />
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge className={getStatusBadgeColor(plot.availability_status || 'available')}>
-                      {plot.availability_status || 'available'}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex space-x-2">
-                      <Button variant="outline" size="sm">
-                        Edit
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        View
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </CardContent>
-    </Card>
+        <Badge variant="outline" className="text-lg px-3 py-1">
+          {landPlots.length} Total Plots
+        </Badge>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {landPlots.map((plot) => (
+          <Card key={plot.id} className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <div className="flex justify-between items-start">
+                <div className="flex-1">
+                  <CardTitle className="text-lg">{plot.title}</CardTitle>
+                  <CardDescription className="flex items-center mt-1">
+                    <MapPin className="h-4 w-4 mr-1" />
+                    {plot.location}
+                  </CardDescription>
+                </div>
+                <Badge 
+                  variant={plot.availability_status === 'available' ? 'default' : 'secondary'}
+                >
+                  {plot.availability_status}
+                </Badge>
+              </div>
+            </CardHeader>
+            
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="flex items-center">
+                  <Ruler className="h-4 w-4 mr-2 text-gray-500" />
+                  <span>{plot.size_acres} acres</span>
+                </div>
+                <div className="flex items-center">
+                  <DollarSign className="h-4 w-4 mr-2 text-gray-500" />
+                  <span>${plot.price_per_acre}/acre</span>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center text-sm">
+                <span className="font-medium">Total: ${plot.total_price}</span>
+                <span className="text-gray-500">Soil: {plot.soil_type}</span>
+              </div>
+
+              <div className="flex space-x-2">
+                <div className="flex items-center text-xs">
+                  <Droplets className={`h-3 w-3 mr-1 ${plot.water_access ? 'text-blue-500' : 'text-gray-400'}`} />
+                  <span>Water</span>
+                </div>
+                <div className="flex items-center text-xs">
+                  <Zap className={`h-3 w-3 mr-1 ${plot.electricity_access ? 'text-yellow-500' : 'text-gray-400'}`} />
+                  <span>Electric</span>
+                </div>
+                <div className="flex items-center text-xs">
+                  <Car className={`h-3 w-3 mr-1 ${plot.road_access ? 'text-green-500' : 'text-gray-400'}`} />
+                  <span>Road</span>
+                </div>
+              </div>
+
+              <div className="text-xs text-gray-500">
+                <p>Owner: {plot.owner_name}</p>
+                <p>Contact: {plot.owner_contact}</p>
+              </div>
+
+              <div className="flex space-x-2">
+                <Button
+                  size="sm"
+                  variant={plot.availability_status === 'available' ? 'outline' : 'default'}
+                  onClick={() => handleStatusChange(plot.id, plot.availability_status === 'available' ? 'rented' : 'available')}
+                >
+                  {plot.availability_status === 'available' ? 'Mark Rented' : 'Mark Available'}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {landPlots.length === 0 && (
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <MapPin className="h-12 w-12 text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No land plots found</h3>
+            <p className="text-gray-500 text-center">
+              Land plots will appear here once they are added to the platform.
+            </p>
+          </CardContent>
+        </Card>
+      )}
+    </div>
   );
 };
 

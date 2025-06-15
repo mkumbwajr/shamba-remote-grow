@@ -27,7 +27,7 @@ import {
 } from "lucide-react"
 import { Link, useLocation } from "react-router-dom"
 import { useLanguage } from "@/contexts/LanguageContext"
-import { LanguageToggle } from "@/components/LanguageToggle"
+import LanguageToggle from "@/components/LanguageToggle"
 import { useEffect, useState } from "react"
 import { supabase } from "@/integrations/supabase/client"
 
