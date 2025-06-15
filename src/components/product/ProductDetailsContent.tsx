@@ -42,7 +42,7 @@ const ProductDetailsContent: React.FC<ProductDetailsContentProps> = ({ productId
       location: 'Arusha',
       rating: 4.8,
       stock: 150,
-      image: '🌽',
+      image: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=400&fit=crop',
       description: 'High-yield drought-resistant hybrid maize seeds specially developed for East African growing conditions. These seeds offer excellent resistance to common pests and diseases while maintaining high nutritional value.',
       delivery: '2-3 days'
     },
@@ -55,7 +55,7 @@ const ProductDetailsContent: React.FC<ProductDetailsContentProps> = ({ productId
       location: 'Moshi',
       rating: 4.6,
       stock: 80,
-      image: '🌱',
+      image: 'https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=400&h=400&fit=crop',
       description: 'Premium organic compost fertilizer made from decomposed plant matter and animal manure. Rich in essential nutrients and beneficial microorganisms.',
       delivery: '1-2 days'
     },
@@ -68,7 +68,7 @@ const ProductDetailsContent: React.FC<ProductDetailsContentProps> = ({ productId
       location: 'Dar es Salaam',
       rating: 4.7,
       stock: 200,
-      image: '🔨',
+      image: 'https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=400&h=400&fit=crop',
       description: 'Durable hand tools for planting and weeding. Made from high-quality steel with comfortable ergonomic handles.',
       delivery: '3-5 days'
     },
@@ -81,7 +81,7 @@ const ProductDetailsContent: React.FC<ProductDetailsContentProps> = ({ productId
       location: 'Kilimanjaro',
       rating: 4.9,
       stock: 50,
-      image: '☕',
+      image: 'https://images.unsplash.com/photo-1493962853295-0fd70327578a?w=400&h=400&fit=crop',
       description: 'Premium Arabica coffee seedlings ready for transplanting. Grown in ideal mountain conditions for optimal quality.',
       delivery: '1-2 days'
     },
@@ -94,7 +94,7 @@ const ProductDetailsContent: React.FC<ProductDetailsContentProps> = ({ productId
       location: 'Mwanza',
       rating: 4.5,
       stock: 120,
-      image: '🧪',
+      image: 'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=400&h=400&fit=crop',
       description: 'Balanced NPK fertilizer 20-10-10 for optimal plant growth and development.',
       delivery: '2-4 days'
     },
@@ -107,7 +107,7 @@ const ProductDetailsContent: React.FC<ProductDetailsContentProps> = ({ productId
       location: 'Dodoma',
       rating: 4.8,
       stock: 30,
-      image: '💧',
+      image: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=400&fit=crop',
       description: 'Complete sprinkler system for 1 acre including all necessary components and installation guide.',
       delivery: '5-7 days'
     }
@@ -169,7 +169,11 @@ const ProductDetailsContent: React.FC<ProductDetailsContentProps> = ({ productId
             {/* Product Image and Basic Info */}
             <div>
               <div className="text-center mb-6">
-                <div className="text-8xl mb-4">{product.image}</div>
+                <img 
+                  src={product.image} 
+                  alt={product.name}
+                  className="w-64 h-64 mx-auto object-cover rounded-lg mb-4"
+                />
                 <div className="flex items-center justify-center space-x-1 mb-2">
                   <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                   <span className="text-lg font-medium">{product.rating}</span>

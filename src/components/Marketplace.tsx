@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import MarketplaceHeader from '@/components/marketplace/MarketplaceHeader';
@@ -34,7 +33,7 @@ const Marketplace = () => {
       location: 'Arusha',
       rating: 4.8,
       stock: 150,
-      image: '🌽',
+      image: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=400&fit=crop',
       description: 'High-yield drought-resistant hybrid maize seeds',
       delivery: '2-3 days'
     },
@@ -47,7 +46,7 @@ const Marketplace = () => {
       location: 'Moshi',
       rating: 4.6,
       stock: 80,
-      image: '🌱',
+      image: 'https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=400&h=400&fit=crop',
       description: 'Premium organic compost fertilizer',
       delivery: '1-2 days'
     },
@@ -60,7 +59,7 @@ const Marketplace = () => {
       location: 'Dar es Salaam',
       rating: 4.7,
       stock: 200,
-      image: '🔨',
+      image: 'https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=400&h=400&fit=crop',
       description: 'Durable hand tools for planting and weeding',
       delivery: '3-5 days'
     },
@@ -73,7 +72,7 @@ const Marketplace = () => {
       location: 'Kilimanjaro',
       rating: 4.9,
       stock: 50,
-      image: '☕',
+      image: 'https://images.unsplash.com/photo-1493962853295-0fd70327578a?w=400&h=400&fit=crop',
       description: 'Premium Arabica coffee seedlings',
       delivery: '1-2 days'
     },
@@ -86,7 +85,7 @@ const Marketplace = () => {
       location: 'Mwanza',
       rating: 4.5,
       stock: 120,
-      image: '🧪',
+      image: 'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=400&h=400&fit=crop',
       description: 'Balanced NPK fertilizer 20-10-10',
       delivery: '2-4 days'
     },
@@ -99,7 +98,7 @@ const Marketplace = () => {
       location: 'Dodoma',
       rating: 4.8,
       stock: 30,
-      image: '💧',
+      image: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=400&fit=crop',
       description: 'Complete sprinkler system for 1 acre',
       delivery: '5-7 days'
     }

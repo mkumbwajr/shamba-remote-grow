@@ -39,7 +39,13 @@ const MarketplaceProducts: React.FC<MarketplaceProductsProps> = ({ products, onA
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between space-x-3">
                 <div className="flex items-center space-x-3 min-w-0 flex-1">
-                  <div className="text-2xl sm:text-3xl flex-shrink-0">{product.image}</div>
+                  <div className="flex-shrink-0">
+                    <img 
+                      src={product.image} 
+                      alt={product.name}
+                      className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-lg"
+                    />
+                  </div>
                   <div className="min-w-0 flex-1">
                     <CardTitle className="text-forest-800 text-base sm:text-lg leading-tight">{product.name}</CardTitle>
                     <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2 mt-1">
